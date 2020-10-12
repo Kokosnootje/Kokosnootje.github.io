@@ -7,23 +7,6 @@ a.navbar-brand {
   word-break: break-all;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -62,12 +45,22 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 40px; /* Vertically center the text there */
+}
+
+.footer container {
+    color: #444444;
+}
+
+.footer a {
+    font-size: 15px;
+    color: #D5BFAA;
 }
 
 /*-------------------------------------------------------------------*/
@@ -150,7 +143,7 @@ body, div, h1, h3 {
     height: 140px;
 }
 
-/*NAV BAR*/
+/*NAVIGATION BAR*/
 .nav_bar {
     box-sizing: border-box;
 }
@@ -166,7 +159,7 @@ body, div, h1, h3 {
 }
 
 .nav_bar header img {
-    width: 60px;
+    height: 10vh;
     padding: 10px 50px;
 }
 
