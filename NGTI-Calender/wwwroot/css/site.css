@@ -191,17 +191,27 @@ body, div, h1, h3 {
     font-size: 2em;
 }
 
-#select-date_line {
+.reserve_page #line1 {
+    float:left;
     margin-left: 4vw;
     width:52vw;
     height: 1vh;
     background-color: #444444;
 }
 
+.reserve_page #line2 {
+    float: right;
+    margin-right: 4vw;
+    width: 40vw;
+    height: 1vh;
+    background-color: #D5BFAA;
+}
+
 .reserve_page .left_side {
     width: 46vw;
     margin-left: 4vw;
     user-select: none;
+    float:left
 }
 
     /*DATE SELECTION*/
@@ -232,7 +242,7 @@ body, div, h1, h3 {
 
     /*TIMESLOT SELECTION*/
 .reserve_page .timeslot label {
-    font-size: 1.5vw;
+    font-size: 2em;
     background-color: #D5BFAA;
     border: 1vh solid #444444;
     color: #444444;
@@ -243,7 +253,7 @@ body, div, h1, h3 {
 }
 
 .reserve_page .timeslot input[type=checkbox] {
-display: none;
+    display: none;
 }
 
 .reserve_page .timeslot input[type=checkbox] + label {
@@ -285,3 +295,17 @@ display: none;
     float: right;
 }
 
+    /*RIGHT SIDE*/
+.reserve_page .right_side {
+    float: right;
+    width: 46vw;
+    margin-right: 0.4vw
+}
+
+.reserve_page .right_side #reserve_button {
+    transition: all 0.5s ease 0s;
+    background-color: #444444;
+    color: #D5BFAA;
+    font-size: 1.5em;
+    box-shadow: 0px 5px 5px 0px rgba(194,194,194,1);
+}
