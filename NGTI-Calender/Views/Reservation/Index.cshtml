@@ -1,0 +1,167 @@
+﻿@model IEnumerable<NGTI_Calender.Models.Reservation>
+
+@{
+    @using FluentDateTime
+    ViewData["Title"] = "Reserve";
+    ViewData["ID Reserve"] = "current_page";
+    ViewData["ID Home"] = "null";
+    ViewData["ID Team"] = "null";
+    ViewData["ID Admin Dashboard"] = "null";
+
+    static string[][] SelectDaysOfWeeks()
+    {
+        string[] daysOfWeekCalenderDays = new string[10];
+        string[] daysOfWeeksCalender = new string[10];
+        DateTime lastDay = DateTime.Now;
+        for(int i = 0; i < 10; i++)
+        {
+            if (lastDay.DayOfWeek == DayOfWeek.Saturday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
+                lastDay = lastDay.AddDays(3.0);
+            }
+            else if (lastDay.DayOfWeek == DayOfWeek.Sunday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(1.0).ToShortDateString();
+                lastDay = lastDay.AddDays(2.0);
+
+            } else
+            {
+                if(lastDay.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    daysOfWeekCalenderDays[i] = "Tue.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Wednesday)
+                {
+                    daysOfWeekCalenderDays[i] = "Wed.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Thursday)
+                {
+                    daysOfWeekCalenderDays[i] = "Thu.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Friday)
+                {
+                    daysOfWeekCalenderDays[i] = "Fri.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+
+            }
+        }
+        return new [] { daysOfWeekCalenderDays, daysOfWeeksCalender };
+
+    }
+    var calender = SelectDaysOfWeeks();
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link href="./css/site.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    <div class="reserve_page">
+        <h1>Select date:</h1>
+        <div id="line1"></div>
+        <div id="line2"></div>
+        <form>
+            <div class="left_side">
+                <!--DATE SELECTION-->
+                <div class="date_selection">
+                    <div>
+                        <label class="date_placeholder" for="CB1" id="L1">@calender[0][0] <br> @calender[1][0]</label>
+                        <input type="checkbox" id="CB1" onclick="changeColor('CB1', 'L1', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB2" id="L2">@calender[0][1] <br> @calender[1][1]</label>
+                        <input type="checkbox" id="CB2" onclick="changeColor('CB2', 'L2', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB3" id="L3">@calender[0][2] <br> @calender[1][2]</label>
+                        <input type="checkbox" id="CB3" onclick="changeColor('CB3', 'L3', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB4" id="L4">@calender[0][3] <br> @calender[1][3]</label>
+                        <input type="checkbox" id="CB4" onclick="changeColor('CB4', 'L4', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB5" id="L5">@calender[0][4] <br> @calender[1][4]</label>
+                        <input type="checkbox" id="CB5" onclick="changeColor('CB5', 'L5', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB6" id="L6">@calender[0][5] <br> @calender[1][5]</label>
+                        <input type="checkbox" id="CB6" onclick="changeColor('CB6', 'L6', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB7" id="L7">@calender[0][6] <br> @calender[1][6]</label>
+                        <input type="checkbox" id="CB7" onclick="changeColor('CB7', 'L7', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB8" id="L8">@calender[0][7] <br> @calender[1][7]</label>
+                        <input type="checkbox" id="CB8" onclick="changeColor('CB8', 'L8', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB9" id="L9">@calender[0][8] <br> @calender[1][8]</label>
+                        <input type="checkbox" id="CB9" onclick="changeColor('CB9', 'L9', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                    <div>
+                        <label class="date_placeholder" for="CB10" id="L10">@calender[0][9] <br> @calender[1][9]</label>
+                        <input type="checkbox" id="CB10" onclick="changeColor('CB10', 'L10', '#D5BFAA', '#FFFFFF')" />
+                    </div>
+                </div>
+
+                <!--TIMESLOT SELECTION-->
+                <div>
+                    <div class="timeslot">
+                        <input type="checkbox" id="TS1" />
+                        <label for="TS1">
+                            08:00-11:00
+                            <div id="TS1_slot_availability" class="slot_availability"><p>00/17</p></div>
+                        </label>
+                    </div>
+                    <div class="timeslot">
+                        <input type="checkbox" id="TS2" />
+                        <label for="TS2">
+                            11:30-14:00
+                            <div id="TS2_slot_availability" class="slot_availability"><p>00/17</p></div>
+                        </label>
+                    </div>
+                    <div class="timeslot">
+                        <input type="checkbox" id="TS3" />
+                        <label for="TS3">
+                            14:30-17:00
+                            <div id="TS3_slot_availability" class="slot_availability"><p>00/17</p></div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="right_side">
+                <button type="submit" id="reserve_button">RESERVE</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function changeColor(checkboxID, labelID, originColor, checkedColor) {
+            var checkBox = document.getElementById(checkboxID);
+            if (checkBox.checked == true) {
+                document.getElementById(labelID).style.color = checkedColor;
+            } else {
+                document.getElementById(labelID).style.color = originColor;
+            }
+        }
+
+    </script>
+</body>
+
+
