@@ -10,8 +10,7 @@ namespace NGTI_Calender.Models
         public int ReservationId { get; set; }
 
         // public Office office {get; set;}
-        public Person PersonId { get; set; }
-        public DateTime Date { get; set; }
-        public string TestDateString { get; set; }
+        public Person Person { get; set; }
+        public string Date { get; set; }
     }
 }
