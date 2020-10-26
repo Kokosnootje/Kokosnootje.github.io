@@ -19,23 +19,9 @@ namespace NGTI_Calender.Controllers
             _context = context;
         }
 
-        // GET: Reservation/Create
-        public IActionResult Index()
+        // GET: Reservation
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-        // POST: Reservation
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("ReservationId,Date")] Reservation reservation)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(reservation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
             return View(await _context.Reservation.ToListAsync());
         }
 
