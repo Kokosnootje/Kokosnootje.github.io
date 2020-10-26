@@ -1,6 +1,7 @@
-﻿@model IEnumerable<NGTI_Calender.Models.Reservation>
-
+﻿
+@model NGTI_Calender.Models.Reservation
 @{
+    //@model IEnumerable<NGTI_Calender.Models.Reservation>
     @using FluentDateTime
     ViewData["Title"] = "Reserve";
     ViewData["ID Reserve"] = "current_page";
@@ -13,7 +14,7 @@
         string[] daysOfWeekCalenderDays = new string[10];
         string[] daysOfWeeksCalender = new string[10];
         DateTime lastDay = DateTime.Now;
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             if (lastDay.DayOfWeek == DayOfWeek.Saturday)
             {
@@ -27,9 +28,10 @@
                 daysOfWeeksCalender[i] = lastDay.AddDays(1.0).ToShortDateString();
                 lastDay = lastDay.AddDays(2.0);
 
-            } else
+            }
+            else
             {
-                if(lastDay.DayOfWeek == DayOfWeek.Tuesday)
+                if (lastDay.DayOfWeek == DayOfWeek.Tuesday)
                 {
                     daysOfWeekCalenderDays[i] = "Tue.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
@@ -56,7 +58,7 @@
 
             }
         }
-        return new [] { daysOfWeekCalenderDays, daysOfWeeksCalender };
+        return new[] { daysOfWeekCalenderDays, daysOfWeeksCalender };
 
     }
     var calender = SelectDaysOfWeeks();
@@ -72,10 +74,11 @@
         <h1>Select date:</h1>
         <div id="select-date_line"></div>
 
-        <form class="date_selection">
+        <form class="date_selection" asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>
                 <label class="date_placeholder" for="CB1" id="L1">@calender[0][0] <br> @calender[1][0]</label>
-                <input type="checkbox" id="CB1" onclick="changeColor('CB1', 'L1', '#D5BFAA', '#FFFFFF')" />
+                <input asp-for="Date" type="checkbox" id="CB1" onclick="changeColor('CB1', 'L1', '#D5BFAA', '#FFFFFF')" />
             </div>
             <div>
                 <label class="date_placeholder" for="CB2" id="L2">@calender[0][1] <br> @calender[1][1]</label>
@@ -113,7 +116,8 @@
                 <label class="date_placeholder" for="CB10" id="L10">@calender[0][9] <br> @calender[1][9]</label>
                 <input type="checkbox" id="CB10" onclick="changeColor('CB10', 'L10', '#D5BFAA', '#FFFFFF')" />
             </div>
-
+            <span asp-validation-for="Date" class="text-danger"></span>
+            <input type="submit" value="Create" class="btn btn-primary" />
         </form>
     </div>
 
@@ -129,5 +133,4 @@
 
     </script>
 </body>
-
 
