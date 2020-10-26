@@ -271,7 +271,7 @@ body, div, h1, h3 {
     display: inline-block;
     width: 3vw;
     height: 5vh;
-    vertical-align: baseline;
+    vertical-align: sub;
     color: transparent;
     transition: .2s;
     margin: 0.5vh;
@@ -282,7 +282,8 @@ body, div, h1, h3 {
     background-color: #444444;
     border-color: #444444;
     color: #D5BFAA;
-    padding-left: 0.7vw;
+    text-align: center;
+    vertical-align: sub;
 }
 
 .reserve_page .timeslot .slot_availability {

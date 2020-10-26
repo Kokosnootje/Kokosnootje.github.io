@@ -29,7 +29,12 @@
 
             } else
             {
-                if(lastDay.DayOfWeek == DayOfWeek.Tuesday)
+                if(lastDay.DayOfWeek == DayOfWeek.Monday)
+                {
+                    daysOfWeekCalenderDays[i] = "Mon.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }else if(lastDay.DayOfWeek == DayOfWeek.Tuesday)
                 {
                     daysOfWeekCalenderDays[i] = "Tue.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
