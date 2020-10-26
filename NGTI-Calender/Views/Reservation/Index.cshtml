@@ -15,7 +15,13 @@
         DateTime lastDay = DateTime.Now;
         for(int i = 0; i < 10; i++)
         {
-            if (lastDay.DayOfWeek == DayOfWeek.Saturday)
+            if (lastDay.DayOfWeek == DayOfWeek.Monday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
+                lastDay = lastDay.AddDays(3.0);
+            }
+            else if (lastDay.DayOfWeek == DayOfWeek.Saturday)
             {
                 daysOfWeekCalenderDays[i] = "Mon.";
                 daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
