@@ -11,6 +11,6 @@ namespace NGTI_Calender.Models
 
         // public Office office {get; set;}
         public Person Person { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
     }
 }
