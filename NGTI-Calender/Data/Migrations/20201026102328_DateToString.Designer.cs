@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NGTI_Calender.Data;
 
 namespace NGTI_Calender.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201026102328_DateToString")]
+    partial class DateToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,34 +252,11 @@ namespace NGTI_Calender.Data.Migrations
                     b.Property<int?>("PersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TimeslotId")
-                        .HasColumnType("int");
-
                     b.HasKey("ReservationId");
 
                     b.HasIndex("PersonId");
 
-                    b.HasIndex("TimeslotId");
-
                     b.ToTable("Reservation");
-                });
-
-            modelBuilder.Entity("NGTI_Calender.Models.Timeslot", b =>
-                {
-                    b.Property<int>("TimeslotId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("TimeEnd")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TimeStart")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TimeslotId");
-
-                    b.ToTable("Timeslot");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -336,10 +315,6 @@ namespace NGTI_Calender.Data.Migrations
                     b.HasOne("NGTI_Calender.Models.Person", "Person")
                         .WithMany("Reservations")
                         .HasForeignKey("PersonId");
-
-                    b.HasOne("NGTI_Calender.Models.Timeslot", "Timeslot")
-                        .WithMany()
-                        .HasForeignKey("TimeslotId");
                 });
 #pragma warning restore 612, 618
         }
