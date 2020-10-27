@@ -8,17 +8,26 @@
 <head>
     <meta charset="utf-8" />
     <link href="./css/site.css" type="text/css" rel="stylesheet" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google-signin-client_id" content="835750252333-i1ekg7hg1tkl6nevitme4uem0fl16de4.apps.googleusercontent.com">
+    <script>
+        function onSignIn(googleUser)
+        {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+            window.location.href = '@Url.Action("Index", "Reservation")';
+        }
+    </script>
 </head>
 <body>
     <div class="login_page">
         <div class="centered_div_hv">
             <h1>WELC<img id="ngti_logo" src="img/NGTI Logo.png" />ME</h1>
-            <a href="@Url.Action("Index", "Reservation")">
-            <button id="login_button">
-                <img id="google_logo" src="img/Google Logo.png" /><h3>LOGIN WITH GOOGLE</h3>
-            </button>
-                </a>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
         </div>
     </div>
 </body>
