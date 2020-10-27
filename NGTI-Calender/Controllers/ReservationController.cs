@@ -31,7 +31,7 @@ namespace NGTI_Calender.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("ReservationId,Date")] Reservation reservation)
+        public async Task<IActionResult> Index([Bind("ReservationId,Date", Prefix = "Item1")] Reservation reservation)
         {
             if (ModelState.IsValid)
             {
