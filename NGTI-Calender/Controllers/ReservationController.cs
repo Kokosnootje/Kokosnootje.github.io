@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Classification;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NGTI_Calender.Data;
 using NGTI_Calender.Models;
 
@@ -22,7 +24,8 @@ namespace NGTI_Calender.Controllers
         // GET: Reservation/Create
         public IActionResult Index()
         {
-            return View();
+            Tuple<Reservation, IEnumerable<Timeslot>> tuple = Tuple.Create<Reservation, IEnumerable<Timeslot>>(new Reservation(), _context.Timeslot.ToList());
+            return View(tuple);
         }
         // POST: Reservation
 
