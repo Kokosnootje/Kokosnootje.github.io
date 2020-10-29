@@ -22,12 +22,98 @@
             window.location.href = '@Url.Action("Index", "Reservation")';
         }
     </script>
+
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script>
+        var googleUser = {};
+        var startApp = function () {
+            gapi.load('auth2', function () {
+                // Retrieve the singleton for the GoogleAuth library and set up the client.
+                auth2 = gapi.auth2.init({
+                    client_id: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
+                    cookiepolicy: 'single_host_origin',
+                    // Request scopes in addition to 'profile' and 'email'
+                    //scope: 'additional_scope'
+                });
+                attachSignin(document.getElementById('customBtn'));
+            });
+        };
+
+        function attachSignin(element) {
+            console.log(element.id);
+            auth2.attachClickHandler(element, {},
+                function (googleUser) {
+                    document.getElementById('name').innerText = "Signed in: " +
+                        googleUser.getBasicProfile().getName();
+                }, function (error) {
+                    alert(JSON.stringify(error, undefined, 2));
+                });
+        }
+    </script>
+    <style type="text/css">
+        #customBtn {
+            transition: all 0.5s ease 0s;
+            color: #444444;
+            box-shadow: 0px 5px 5px 0px rgba(194,194,194,1);
+            margin-top: 2%;
+            position: relative;
+            left: 50%;
+            background-color: #ffffff;
+            border-color: #444444;
+            border-style: solid;
+            border-width: 2px;
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            -o-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            -webkit-box-shadow: 0px 5px 5px 0px rgba(194,194,194,1);
+            -moz-box-shadow: 0px 5px 5px 0px rgba(194,194,194,1);
+            width: fit-content;
+        }
+
+        #customBtn:hover {
+            cursor: pointer;
+            color: #D5BFAA;
+            border-color: #D5BFAA;
+        }
+
+        span.label {
+            font-family: serif;
+            font-weight: normal;
+        }
+
+        span.icon {
+            background: url('./img/Google Logo.png') transparent 5px 50% no-repeat;
+            display: inline-block;
+            vertical-align: middle;
+            background-size: cover;
+            width: 42px;
+            height: 42px;
+        }
+
+        span.buttonText {
+            display: inline-block;
+            vertical-align: middle;
+            padding: 15px 10px 15px 0px;
+            font-size: 1.7em;
+        }
+
+    </style>
 </head>
 <body>
     <div class="login_page">
         <div class="centered_div_hv">
             <h1>WELC<img id="ngti_logo" src="img/NGTI Logo.png" />ME</h1>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+            <div id="gSignInWrapper">
+                <div id="customBtn" class="customGPlusSignIn">
+                    <span class="icon"></span>
+                    <span class="buttonText">LOGIN WITH GOOGLE</span>
+                </div>
+            </div>
+            <div id="name"></div>
+            <script>startApp();</script>
         </div>
     </div>
 </body>
