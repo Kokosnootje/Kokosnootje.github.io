@@ -29,32 +29,6 @@ namespace NGTI_Calender.Controllers
         }
         // POST: Reservation
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("ReservationId,Date", Prefix = "Item1")] Reservation reservation)
-        {
-            Reservation[] revList = new Reservation[selectedObjects.Length];
-            for(int i = 0; i < selectedObjects.Length; i++)
-            {
-                revList[i] = new Reservation();
-                revList[i].Date = selectedObjects[i];
-            }
-            if (ModelState.IsValid)
-            {
-                for (int i = 0; i < selectedObjects.Length; i++)
-                {
-
-                    _context.Add(revList[i]);
-                    await _context.SaveChangesAsync();
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                return View(await _context.Reservation.ToListAsync());
-            }
-        }
-
         // GET: Reservation/Details/5
         public async Task<IActionResult> Details(int? id)
         {
