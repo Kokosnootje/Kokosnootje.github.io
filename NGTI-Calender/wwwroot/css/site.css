@@ -94,10 +94,10 @@ body, div, h1, h3 {
     align-items: center;
 }
 
-    .nav_bar header img {
-        height: 10vh;
-        padding: 10px 50px;
-    }
+.nav_bar header img {
+    height: 10vh;
+    padding: 10px 50px;
+}
 
 .nav_bar ul {
     list-style: none;
