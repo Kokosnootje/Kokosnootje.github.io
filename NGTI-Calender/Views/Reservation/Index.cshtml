@@ -1,6 +1,6 @@
 ﻿@model Tuple<Reservation, IEnumerable<Timeslot>>
 @{
-    //@model IEnumerable<NGTI_Calender.Models.Reservation>
+//@model IEnumerable<NGTI_Calender.Models.Reservation>
     @using FluentDateTime
     ViewData["Title"] = "Reserve";
     ViewData["ID Reserve"] = "current_page";
@@ -42,7 +42,7 @@
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
                 }
-                if(lastDay.DayOfWeek == DayOfWeek.Tuesday)
+                if (lastDay.DayOfWeek == DayOfWeek.Tuesday)
                 {
                     daysOfWeekCalenderDays[i] = "Tue.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
@@ -132,16 +132,25 @@
                 </div>
 
                 <!--TIMESLOT SELECTION-->
-                @foreach (var item in Model.Item2) {
+                @{ 
+                    int i = 1;
+                    foreach (var item in Model.Item2)
+                    {
+                    string[] abc = new string[3];
+                        abc[0] = item.TimeslotId.ToString();
+                        abc[1] = item.TimeStart;
+                        abc[2] = item.TimeEnd;
+
                     <div class="timeslot">
-                        <input type="checkbox" id="TS1" />
-                        <label for="TS1">
+                        <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
+                        <label for="TS@(i)">
                             @item.TimeStart-@item.TimeEnd
-                            <div id="TS1_slot_availability" class="slot_availability"><p>00/17</p></div>
+                            <div id="TS@(i)_slot_availability" class="slot_availability"><p>00/17</p></div>
                         </label>
                     </div>
-                }
-
+                        i++;
+                    }
+                    }
                 @*<div>
             <div class="timeslot">
                 <input type="checkbox" id="TS1" />
