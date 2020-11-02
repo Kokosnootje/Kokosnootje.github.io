@@ -6,6 +6,10 @@
     <title>@ViewData["Title"] - NGTI Calender</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    <script type="text/javascript">
+        
+    </script>
 </head>
 <body>
     <!--NAVIGATION BAR-->
@@ -23,7 +27,16 @@
                     <li><a href="" id="@ViewData["ID Admin Dashboard"]">Admin Dashboard</a></li>
                 </ul>
             </nav>
-            <img src="./img/NGTI Logo.png" />
+            <img id="myImage">
+            <script type="text/javascript">
+                var clientId = '835750252333-i1ekg7hg1tkl6nevitme4uem0fl16de4.apps.googleusercontent.com'
+                function init() {
+                    gapi.load('auth2', function () {
+                        gapi.auth2.init();
+                        document.getElementById("myImage").src = auth2.currentUser.get().getBasicProfile().getImageUrl();
+                    });
+                }
+            </script>
         </header>
     </div>
     <main role="main" class="pb-3">

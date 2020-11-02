@@ -9,9 +9,7 @@ namespace NGTI_Calender.Models
     {
         public int PersonId { get; set; }
         //public ICollection<Role> Roles { get; set; }
-        public ICollection<Reservation> Reservations { get; set; }
         public string PersonName { get; set; }
-        public string Password { get; set; }
-
+        //public string ProfilePicture { get; set; }
     }
 }
