@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Timeslot>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    ViewData["ID Reserve"] = "null";
+    ViewData["ID Overview"] = "null";
+    ViewData["ID Team"] = "null";
+    ViewData["ID Admin Dashboard"] = "current_page";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link href="./css/site.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    <div class="admin_page">
+        <div class="teams"></div>
+        <div class="timeslots">
+            <h1>Timeslots</h1>
+            <div class="timeslot_config">
+                @foreach(var item in Model) {
+                    <div>
+                    <p class="ts">@item.TimeStart - @item.TimeEnd</p>
+                    <p><a href="">change</a> | <a href="">delete</a></p>
+                    </div>
+                }
+                <a id="add_timeslot" href="">add timeslot</a>
+            </div>
+        </div>
+        <div class="employees"></div>
+        <div class="workplaces">
+            <h1>Workplaces</h1>
+            <div class="workplace_config">
+                <p><a href="">  -  </a>  17  <a href="">  +  </a></p>
+            </div>
+        </div>
+    </div>
+</body>

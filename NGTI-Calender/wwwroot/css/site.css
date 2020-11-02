@@ -65,7 +65,7 @@ body {
 /* ALGEMEEN */
 * {
     font-family: 'Segoe UI', 'Georgia', 'Times New Roman';
-    font-size: 20px;
+    font-size: 2.5vh;
 }
 
 #current_page {
@@ -73,7 +73,7 @@ body {
 }
 
 body, div, h1, h3 {
-    font-size: 20px;
+    font-size: 2.5vh;
     margin: 0;
     padding: 0;
     color: #444444;
@@ -217,7 +217,7 @@ body, div, h1, h3 {
     text-align: center;
     width: 10.4vw;
     height: 5.5vh;
-    font-size: 2vh;
+    font-size: 0.7em;
     margin: 0.5vh 0.3vw;
 }
 
@@ -229,11 +229,11 @@ body, div, h1, h3 {
     background-color: #444444;
     color: #D5BFAA;
     float: right;
-    font-size: initial;
+    font-size: 0.5em;
 }
 
 .overview_page .selected_timeslot {
-    margin: 0 4vw;
+    margin-right: 4vw;
     width: 28vw;
     height: 80vh;
     background-color: #444444;
@@ -380,6 +380,7 @@ body, div, h1, h3 {
 .reserve_page .timeslot input[type=checkbox] + label {
     display: inline-block;
     cursor: pointer;
+    font-size: inherit;
 }
 
     /*EMPTY CHECKBOX*/
@@ -392,7 +393,7 @@ body, div, h1, h3 {
     display: inline-block;
     width: 3vw;
     height: 5vh;
-    vertical-align: sub;
+    vertical-align: baseline;
     color: transparent;
     transition: .2s;
     margin: 0.5vh;
@@ -404,7 +405,7 @@ body, div, h1, h3 {
     border-color: #444444;
     color: #D5BFAA;
     text-align: center;
-    vertical-align: sub;
+    vertical-align: inherit;
 }
 
 .reserve_page .timeslot .slot_availability {
@@ -430,4 +431,88 @@ body, div, h1, h3 {
     color: #D5BFAA;
     font-size: 1.5em;
     box-shadow: 0px 5px 5px 0px rgba(194,194,194,1);
+}
+
+/*----------------------------------------*/
+/* ADMIN PAGE */
+.admin_page .teams {
+    float: left;
+    width: 42vw;
+    height: 80vh;
+    margin-left: 4vw;
+    margin-top: 2vh;
+    background-color: navajowhite;
+}
+
+.admin_page .timeslots{
+    float: right;
+    width: 46vw;
+    height: 50vh;
+    margin-right: 4vw;
+    margin-top: 2vh;
+}
+
+.admin_page .timeslots h1{
+    font-size: 4vh;    
+}
+
+.admin_page .timeslots .timeslot_config{
+    height: 46vh;
+    background-color: #444444;
+    text-align: center;
+    padding: 2vh 2vw;
+}
+.admin_page .timeslots .timeslot_config .ts{
+    float: left;
+    margin-left: 4vw;
+}
+.admin_page .timeslots .timeslot_config p{
+    background-color: #D5BFAA;
+    font-size: 3vh;
+}
+
+.admin_page .timeslots .timeslot_config a, .admin_page .workplace_config a{
+    text-decoration: none;
+    color: #444444;
+}
+
+.admin_page .timeslots .timeslot_config a:hover, .admin_page .workplace_config a:hover, .admin_page .timeslots .timeslot_config #add_timeslot:hover{
+    text-decoration: underline;
+    color: white;
+}
+
+.admin_page .timeslots .timeslot_config #add_timeslot{
+    float: right;
+    color: #D5BFAA;
+}
+
+.admin_page .employees {
+    float: right;
+    width: 30vw;
+    height: 28vh;
+    margin-right: 4vw;
+    margin-top: 2vh;
+    background-color: palevioletred;
+}
+
+.admin_page .workplaces {
+    float: right;
+    width: 15vw;
+    height: 10vh;
+    margin-right: 1vw;
+    margin-top: 20vh;
+}
+.admin_page .workplaces h1 {
+    font-size: 3vh;
+}
+.admin_page .workplace_config {
+    height: 7vh;
+    background-color: #444444;
+    text-align: center;
+    padding: 2vh 2vw;
+}
+
+.admin_page .workplace_config p {
+    background-color: #D5BFAA;
+    font-size: 2vh;
 }
