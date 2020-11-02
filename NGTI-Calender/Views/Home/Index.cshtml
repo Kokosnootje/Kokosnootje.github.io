@@ -11,24 +11,41 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="google-signin-client_id" content="835750252333-i1ekg7hg1tkl6nevitme4uem0fl16de4.apps.googleusercontent.com">
-    <script>
-        function onSignIn(googleUser)
-        {
-            var profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-            window.location.href = '@Url.Action("Index", "Reservation")';
-        }
-    </script>
 </head>
 <body>
     <div class="login_page">
         <div class="centered_div_hv">
             <h1>WELC<img id="ngti_logo" src="img/NGTI Logo.png" />ME</h1>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+            <div id="my-signin2" style="position:relative; left:41%;"></div>
+            <script>
+                function onSuccess(googleUser) {
+                    var profile = googleUser.getBasicProfile();
+                    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                    console.log('Name: ' + profile.getName());
+                    console.log('Image URL: ' + profile.getImageUrl());
+                    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+                    window.location.href = '@Url.Action("Index", "Reservation")';
+                }
+                function onFailure(error) {
+                    console.log(error);
+                }
+                function renderButton() {
+                    gapi.signin2.render('my-signin2', {
+                        'scope': 'profile email',
+                        'width': 250,
+                        'height': 60,
+                        'longtitle': true,
+                        'theme': 'light',
+                        'onsuccess': onSuccess,
+                        'onfailure': onFailure
+                    });
+                }
+            </script>
+
+            <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
         </div>
-    </div>
-</body>
-</html>
+        </div >
+</body >
+</html >

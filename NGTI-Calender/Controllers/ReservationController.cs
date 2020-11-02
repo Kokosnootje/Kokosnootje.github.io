@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Classification;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Localization.Internal;
 using NGTI_Calender.Data;
 using NGTI_Calender.Models;
 
@@ -13,16 +16,71 @@ namespace NGTI_Calender.Controllers
     public class ReservationController : Controller
     {
         private readonly ApplicationDbContext _context;
+        public List<Timeslot> timeslotList;
 
         public ReservationController(ApplicationDbContext context)
         {
             _context = context;
+            timeslotList = _context.Timeslot.ToList();
         }
 
-        // GET: Reservation
-        public async Task<IActionResult> Index()
+        // GET: Reservation/Create
+        public IActionResult Index()
         {
-            return View(await _context.Reservation.ToListAsync());
+            Tuple<Reservation, IEnumerable<Timeslot>> tuple = Tuple.Create<Reservation, IEnumerable<Timeslot>>(new Reservation(), _context.Timeslot.ToList());
+            return View(tuple);
+        }
+        // POST: Reservation
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index([Bind("ReservationId,Date,Timeslot", Prefix = "Item1")] Reservation reservation, string[] selectedObjects, int[] selectedTimeslots)
+        {
+            Timeslot[] rightTimeslots = new Timeslot[selectedTimeslots.Length];
+            for(int i = 0; i < selectedTimeslots.Length; i++)
+            {
+                for(int j = 0; j < timeslotList.Count; j++)
+                {
+                    if(selectedTimeslots[i] == timeslotList[j].TimeslotId)
+                    {
+                        rightTimeslots[i] = timeslotList[j];
+                    }
+                }
+            }
+            Reservation[][] revList = new Reservation[selectedObjects.Length][];
+
+            for (int i = 0; i < selectedObjects.Length; i++)
+            {
+                revList[i] = new Reservation[selectedTimeslots.Length];
+                for(int j = 0; j < selectedTimeslots.Length; j++)
+                {
+                    revList[i][j] = new Reservation();
+                    revList[i][j].Date = selectedObjects[i];
+                }
+            }
+            for(int i = 0; i < selectedObjects.Length; i++)
+            {
+                for(int j = 0; j < selectedTimeslots.Length; j++)
+                {
+                    revList[i][j].Timeslot = rightTimeslots[j];
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                for(int j = 0; j < selectedObjects.Length; j++)
+                {
+                    for (int i = 0; i < selectedTimeslots.Length; i++)
+                    {
+                        _context.Add(revList[j][i]);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(await _context.Reservation.ToListAsync());
+            }
         }
 
         // GET: Reservation/Details/5
