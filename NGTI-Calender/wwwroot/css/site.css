@@ -94,10 +94,10 @@ body, div, h1, h3 {
     align-items: center;
 }
 
-    .nav_bar header img {
-        height: 10vh;
-        padding: 10px 50px;
-    }
+.nav_bar header img {
+    height: 10vh;
+    padding: 10px 50px;
+}
 
 .nav_bar ul {
     list-style: none;
@@ -133,6 +133,7 @@ body, div, h1, h3 {
     font-family: 'Segoe UI', 'Georgia', 'Times New Roman';
 }
 
+/*----------------------------------------*/
 /* LOGIN PAGINA */
 .login_page h1, .login_page h3 {
     text-align: center;
@@ -183,6 +184,126 @@ body, div, h1, h3 {
     height: 140px;
 }
 
+/*----------------------------------------*/
+/* Overview PAGE */
+
+.overview_page {
+    margin-top: 2vh;
+}
+.overview_page .select_timeslot {
+    margin-left: 4vw;
+    width: 60vw;
+    height: 50vh;
+    float: left;
+}
+
+.overview_page .day_block {
+    width: 11vw;
+    height: 24vh;
+    float: left;
+    margin: 0.5vh 0.5vw;
+    background-color: #444444;
+}
+
+.overview_page .day_block h3 {
+    color: #D5BFAA;
+    text-align: center;
+    font-size: 2vh;
+    margin: 1vh 0;
+}
+
+.overview_page .day_block button {
+    background-color: #D5BFAA;
+    text-align: center;
+    width: 10.4vw;
+    height: 5.5vh;
+    font-size: 2vh;
+    margin: 0.5vh 0.3vw;
+}
+
+.overview_page .day_block button .TSS_availability {
+    text-align: center;
+    margin: 0.5vh;
+    width: 2vw;
+    height: 3vh;
+    background-color: #444444;
+    color: #D5BFAA;
+    float: right;
+    font-size: initial;
+}
+
+.overview_page .selected_timeslot {
+    margin: 0 4vw;
+    width: 28vw;
+    height: 80vh;
+    background-color: #444444;
+    color: #D5BFAA;
+    float: right;
+}
+
+.overview_page .selected_timeslot h1 {
+    margin: 1vh 1vw;
+    height: 3vh;
+    font-size: 1.5em;
+    color: #D5BFAA;
+}
+
+.overview_page .selected_timeslot .colleagues {
+    margin: 1vh 1vw;
+    font-size: 1.5em;
+    height:73vh;
+    width: 26vw;
+    background-color: #D5BFAA;
+    color: #444444;
+    padding: 0.1vh 0.1vw;
+}
+
+.overview_page .selected_timeslot .colleagues .date{
+    margin: 0.5vh 1vw;
+    font-size: 1.5em;
+    height:4vh;
+    width: 23.8vw;
+    background-color: #444444;
+    color: #D5BFAA;
+}
+
+.overview_page .selected_timeslot .colleagues p{
+    margin: 0.5vh 1vw;
+}
+
+.overview_page .selected_timeslot .colleagues .date #date{
+    float:left;
+    height: 2vh;
+    margin: 1vh;
+}
+
+.overview_page .selected_timeslot .colleagues .date #tsa{
+    float:right;
+    height: 2vh;
+    margin: 1vh;
+}
+
+.overview_page .upcoming_reservations {
+    width: 60vw;
+    height: 26.5vh;
+    margin-left: 4vw;
+    margin-top: 2vw;
+    background-color: #444444;
+    float:left;
+}
+
+.overview_page .upcoming_reservations h1{
+    margin: 1vh 1vw;
+    font-size: 1.5em;
+    color: #D5BFAA;
+}
+.overview_page .upcoming_reservations .line{
+    width:58vw;
+    height: 1vh;
+    margin-left:1vw;
+    background-color: #D5BFAA;
+}
+/*----------------------------------------*/
 /* RESERVE PAGE */
 .reserve_page h1 {
     width: 48vw;
@@ -271,7 +392,7 @@ body, div, h1, h3 {
     display: inline-block;
     width: 3vw;
     height: 5vh;
-    vertical-align: baseline;
+    vertical-align: sub;
     color: transparent;
     transition: .2s;
     margin: 0.5vh;
@@ -282,7 +403,8 @@ body, div, h1, h3 {
     background-color: #444444;
     border-color: #444444;
     color: #D5BFAA;
-    padding-left: 0.7vw;
+    text-align: center;
+    vertical-align: sub;
 }
 
 .reserve_page .timeslot .slot_availability {

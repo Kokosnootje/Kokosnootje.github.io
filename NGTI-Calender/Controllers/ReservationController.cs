@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Classification;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NGTI_Calender.Data;
 using NGTI_Calender.Models;
 
@@ -22,21 +24,35 @@ namespace NGTI_Calender.Controllers
         // GET: Reservation/Create
         public IActionResult Index()
         {
-            return View();
+            Tuple<Reservation, IEnumerable<Timeslot>> tuple = Tuple.Create<Reservation, IEnumerable<Timeslot>>(new Reservation(), _context.Timeslot.ToList());
+            return View(tuple);
         }
         // POST: Reservation
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("ReservationId,Date")] Reservation reservation)
+        public async Task<IActionResult> Index([Bind("ReservationId,Date", Prefix = "Item1")] Reservation reservation, string[] selectedObjects)
         {
+            Reservation[] revList = new Reservation[selectedObjects.Length];
+            for(int i = 0; i < selectedObjects.Length; i++)
+            {
+                revList[i] = new Reservation();
+                revList[i].Date = selectedObjects[i];
+            }
             if (ModelState.IsValid)
             {
-                _context.Add(reservation);
-                await _context.SaveChangesAsync();
+                for (int i = 0; i < selectedObjects.Length; i++)
+                {
+
+                    _context.Add(revList[i]);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
-            return View(await _context.Reservation.ToListAsync());
+            else
+            {
+                return View(await _context.Reservation.ToListAsync());
+            }
         }
 
         // GET: Reservation/Details/5
