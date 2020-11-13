@@ -1,4 +1,4 @@
-﻿@model Tuple<Reservation, IEnumerable<Timeslot>>
+﻿@model Tuple<Reservation, List<Timeslot>, Popup>
 @{
 //@model IEnumerable<NGTI_Calender.Models.Reservation>
     @using FluentDateTime
@@ -132,49 +132,24 @@
                 </div>
 
                 <!--TIMESLOT SELECTION-->
-                @{ 
+                @{
                     int i = 1;
-                    foreach (var item in Model.Item2)
-                    {
-                    string[] abc = new string[3];
+                    foreach (var item in Model.Item2) {
+                        string[] abc = new string[3];
                         abc[0] = item.TimeslotId.ToString();
                         abc[1] = item.TimeStart;
                         abc[2] = item.TimeEnd;
 
-                    <div class="timeslot">
-                        <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
-                        <label for="TS@(i)">
-                            @item.TimeStart-@item.TimeEnd
-                            <div id="TS@(i)_slot_availability" class="slot_availability"><p>00/17</p></div>
-                        </label>
-                    </div>
+                        <div class="timeslot">
+                            <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
+                            <label for="TS@(i)">
+                                @item.TimeStart-@item.TimeEnd
+                                <div id="TS@(i)_slot_availability" class="slot_availability"><p>00/17</p></div>
+                            </label>
+                        </div>
                         i++;
                     }
-                    }
-                @*<div>
-            <div class="timeslot">
-                <input type="checkbox" id="TS1" />
-                <label for="TS1">
-                    08:00-11:00
-                    <div id="TS1_slot_availability" class="slot_availability"><p>00/17</p></div>
-                </label>
-            </div>
-            <div class="timeslot">
-                <input type="checkbox" id="TS2" />
-                <label for="TS2">
-                    11:30-14:00
-                    <div id="TS2_slot_availability" class="slot_availability"><p>00/17</p></div>
-                </label>
-            </div>
-            <div class="timeslot">
-                <input type="checkbox" id="TS3" />
-                <label for="TS3">
-                    14:30-17:00
-                    <div id="TS3_slot_availability" class="slot_availability"><p>00/17</p></div>
-                </label>
-            </div>
-        </div>*@
-
+                }
             </div>
 
             <div class="right_side">
@@ -185,6 +160,12 @@
     </div>
 
     <script>
+        if ("@Model.Item3.popupMessage" != "") {
+            window.alert("@Html.Raw(Model.Item3.popupMessage)");
+        }
+    </script>
+
+    <script>
         function changeColor(checkboxID, labelID, originColor, checkedColor) {
             var checkBox = document.getElementById(checkboxID);
             if (checkBox.checked == true) {
@@ -193,7 +174,6 @@
                 document.getElementById(labelID).style.color = originColor;
             }
         }
-
     </script>
 </body>
 

@@ -27,7 +27,7 @@ namespace NGTI_Calender.Controllers
         // GET: Reservation/Create
         public IActionResult Index()
         {
-            Tuple<Reservation, IEnumerable<Timeslot>> tuple = Tuple.Create<Reservation, IEnumerable<Timeslot>>(new Reservation(), _context.Timeslot.ToList());
+            var tuple = Tuple.Create<Reservation, List<Timeslot>, Popup>(new Reservation(), _context.Timeslot.ToList(), new Popup());
             return View(tuple);
         }
         // POST: Reservation
@@ -37,6 +37,7 @@ namespace NGTI_Calender.Controllers
         public async Task<IActionResult> Index([Bind("ReservationId,Date,Timeslot", Prefix = "Item1")] Reservation reservation, string[] selectedObjects, int[] selectedTimeslots)
         {
             Timeslot[] rightTimeslots = new Timeslot[selectedTimeslots.Length];
+            Dictionary<int, string> time = new Dictionary<int, string>();
             for(int i = 0; i < selectedTimeslots.Length; i++)
             {
                 for(int j = 0; j < timeslotList.Count; j++)
@@ -44,6 +45,8 @@ namespace NGTI_Calender.Controllers
                     if(selectedTimeslots[i] == timeslotList[j].TimeslotId)
                     {
                         rightTimeslots[i] = timeslotList[j];
+                        string s = timeslotList[j].TimeStart + "-" + timeslotList[j].TimeEnd;
+                        time.Add(selectedTimeslots[i], s);
                     }
                 }
             }
@@ -65,21 +68,28 @@ namespace NGTI_Calender.Controllers
                     revList[i][j].Timeslot = rightTimeslots[j];
                 }
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && selectedObjects.Length != 0 && selectedTimeslots.Length != 0)
             {
-                for(int j = 0; j < selectedObjects.Length; j++)
+                Popup popup = new Popup();
+                popup.popupMessage = "";
+                for (int j = 0; j < selectedObjects.Length; j++)
                 {
                     for (int i = 0; i < selectedTimeslots.Length; i++)
                     {
+                        popup.popupMessage += revList[j][i].Person + revList[j][i].Date + " : " + time[revList[j][i].Timeslot.TimeslotId] + " || ";
                         _context.Add(revList[j][i]);
                         await _context.SaveChangesAsync();
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                var tuple = Tuple.Create<Reservation, List<Timeslot>, Popup>(new Reservation(), _context.Timeslot.ToList(), popup);
+                return View(tuple);
             }
             else
             {
-                return View(await _context.Reservation.ToListAsync());
+                Popup popup = new Popup();
+                popup.popupMessage = "an error has occured";
+                var tuple = Tuple.Create<Reservation, List<Timeslot>, Popup>(new Reservation(), _context.Timeslot.ToList(), popup);
+                return View(tuple);
             }
         }
 
