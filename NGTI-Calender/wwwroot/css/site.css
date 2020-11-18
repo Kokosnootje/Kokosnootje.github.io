@@ -9,12 +9,6 @@ a.navbar-brand {
 
 /* Sticky footer styles
 -------------------------------------------------- */
-@media (min-width: 768px) {
-    html {
-        font-size: 0.8em;
-    }
-}
-
 .border-top {
     border-top: 1px solid #e5e5e5;
 }
@@ -52,14 +46,14 @@ body {
     line-height: 40px; /* Vertically center the text there */
 }
 
-    .footer container {
-        color: #444444;
-    }
+.footer container {
+    color: #444444;
+}
 
-    .footer a {
-        font-size: 0.75em;
-        color: #D5BFAA;
-    }
+.footer a {
+    font-size: 0.75em;
+    color: #D5BFAA;
+}
 
 /*-------------------------------------------------------------*/
 /* ALGEMEEN */
@@ -73,7 +67,6 @@ body {
 }
 
 body, div, h1, h3 {
-    font-size: 2.5vh;
     margin: 0;
     padding: 0;
     color: #444444;
@@ -101,6 +94,8 @@ body, div, h1, h3 {
 
 .nav_bar ul {
     list-style: none;
+    padding: 0;
+    text-align: center;
 }
 
 .nav_bar li {
@@ -143,6 +138,13 @@ body, div, h1, h3 {
     font-size: 10em;
 }
 
+.login_page #login_spacer {
+    margin-left: 38%;
+    width: 1px;
+    height: 1px;
+    float: left;
+}
+
 .login_page h3 {
     color: inherit;
     font-size: 1.7em;
@@ -181,7 +183,8 @@ body, div, h1, h3 {
 }
 
 .login_page #ngti_logo {
-    height: 140px;
+    font-size: 25vh;
+    height: 0.7em;
 }
 
 /*----------------------------------------*/
@@ -307,25 +310,32 @@ body, div, h1, h3 {
 /* RESERVE PAGE */
 .reserve_page h1 {
     width: 48vw;
-    margin-left: 4vw;
     margin-top: 1vw;
     font-size: 2em;
 }
 
 .reserve_page #line1 {
-    float:left;
-    margin-left: 4vw;
-    width:52vw;
+    width: 50vw;
     height: 1vh;
     background-color: #444444;
 }
 
 .reserve_page #line2 {
-    float: right;
-    margin-right: 4vw;
-    width: 40vw;
+    width: 100%;
     height: 1vh;
     background-color: #D5BFAA;
+}
+
+.reserve_page form {
+    overflow: hidden;
+    clear: both;
+    padding-bottom: 15px;
+}
+
+.reserve_page .timeslot_selection {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 35vh
 }
 
 .reserve_page .left_side {
@@ -343,7 +353,7 @@ body, div, h1, h3 {
 .reserve_page .date_selection label {
     background-color: #444444;
     border-radius: 4.4vw;
-    width: 8.4vw;
+    width: 8.2vw;
     height: 8.4vw;
     margin: 0.2vw 0.4vw;
     text-align: center;
@@ -365,9 +375,8 @@ body, div, h1, h3 {
 .reserve_page .timeslot label {
     font-size: 2em;
     background-color: #D5BFAA;
-    border: 1vh solid #444444;
     color: #444444;
-    height: 8vh;
+    height: 6vh;
     width: 45.2vw;
     margin: 1vh 0.4vw;
     user-select: none;
@@ -388,7 +397,7 @@ body, div, h1, h3 {
     background-color: #D5BFAA;
     border-color: #444444;
     content: "\2714";
-    border: 4px solid #000;
+    border: 2px solid #000;
     border-radius: 0.2em;
     display: inline-block;
     width: 3vw;
@@ -422,7 +431,21 @@ body, div, h1, h3 {
 .reserve_page .right_side {
     float: right;
     width: 46vw;
-    margin-right: 0.4vw
+    margin-right: 0.4vw;
+    color: #D5BFAA;
+}
+
+.reserve_page .select_team {
+    background-color: #444444;
+}
+
+.reserve_page .right_side h1 {
+    color: #D5BFAA;
+}
+
+.reserve_page .team_selection {
+    width: 100%;
+    height: 55vh;
 }
 
 .reserve_page .right_side #reserve_button {
@@ -431,8 +454,9 @@ body, div, h1, h3 {
     color: #D5BFAA;
     font-size: 1.5em;
     box-shadow: 0px 5px 5px 0px rgba(194,194,194,1);
+    padding: 20px;
+    margin: 30px 70px;
 }
-
 /*----------------------------------------*/
 /* ADMIN PAGE */
 .admin_page .teams {
@@ -515,4 +539,74 @@ body, div, h1, h3 {
 .admin_page .workplace_config p {
     background-color: #D5BFAA;
     font-size: 2vh;
+}
+
+/* RESPONSIVE PHONE */
+@media screen and (max-width:640px){
+    /*LOGIN PAGE*/
+    .login_page h1, .login_page #ngti_logo {
+        font-size: 9vh;
+    }
+    .login_page #login_spacer {
+        margin-left: 2%;
+    }
+    
+    /*NAV BAR*/
+    .nav_bar header img {
+        height: 6vh;
+        padding: 2px 20px;
+    }
+    .nav_bar li a{
+        padding: 0 2.3vw;
+        font-size: 1em;
+    }
+    
+    /*RESERVE PAGE*/
+    .reserve_page .left_side, .reserve_page .right_side {
+        width: 92vw;
+        margin: 0 4vw;
+        float: none;
+    }
+    .reserve_page h1 {
+        font-size: 1em;
+        margin-left: 20vw;
+        text-align: center;
+    }
+    .reserve_page #line1, .reserve_page #line2 {
+        width: 100%;
+    }
+    .reserve_page .date_selection {
+        height: 35.2vw;
+    }
+    .reserve_page .date_selection label {
+        width: 16.8vw;
+        height: 16.8vw;
+        border-radius: 8.8vw;
+        font-size: 2.5vw;
+        padding-top: 4vw;
+    }
+    .reserve_page .timeslot_selection {
+        height: 21vh;
+        margin-bottom: 5px;
+    }
+    .reserve_page .timeslot label {
+        width: 90vw;
+        height: 5vh;
+    }
+    .reserve_page .timeslot input[type=checkbox] + label:before {
+        width: 6vw;
+        height: 4vh;
+    }
+    .reserve_page .timeslot .slot_availability {
+        width: 15vw;
+        margin: 0.5vh;
+    }
+    .reserve_page .team_selection {
+        height: 25vh;
+        overflow-y: scroll;
+    }
+    .reserve_page .right_side #reserve_button {
+        margin: 10px;
+        padding: 0;
+    }
 }
