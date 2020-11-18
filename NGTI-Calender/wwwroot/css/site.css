@@ -208,6 +208,12 @@ body, div, h1, h3 {
     background-color: #444444;
 }
 
+.overview_page .day_block .timeslots {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 19vh;
+}
+
 .overview_page .day_block h3 {
     color: #D5BFAA;
     text-align: center;
@@ -218,7 +224,7 @@ body, div, h1, h3 {
 .overview_page .day_block button {
     background-color: #D5BFAA;
     text-align: center;
-    width: 10.4vw;
+    width: 9.8vw;
     height: 5.5vh;
     font-size: 0.7em;
     margin: 0.5vh 0.3vw;
@@ -334,7 +340,7 @@ body, div, h1, h3 {
 
 .reserve_page .timeslot_selection {
     overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-x: visible;
     height: 35vh
 }
 
@@ -377,7 +383,7 @@ body, div, h1, h3 {
     background-color: #D5BFAA;
     color: #444444;
     height: 6vh;
-    width: 45.2vw;
+    width: 44vw;
     margin: 1vh 0.4vw;
     user-select: none;
 }
@@ -440,6 +446,7 @@ body, div, h1, h3 {
 }
 
 .reserve_page .right_side h1 {
+    margin-left: 1vw;
     color: #D5BFAA;
 }
 
@@ -561,6 +568,61 @@ body, div, h1, h3 {
         font-size: 1em;
     }
     
+    /*OVERVIEW PAGE*/
+    .overview_page .select_timeslot {
+        width: 92vw;
+    }
+    .overview_page .day_block {
+        width: 17.4vw;
+    }
+    .overview_page .day_block .timeslots {
+        height: 17vh;
+    }
+    .overview_page .day_block button {
+        width: 16.4vw;
+        font-size: 0.5em;
+    }
+    .overview_page .day_block button .TSS_availability {
+        height: 2vh;
+        width: 11.4vw;
+        float: none;
+        font-size: 1em;
+    }
+    .overview_page .selected_timeslot {
+        width: 45vw;
+        height: 31vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    } 
+    .overview_page .selected_timeslot h1 {
+        font-size: 0.7em;
+    }
+    .overview_page .selected_timeslot .colleagues {
+        width: 42vw;
+        height: 25vh;
+    }
+    .overview_page .selected_timeslot .colleagues .date {
+        width: 40vw;
+    }
+    .overview_page .selected_timeslot .colleagues p {
+        font-size: 0.3em;
+    }
+    .overview_page .upcoming_reservations {
+        width: 45vw;
+        height: 31vh;
+        margin-top: 0;
+        margin-left: 4.5vw;
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+    .overview_page .upcoming_reservations h1 {
+        font-size: 0.7em;
+    } 
+    .overview_page .upcoming_reservations .line{
+        width: 42vw;
+        height: 0.5vh;
+    }
+
     /*RESERVE PAGE*/
     .reserve_page .left_side, .reserve_page .right_side {
         width: 92vw;

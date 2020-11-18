@@ -71,6 +71,7 @@
             foreach (var day in calender[0]) {
                 <div class="day_block">
                     <h3>@calender[0][i] @calender[1][i]</h3>
+                    <div class="timeslots">
                     @{ 
                         int j = 0;
                         foreach(var timeslot in Model) {
@@ -81,12 +82,12 @@
                             j++;
                         }
                     }
-                }
-            </div>
+                </div>
+                </div>
+            }
             i++;
         }
-    }
-    </div>
+        </div>
         
     <div class="selected_timeslot">
         <h1>Selected timeslot:</h1>
