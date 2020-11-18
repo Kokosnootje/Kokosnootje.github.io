@@ -2,29 +2,46 @@
     ViewData["Title"] = "Home Page";
     Layout = null;
 }
+@model IEnumerable<NGTI_Calender.Models.Person>
+    @using System;
+    @using System.Collections.Generic;
+    @using Newtonsoft.Json;
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="./css/site.css" type="text/css" rel="stylesheet" />
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google-signin-client_id" content="835750252333-i1ekg7hg1tkl6nevitme4uem0fl16de4.apps.googleusercontent.com">
+    </head>
+    <body>
+        <div class="login_page">
+            <div class="centered_div_hv">
+                <h1>WELC<img id="ngti_logo" src="img/NGTI Logo.png" />ME</h1>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <link href="./css/site.css" type="text/css" rel="stylesheet" />
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="google-signin-client_id" content="835750252333-i1ekg7hg1tkl6nevitme4uem0fl16de4.apps.googleusercontent.com">
-</head>
-<body>
-    <div class="login_page">
-        <div class="centered_div_hv">
-            <h1>WELC<img id="ngti_logo" src="img/NGTI Logo.png" />ME</h1>
-
-            <div id="my-signin2" style="position:relative; left:41%;"></div>
-            <script>
+                <div id="my-signin2" style="position:relative; left:41%;"></div>
+                <script>
                 function onSuccess(googleUser) {
                     var profile = googleUser.getBasicProfile();
                     console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
                     console.log('Name: ' + profile.getName());
                     console.log('Image URL: ' + profile.getImageUrl());
                     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+
+                    // Mozilla -> fetch, posten van data
+                            fetch('@Url.Action("Create", "Person")', {
+                                method: 'post',
+                                body: JSON.stringify({ Name: profile.getName(), Email: profile.getEmail, Image: profile.getImageUrl })
+                            })
+                            .then(() => {
+                                alert("Successvol")
+                            })
+                    // fetch('route naar je controller', { method: 'POST })
+                    // .then(() => {
+                    // })
+
                     window.location.href = '@Url.Action("Index", "Reservation")';
                 }
                 function onFailure(error) {
@@ -41,11 +58,11 @@
                         'onfailure': onFailure
                     });
                 }
-            </script>
+                </script>
 
-            <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+                <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 
+            </div>
         </div>
-        </div >
-</body >
-</html >
+    </body>
+</html>
