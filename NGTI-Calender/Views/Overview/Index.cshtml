@@ -77,15 +77,15 @@
                         foreach(var timeslot in Model) {
                             <button id="TSS@(j)">
                                 @timeslot.TimeStart-@timeslot.TimeEnd
-                                <div id="TSS@(i)_slot_availability" class="TSS_availability">00/17</div>
+                                <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">00/17</div>
                                 </button>
                             j++;
                         }
                     }
                 </div>
                 </div>
-            }
             i++;
+            }
         }
         </div>
         

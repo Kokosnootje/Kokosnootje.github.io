@@ -473,9 +473,11 @@ body, div, h1, h3 {
     margin-left: 4vw;
     margin-top: 2vh;
     background-color: navajowhite;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
-.admin_page .timeslots{
+.admin_page .timeslots {
     float: right;
     width: 46vw;
     height: 50vh;
@@ -488,7 +490,9 @@ body, div, h1, h3 {
 }
 
 .admin_page .timeslots .timeslot_config{
-    height: 46vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 42vh;
     background-color: #444444;
     text-align: center;
     padding: 2vh 2vw;
@@ -507,17 +511,22 @@ body, div, h1, h3 {
     color: #444444;
 }
 
-.admin_page .timeslots .timeslot_config a:hover, .admin_page .workplace_config a:hover, .admin_page .timeslots .timeslot_config #add_timeslot:hover{
+.admin_page .timeslots .timeslot_config a:hover, .admin_page .workplace_config a:hover, .admin_page .timeslots #add_timeslot:hover{
     text-decoration: underline;
     color: white;
 }
 
-.admin_page .timeslots .timeslot_config #add_timeslot{
+.admin_page .timeslots #add_timeslot{
+    width: inherit;
+    background-color: #444;
     float: right;
     color: #D5BFAA;
+    padding-left: 10px;
 }
 
 .admin_page .employees {
+    overflow-y: scroll;
+    overflow-x: hidden;
     float: right;
     width: 30vw;
     height: 28vh;
@@ -527,11 +536,13 @@ body, div, h1, h3 {
 }
 
 .admin_page .workplaces {
+    overflow-y: scroll;
+    overflow-x: hidden;
     float: right;
     width: 15vw;
-    height: 10vh;
+    height: 12vh;
     margin-right: 1vw;
-    margin-top: 20vh;
+    margin-top: 19vh;
 }
 .admin_page .workplaces h1 {
     font-size: 3vh;
@@ -670,5 +681,32 @@ body, div, h1, h3 {
     .reserve_page .right_side #reserve_button {
         margin: 10px;
         padding: 0;
+    }
+
+    /*ADMIN SCREEN*/
+    .admin_page .teams {
+        height: 26vh;
+        width: 92vw;
+    }
+    .admin_page .timeslots h1 {
+        font-size: 3vh;
+    }
+    .admin_page .timeslots {
+        width: 92vw;
+        height: 26vh;
+    }
+    .admin_page .timeslots .timeslot_config {
+        height: 19vh;
+    }
+    .admin_page .timeslots .timeslot_config p {
+        font-size: 2vh;
+    }
+    .admin_page .employees {
+        width: 62vw;
+        height: 25vh;
+    }
+    .admin_page .workplaces {
+        margin-top: 2vh;
+        width: 29vw;
     }
 }
