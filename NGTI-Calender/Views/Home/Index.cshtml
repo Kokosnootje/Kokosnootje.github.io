@@ -16,8 +16,8 @@
     <div class="login_page">
         <div class="centered_div_hv">
             <h1>WELC<img id="ngti_logo" src="img/NGTI Logo.png" />ME</h1>
-
-            <div id="my-signin2" style="position:relative; left:41%;"></div>
+            <div id="login_spacer"></div>
+            <div id="my-signin2" style="float:left;"></div>
             <script>
                 function onSuccess(googleUser) {
                     var profile = googleUser.getBasicProfile();
@@ -33,14 +33,25 @@
                 function renderButton() {
                     gapi.signin2.render('my-signin2', {
                         'scope': 'profile email',
-                        'width': 250,
+                        'width': 300,
                         'height': 60,
                         'longtitle': true,
                         'theme': 'light',
+                        'font-size': 10,
                         'onsuccess': onSuccess,
                         'onfailure': onFailure
                     });
                 }
+                function responsive(x) {
+                    if (x.matches) {
+                    } else {
+
+                    }
+                }
+
+                var x = window.matchMedia("(max-width: 640px)")
+                responsive(x)
+
             </script>
 
             <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
