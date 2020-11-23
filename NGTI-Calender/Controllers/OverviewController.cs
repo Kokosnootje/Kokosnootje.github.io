@@ -14,9 +14,10 @@ namespace NGTI_Calender.Controllers {
             _context = context;
         }
 
-        // GET: Reservation/Create
-        public IActionResult Index() {
-            return View(_context.Timeslot.ToArray());
+        // GET: Overview/Index
+        public IActionResult Index(string personId) {
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), personId, _context.Reservation.ToList(), _context.Person.ToList());
+            return View(tuple);
         }
 
         // SEND MAIL + RETURN VIEW

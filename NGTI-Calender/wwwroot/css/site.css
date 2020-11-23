@@ -323,12 +323,13 @@ body, div, h1, h3 {
     overflow-x: scroll;
     overflow-y: hidden;
 }
-.overview_page .upcoming_reservations .reservation_displays .display {
-    background-color: #D5BFAA;
-    height: 17vh;
-    margin: 1vh 1vw;
-    width: 17vh;
-}
+    .overview_page .upcoming_reservations .reservation_displays .display {
+        background-color: #D5BFAA;
+        height: 17vh;
+        margin: 1vh 1vw;
+        width: 17vh;
+        float: left;
+    }
 .overview_page .upcoming_reservations .reservation_displays .display a {
     float: right;
     margin: 1vh 1vh 0 0;

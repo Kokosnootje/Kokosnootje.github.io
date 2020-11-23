@@ -8,12 +8,13 @@
     ViewData["ID Team"] = "null";
     ViewData["ID Admin Dashboard"] = "null";
     ViewData["ProfilePicture"] = GetProfilePicture(Model.Item4);
+    ViewData["PersonId"] = Model.Item4;
 
     string GetProfilePicture(string personId)
     {
         foreach (var item in Model.Item5)
         {
-            if(personId == Model.Item4)
+            if(personId == item.PersonId.ToString())
             {
                 return item.Image;
             }
