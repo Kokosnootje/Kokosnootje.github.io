@@ -312,6 +312,25 @@ body, div, h1, h3 {
     margin-left:1vw;
     background-color: #D5BFAA;
 }
+.overview_page .upcoming_reservations .reservation_displays {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+.overview_page .upcoming_reservations .reservation_displays .display {
+    background-color: #D5BFAA;
+    height: 17vh;
+    margin: 1vh 1vw;
+    width: 17vh;
+}
+.overview_page .upcoming_reservations .reservation_displays .display a {
+    float: right;
+    margin: 1vh 1vh 0 0;
+}
+.overview_page .upcoming_reservations .reservation_displays .display p {
+    text-align: center;
+    padding-top: 4.8vh;
+}
+
 /*----------------------------------------*/
 /* RESERVE PAGE */
 .reserve_page h1 {
@@ -536,8 +555,6 @@ body, div, h1, h3 {
 }
 
 .admin_page .workplaces {
-    overflow-y: scroll;
-    overflow-x: hidden;
     float: right;
     width: 15vw;
     height: 12vh;
@@ -623,8 +640,6 @@ body, div, h1, h3 {
         height: 31vh;
         margin-top: 0;
         margin-left: 4.5vw;
-        overflow-x: scroll;
-        overflow-y: hidden;
     }
     .overview_page .upcoming_reservations h1 {
         font-size: 0.7em;
