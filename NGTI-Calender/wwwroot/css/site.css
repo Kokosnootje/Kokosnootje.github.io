@@ -92,6 +92,13 @@ body, div, h1, h3 {
     padding: 10px 50px;
 }
 
+.nav_bar header #google_pf {
+    border-radius: 3.75vh;
+    height: 7.5vh;
+    margin: 10px 50px;
+    padding: 0; 
+}
+
 .nav_bar ul {
     list-style: none;
     padding: 0;
@@ -296,7 +303,7 @@ body, div, h1, h3 {
     width: 60vw;
     height: 26.5vh;
     margin-left: 4vw;
-    margin-top: 2vw;
+    margin-top: 0.5vw;
     background-color: #444444;
     float:left;
 }

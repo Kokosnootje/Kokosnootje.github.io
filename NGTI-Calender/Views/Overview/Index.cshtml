@@ -64,46 +64,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
+    @*
+        MAIL SYSTEM
+
+        <form asp-action="Index">
+        <input type="hidden" name="personId" value="1"/>
+        <input type="hidden" name="subject" value="onderwerp"/>
+        <input type="hidden" name="body" value="tekst"/>
+        <button type="submit">SEND MAIL</button>
+    </form>*@
     <div class="overview_page">
         <div class="select_timeslot">
-        @{
-            int i = 0;
-            foreach (var day in calender[0]) {
-                <div class="day_block">
-                    <h3>@calender[0][i] @calender[1][i]</h3>
-                    <div class="timeslots">
-                    @{ 
-                        int j = 0;
-                        foreach(var timeslot in Model) {
-                            <button id="TSS@(j)">
-                                @timeslot.TimeStart-@timeslot.TimeEnd
-                                <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">00/17</div>
-                                </button>
-                            j++;
-                        }
-                    }
-                </div>
-                </div>
-            i++;
+            @{
+                int i = 0;
+                foreach (var day in calender[0]) {
+                    <div class="day_block">
+                        <h3>@calender[0][i] @calender[1][i]</h3>
+                        <div class="timeslots">
+                            @{
+                                int j = 0;
+                                foreach (var timeslot in Model) {
+                                    <button id="TSS@(j)">
+                                        @timeslot.TimeStart-@timeslot.TimeEnd
+                                        <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">00/17</div>
+                                    </button>
+                                    j++;
+                                }
+                            }
+                        </div>
+                    </div>
+                    i++;
+                }
             }
-        }
         </div>
-        
-    <div class="selected_timeslot">
-        <h1>Selected timeslot:</h1>
-        <div class="colleagues">
-            <div class="date"><p id="date">date</p><p id="tsa">00/17</p></div>
-            <p>Name + Functions</p>
+
+        <div class="selected_timeslot">
+            <h1>Selected timeslot:</h1>
+            <div class="colleagues">
+                <div class="date"><p id="date">date</p><p id="tsa">00/17</p></div>
+                <p>Name + Functions</p>
+            </div>
         </div>
-    </div>
-    
-    <div class="upcoming_reservations">
-        <h1>My upcoming reservations:</h1>
-        <div class="line"></div>
-        <div class="reservation_displays">
-            <div class="display"><a>X</a><p>datum<br />timeslot</p></div>
-        </div> 
-    </div>
+
+        <div class="upcoming_reservations">
+            <h1>My upcoming reservations:</h1>
+            <div class="line"></div>
+            <div class="reservation_displays">
+                <div class="display"><a>X</a><p>datum<br />timeslot</p></div>
+            </div>
+        </div>
     </div>
 </body>
 
