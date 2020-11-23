@@ -16,6 +16,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.PersonName)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EMail)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -24,6 +27,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.PersonName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EMail)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PersonId">Edit</a> |

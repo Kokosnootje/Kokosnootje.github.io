@@ -25,17 +25,25 @@ namespace NGTI_Calender.Controllers
         }
 
         // GET: Reservation/Create
-        public IActionResult Index()
+        public IActionResult Index(string personId)
         {
-            var tuple = Tuple.Create<Reservation, List<Timeslot>, Popup>(new Reservation(), _context.Timeslot.ToList(), new Popup());
+            var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList());
             return View(tuple);
         }
         // POST: Reservation
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index([Bind("ReservationId,Date,Timeslot", Prefix = "Item1")] Reservation reservation, string[] selectedObjects, int[] selectedTimeslots)
+        public async Task<IActionResult> Index([Bind("ReservationId,Date,Timeslot", Prefix = "Item1")] Reservation reservation, string[] selectedObjects, int[] selectedTimeslots, string personId)
         {
+            Person user = new Person();
+            foreach(var item in _context.Person)
+            {
+                if(item.PersonId.ToString() == personId)
+                {
+                    user = item;
+                }
+            }
             Timeslot[] rightTimeslots = new Timeslot[selectedTimeslots.Length];
             Dictionary<int, string> time = new Dictionary<int, string>();
             for(int i = 0; i < selectedTimeslots.Length; i++)
@@ -59,6 +67,7 @@ namespace NGTI_Calender.Controllers
                 {
                     revList[i][j] = new Reservation();
                     revList[i][j].Date = selectedObjects[i];
+                    revList[i][j].Person = user;
                 }
             }
             for(int i = 0; i < selectedObjects.Length; i++)
@@ -81,14 +90,14 @@ namespace NGTI_Calender.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
-                var tuple = Tuple.Create<Reservation, List<Timeslot>, Popup>(new Reservation(), _context.Timeslot.ToList(), popup);
+                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList());
                 return View(tuple);
             }
             else
             {
                 Popup popup = new Popup();
                 popup.popupMessage = "an error has occured";
-                var tuple = Tuple.Create<Reservation, List<Timeslot>, Popup>(new Reservation(), _context.Timeslot.ToList(), popup);
+                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList());
                 return View(tuple);
             }
         }

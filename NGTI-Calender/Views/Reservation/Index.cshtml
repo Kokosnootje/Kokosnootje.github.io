@@ -1,4 +1,4 @@
-﻿@model Tuple<Reservation, List<Timeslot>, Popup>
+﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>>
 @{
 //@model IEnumerable<NGTI_Calender.Models.Reservation>
     @using FluentDateTime
@@ -7,6 +7,19 @@
     ViewData["ID Overview"] = "null";
     ViewData["ID Team"] = "null";
     ViewData["ID Admin Dashboard"] = "null";
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item4);
+
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item5)
+        {
+            if(personId == Model.Item4)
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
 
     static string[][] SelectDaysOfWeeks()
     {
@@ -15,13 +28,7 @@
         DateTime lastDay = DateTime.Now;
         for (int i = 0; i < 10; i++)
         {
-            if (lastDay.DayOfWeek == DayOfWeek.Monday)
-            {
-                daysOfWeekCalenderDays[i] = "Mon.";
-                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
-                lastDay = lastDay.AddDays(3.0);
-            }
-            else if (lastDay.DayOfWeek == DayOfWeek.Saturday)
+            if (lastDay.DayOfWeek == DayOfWeek.Saturday)
             {
                 daysOfWeekCalenderDays[i] = "Mon.";
                 daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
@@ -124,6 +131,7 @@
                     <div id="line2"></div>
                     <div class="team_selection"></div>
                 </div>
+                <input type="hidden" name="personId" value="@Model.Item4">
                 <button id="reserve_button">BACK</button>
                 <button type="submit" id="reserve_button">RESERVE</button>
                 <a href="https://mail.google.com/mail/u/0/?logout&hl=en">Sign out</a>

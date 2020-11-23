@@ -27,16 +27,7 @@
                     <li><a href="@Url.Action("Index", "Admin")" id="@ViewData["ID Admin Dashboard"]">Admin</a></li>
                 </ul>
             </nav>
-            <img id="myImage">
-            <script type="text/javascript">
-                var clientId = '835750252333-i1ekg7hg1tkl6nevitme4uem0fl16de4.apps.googleusercontent.com'
-                function init() {
-                    gapi.load('auth2', function () {
-                        gapi.auth2.init();
-                        document.getElementById("myImage").src = auth2.currentUser.get().getBasicProfile().getImageUrl();
-                    });
-                }
-            </script>
+            <img src="@ViewData["ProfilePicture"]" />
         </header>
     </div>
     <main role="main" class="pb-3">
