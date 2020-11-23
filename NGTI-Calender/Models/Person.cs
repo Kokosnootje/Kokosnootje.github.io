@@ -13,5 +13,7 @@ namespace NGTI_Calender.Models
         public string PersonName { get; set; }
         public string EMail { get; set; }
 
+        public string Image { get; set; }
+
     }
 }
