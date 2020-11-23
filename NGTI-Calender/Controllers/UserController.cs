@@ -37,11 +37,8 @@ namespace NGTI_Calender.Controllers
                 }
                 if (newUser)
                 {
-                    List<Reservation> resList = new List<Reservation>();
-                    user.Reservations = resList;
                     _context.Add(user);
                     _context.SaveChanges();
-
                 }
                 foreach (var item in _context.Person)
                 {
