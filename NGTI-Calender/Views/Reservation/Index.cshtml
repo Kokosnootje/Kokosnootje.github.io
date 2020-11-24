@@ -142,7 +142,10 @@
 
     <script>
         if ("@Model.Item3.popupMessage" != "") {
-            window.alert("@Html.Raw(Model.Item3.popupMessage)");
+            var s = "@Html.Raw(Model.Item3.popupMessage)";
+            var s = s.split("|").join("\r");
+            var s = s.split("||").join("\n");
+            setTimeout(() =>  window.alert(s), 100);
         }
 
         function changeColor(checkboxID, labelID, originColor, checkedColor) {
