@@ -17,7 +17,7 @@ namespace NGTI_Calender.Controllers {
         }
 
         public IActionResult Index() {
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup());
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList());
             return View(tuple);
         }
 
@@ -46,11 +46,11 @@ namespace NGTI_Calender.Controllers {
                     //must cascade drop
                     _context.Timeslot.Remove(item);
                     await _context.SaveChangesAsync();
-                    var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "The timeslot has been removed." });
+                    var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "The timeslot has been removed." }, _context.Person.ToList());
                     return View(tuple2);
                 }
             }
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage="An error has occured." });
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage="An error has occured." }, _context.Person.ToList());
             return View(tuple);
         }
 
@@ -81,12 +81,12 @@ namespace NGTI_Calender.Controllers {
                 }
             } catch {
                 //wrong input message
-                var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." });
+                var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList());
                 return View(tuple1);
             }
             //check if there are null values
             if (string.IsNullOrWhiteSpace(startTime) || string.IsNullOrWhiteSpace(endTime)){
-                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." });
+                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList());
                 return View(tuple);
             }
             //add to database if it does not overlap
@@ -94,11 +94,11 @@ namespace NGTI_Calender.Controllers {
                 _context.Timeslot.Add(new Timeslot() { TimeStart = startTime, TimeEnd = endTime });
                 await _context.SaveChangesAsync();
                 //timeslot has been added message
-                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The timeslot has been added." });
+                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The timeslot has been added." }, _context.Person.ToList());
                 return View(tuple2);
             } else {
                 //overlapping input message
-                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The input overlaps with an existing timeslot." });
+                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The input overlaps with an existing timeslot." }, _context.Person.ToList());
                 return View(tuple);
             }
         }
@@ -125,8 +125,7 @@ namespace NGTI_Calender.Controllers {
             mail.To.Add(new MailAddress(email));
             mail.Subject = "Your reservation has been canceled.";
             mail.Body = "Your reservation for " + date + " | " + timeStart + "-" + timeEnd + "has been canceled";
-
-            //Json bestand met films openen en lezenmail.Body = "Beste klant. Uw reservering is ontvangen en verwerkt. Laat deze mail zien in de bioscoop als toegangsbewijs. Geniet van de film!";
+            
             SmtpServer.Send(mail);
         }
     }
