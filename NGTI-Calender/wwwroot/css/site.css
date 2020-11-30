@@ -528,17 +528,39 @@ body, div, h1, h3 {
     float: left;
     margin-left: 4vw;
 }
-.admin_page .timeslots .timeslot_config p{
+
+.admin_page .timeslots .timeslot_config form {
     background-color: #D5BFAA;
+    width: 42vw; 
+    height: 6vh;
+    padding-top: 1vh;
+    margin: 2vh 0;
+}
+
+.admin_page .timeslots form, .admin_page .timeslots form input {
+    background-color: #444444;
+}
+
+.admin_page .timeslots form button {
+    background-color: #444444;
+    color: #D5BFAA;
+    outline: none;
+}
+
+.admin_page .timeslots .timeslot_config form button {
+    background-color: #D5BFAA;
+    border: none;
+    margin-left: 20vw;
+    margin-top: 0.3vh;
+    color: #444;
+}
+
+.admin_page .timeslots .timeslot_config p{
     font-size: 3vh;
 }
 
-.admin_page .timeslots .timeslot_config a, .admin_page .workplace_config a{
-    text-decoration: none;
-    color: #444444;
-}
 
-.admin_page .timeslots .timeslot_config a:hover, .admin_page .workplace_config a:hover, .admin_page .timeslots #add_timeslot:hover{
+.admin_page .timeslots #add_timeslot:hover{
     text-decoration: underline;
     color: white;
 }
@@ -723,6 +745,19 @@ body, div, h1, h3 {
     }
     .admin_page .timeslots .timeslot_config p {
         font-size: 2vh;
+    }
+    .admin_page .timeslots .timeslot_config form {
+    background-color: #D5BFAA;
+    width: 87vw; 
+    height: 6vh;
+    padding-top: 1vh;
+    margin: 2vh 0;
+    }
+    .admin_page .timeslots .timeslot_config form button {
+    margin-left: 50vw;
+    }
+    .admin_page .timeslots form, .admin_page .timeslots form input {
+        font-size: 0.76em;
     }
     .admin_page .employees {
         width: 62vw;
