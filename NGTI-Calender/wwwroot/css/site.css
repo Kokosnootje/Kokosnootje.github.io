@@ -257,15 +257,15 @@ body, div, h1, h3 {
     color: #D5BFAA;
 }
 
-.overview_page .selected_timeslot .colleagues {
-    margin: 1vh 1vw;
-    font-size: 1.5em;
-    height:73vh;
-    width: 26vw;
-    background-color: #D5BFAA;
-    color: #444444;
-    padding: 0.1vh 0.1vw;
-}
+    .overview_page .selected_timeslot .colleagues {
+        margin: 1vh 1vw;
+        font-size: 1.5em;
+        height: 73vh;
+        width: 26vw;
+        background-color: #D5BFAA;
+        color: #444444;
+        padding: 0.1vh 0.1vw;
+    }
 
 .overview_page .selected_timeslot .colleagues .date{
     margin: 0.5vh 1vw;
@@ -273,6 +273,15 @@ body, div, h1, h3 {
     height:4vh;
     width: 23.8vw;
     background-color: #444444;
+    color: #D5BFAA;
+}
+
+.overview_page .selected_timeslot .colleagues .res{
+    height: 4vh;
+    width: 23.8vw;
+    background-color: #444444;
+    font-size: 0.8em;
+    margin: 0.5vh 1vw;
     color: #D5BFAA;
 }
 
@@ -313,6 +322,7 @@ body, div, h1, h3 {
     background-color: #D5BFAA;
 }
 .overview_page .upcoming_reservations .reservation_displays {
+    margin-left: 10px;
     overflow-x: scroll;
     overflow-y: hidden;
 }
@@ -323,6 +333,16 @@ body, div, h1, h3 {
         width: 17vh;
         float: left;
     }
+.overview_page .upcoming_reservations .reservation_displays .display .button{
+    text-align: center;
+    background-color: #444444;
+    border: none;
+    margin-left: 20px;
+    color: #D5BFAA;
+    padding: 10px 32px;
+    text-align: center;
+    font-size: 0.8em;
+}
 .overview_page .upcoming_reservations .reservation_displays .display a {
     float: right;
     margin-right: 10px;
