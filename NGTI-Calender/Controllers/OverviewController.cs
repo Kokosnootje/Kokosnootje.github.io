@@ -18,5 +18,20 @@ namespace NGTI_Calender.Controllers {
             var tuple = Tuple.Create(_context.Timeslot.ToList(), personId, _context.Reservation.ToList(), _context.Person.ToList());
             return View(tuple);
         }
+
+        // POST: Overview/Index
+        [HttpPost, ActionName("Index")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string resList)
+        {
+            string[] resids = resList.Split(' ');
+            //for(int i = 0; i < resids.Length; i++)
+            //{
+             //   var reservation = await _context.Reservation.FindAsync(resids[i]);
+               // _context.Reservation.Remove(reservation);
+                //await _context.SaveChangesAsync();
+            //}
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

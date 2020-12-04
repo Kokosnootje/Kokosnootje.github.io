@@ -319,17 +319,19 @@ body, div, h1, h3 {
     .overview_page .upcoming_reservations .reservation_displays .display {
         background-color: #D5BFAA;
         height: 17vh;
-        margin: 1vh 1vw;
+        margin: 1vh 4px;
         width: 17vh;
         float: left;
     }
 .overview_page .upcoming_reservations .reservation_displays .display a {
     float: right;
-    margin: 1vh 1vh 0 0;
+    margin-right: 10px;
+    font-size: 14px;
 }
 .overview_page .upcoming_reservations .reservation_displays .display p {
     text-align: center;
-    padding-top: 4.8vh;
+    font-size: 14px;
+    margin-bottom: 5px;
 }
 
 /*----------------------------------------*/

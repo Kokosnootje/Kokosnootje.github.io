@@ -133,32 +133,47 @@
             <h1>My upcoming reservations:</h1>
             <div class="line"></div>
             <div class="reservation_displays">
-                @{
-                    string selectAllTimeSlots(string date)
-                    {
-                        string totalts = "";
-                        foreach (var times in Model.Item3)
+                <form asp-action="Index">
+                    @{
+
+                        string lastDate = "";
+                        foreach (var item in Model.Item3)
                         {
-                            if (times.Date == date)
+                            if (item.Person.PersonId.ToString() == Model.Item2)
                             {
-                                totalts = totalts + times.Timeslot.TimeStart + " - " + times.Timeslot.TimeEnd + "\n";
+                                if (lastDate != item.Date)
+                                {
+                                        <div class="display">
+                                            <p style="font-weight: bold">@item.Date</p><input type="hidden" name="resList" value="@getResIds(item)"><button type="submit">X</button>
+                                            @{
+                                                string getResIds(Reservation itemm)
+                                                {
+                                                    string theresses = "";
+                                                    foreach (var theRes in Model.Item3)
+                                                    {
+                                                        if (theRes.Date == itemm.Date)
+                                                        {
+                                                            theresses = theresses + item.ReservationId.ToString() + " ";
+                                                        }
+                                                    }
+                                                    theresses = theresses.Remove(theresses.Length - 1);
+                                                    return theresses;
+                                                }
+                                                foreach (var times in Model.Item3)
+                                                {
+                                                    if (times.Date == item.Date)
+                                                    {
+                                                        <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd - @times.ReservationId.ToString()<a>X</a></p>
+                                                    }
+                                                }
+                                                lastDate = item.Date;
+                                            }
+                                        </div>
+                                }
                             }
                         }
-                        return totalts;
                     }
-                    string lastDate = "";
-                    foreach (var item in Model.Item3)
-                    {
-                        if (item.Person.PersonId.ToString() == Model.Item2)
-                        {
-                            if (lastDate != item.Date)
-                            {
-                                lastDate = item.Date;
-                                <div class="display"><a>X</a><p>@item.Date<br />@selectAllTimeSlots(item.Date)</p></div>
-                            }
-                        }
-                    }
-                }
+                </form>
             </div>
             </div>
         </div>
