@@ -7,26 +7,33 @@ using NGTI_Calender.Data;
 using System.Net.Mail;
 using NGTI_Calender.Models;
 
-namespace NGTI_Calender.Controllers {
-    public class OverviewController : Controller {
+namespace NGTI_Calender.Controllers
+{
+    public class OverviewController : Controller
+    {
         private readonly ApplicationDbContext _context;
 
-        public OverviewController(ApplicationDbContext context) {
+        public OverviewController(ApplicationDbContext context)
+        {
             _context = context;
         }
 
         // GET: Overview/Index
-        public IActionResult Index(string personId) {
+        public IActionResult Index(string personId)
+        {
             var tuple = Tuple.Create(_context.Timeslot.ToList(), personId, _context.Reservation.ToList(), _context.Person.ToList(), new Reservation());
             return View(tuple);
         }
 
         // SEND MAIL + RETURN VIEW
         [HttpPost]
-        public async Task<IActionResult> Index(int personId, string subject, string body) {
+        public async Task<IActionResult> Index(int personId, string subject, string body)
+        {
             string email = "";
-            foreach (var person in _context.Person.ToList()) {
-                if (person.PersonId == personId) {
+            foreach (var person in _context.Person.ToList())
+            {
+                if (person.PersonId == personId)
+                {
                     email = person.EMail;
                 }
             }
@@ -49,6 +56,7 @@ namespace NGTI_Calender.Controllers {
             //Json bestand met films openen en lezenmail.Body = "Beste klant. Uw reservering is ontvangen en verwerkt. Laat deze mail zien in de bioscoop als toegangsbewijs. Geniet van de film!";
             SmtpServer.Send(mail);
             return View(_context.Timeslot.ToArray());
+        }
         // POST: Overview/Index
         [HttpPost, ActionName("Index")]
         [ValidateAntiForgeryToken]
@@ -57,17 +65,17 @@ namespace NGTI_Calender.Controllers {
             string p = personId;
             string[] resids = resList.Split(' ');
             int[] reservationIds = new int[resids.Length];
-            for(int j = 0; j < resids.Length; j++)
+            for (int j = 0; j < resids.Length; j++)
             {
                 reservationIds[j] = Int32.Parse(resids[j]);
             }
-            for(int i = 0; i < resids.Length; i++)
+            for (int i = 0; i < resids.Length; i++)
             {
-               var reservation = await _context.Reservation.FindAsync(reservationIds[i]);
-               _context.Reservation.Remove(reservation);
-               await _context.SaveChangesAsync();
+                var reservation = await _context.Reservation.FindAsync(reservationIds[i]);
+                _context.Reservation.Remove(reservation);
+                await _context.SaveChangesAsync();
             }
-            return RedirectToAction("Index", new { personId = personId});
+            return RedirectToAction("Index", new { personId = personId });
         }
     }
 }
