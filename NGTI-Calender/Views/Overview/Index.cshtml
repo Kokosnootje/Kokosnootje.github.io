@@ -1,5 +1,5 @@
 ﻿
-@model Tuple<List<Timeslot>, string, List<Reservation>, List<Person>>
+@model Tuple<List<Timeslot>, string, List<Reservation>, List<Person>, Reservation>
 @{
     @using FluentDateTime
     ViewData["Title"] = "Overview";
@@ -136,41 +136,62 @@
             <div class="colleagues">
                 <div class="date"><p id="date">date</p><p id="tsa">00/17</p></div>
                 <p>Name + Functions</p>
+                <div class="res">test</div>
             </div>
         </div>
         <div class="upcoming_reservations">
             <h1>My upcoming reservations:</h1>
             <div class="line"></div>
             <div class="reservation_displays">
-                @{
-                    string selectAllTimeSlots(string date)
-                    {
-                        string totalts = "";
+                <form asp-action="Index" onsubmit="return confirm('Do you really want to delete this reservation?')">
+                    @{
+                        <input type="hidden" name="personId" value="@Model.Item2">
+                        string lastDate = "";
+                        foreach (var item in Model.Item3)
+                        {
+                            if (item.Person.PersonId.ToString() == Model.Item2)
+                            {
+                                if (lastDate != item.Date)
+                                {
+
+                <div class="display">
+                    <p style="font-weight: bold">@item.Date</p>
+                    @{
+                        string getResIds(string itemDate)
+                        {
+                            string theresses = "";
+                            foreach (var theRes in Model.Item3)
+                            {
+                                if (theRes.Date == itemDate)
+                                {
+                                    theresses = theresses + theRes.ReservationId.ToString() + " ";
+                                }
+                            }
+                            theresses = theresses.Remove(theresses.Length - 1);
+                            return theresses;
+                        }
                         foreach (var times in Model.Item3)
                         {
-                            if (times.Date == date)
+                            if (times.Date == item.Date)
                             {
-                                totalts = totalts + times.Timeslot.TimeStart + " - " + times.Timeslot.TimeEnd + "\n";
+                                <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
                             }
                         }
-                        return totalts;
+                        lastDate = item.Date;
                     }
-                    string lastDate = "";
-                    foreach (var item in Model.Item3)
-                    {
-                        if (item.Person.PersonId.ToString() == Model.Item2)
-                        {
-                            if (lastDate != item.Date)
-                            {
-                                lastDate = item.Date;
-                                <div class="display"><a>X</a><p>@item.Date<br />@selectAllTimeSlots(item.Date)</p></div>
+                    <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
+                </div>
+                                }
                             }
                         }
                     }
-                }
+                </form>
             </div>
             </div>
         </div>
+    <script>
+
+    </script>
 </body>
 
 
