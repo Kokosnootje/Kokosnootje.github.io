@@ -1,10 +1,24 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿
+/* SCROLLBAR
+-------------------------------------------------- */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
 
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 /* Sticky footer styles
@@ -195,7 +209,7 @@ body, div, h1, h3 {
 }
 
 /*----------------------------------------*/
-/* Overview PAGE */
+/* OVERVIEW PAGE */
 
 .overview_page {
     margin-top: 2vh;
@@ -320,16 +334,17 @@ body, div, h1, h3 {
     background-color: #D5BFAA;
 }
 .overview_page .upcoming_reservations .reservation_displays {
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 17vh;
 }
-    .overview_page .upcoming_reservations .reservation_displays .display {
-        background-color: #D5BFAA;
-        height: 17vh;
-        margin: 1vh 1vw;
-        width: 17vh;
-        float: left;
-    }
+.overview_page .upcoming_reservations .reservation_displays .display {
+    background-color: #D5BFAA;
+    height: 17vh;
+    margin: 1vh 1vw;
+    width: 17vh;
+    float: left;
+}
 .overview_page .upcoming_reservations .reservation_displays .display a {
     float: right;
     margin: 1vh 1vh 0 0;
@@ -340,7 +355,114 @@ body, div, h1, h3 {
 }
 
 /*----------------------------------------*/
+/* TEAMS PAGE */
+.teams_page h1 {
+    font-size: 2em;
+    margin-left: 1vw;
+}
+.teams_page .select_team, .teams_page .team_reservations {
+    margin: 2vh 0;
+    height: 80vh;
+}
+.teams_page .select_team {
+    background-color: #444;
+    width: 34vw;
+    float: left;
+    margin-left: 4vw;
+}
+.teams_page .select_team .line {
+    width: 34vw;
+    height: 1vh;
+    margin: 1vh 0 0 0;
+    background-color: #D5BFAA;
+}
+.teams_page .select_team h1 {
+    color: #D5BFAA;
+}
+.teams_page .team_selection_scroll {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.teams_page .team_selection {
+    width: 30vw;
+    height: 70vh;
+    margin: 1vh 2vw;
+}
+.teams_page .team_display {
+    width: inherit;
+    background-color: #D5BFAA;
+    margin-top: 1vh;
+}
+.teams_page .team_selection button {
+    font-size: 3.5vh;
+    width: 28vw;
+    margin: 1vh 1vw;
+    background-color: #D5BFAA;
+}
+.teams_page .team_selection .member_showcase {
+    width: 28vw;
+    margin: 0 1vw;
+    padding-bottom: 1vh;
+}
+.teams_page .team_selection .member {
+    font-size: 2.5vh;
+    border: 2px solid #444;
+    width: 28vw;
+    height: 4.5vh;
+    margin-bottom: 1vh;
+}
+.teams_page .team_selection .member p {
+    text-align: center;
+}
+.teams_page .team_reservations {
+    width: 55vw;
+    float: right;
+    margin-right: 3vw;
+}
+.teams_page .team_reservations .all_members {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 74vh;
+}
+.teams_page .reservation_displays {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: inherit;
+    background-color: #444;
+    height: 17vh;
+}
+.teams_page .member_reservations {
+    background-color: #444;
+    padding: 1vh 0;
+    width: 53vw;
+    margin-left: 1vw;
+    margin-top: 1vh;
+}
+.teams_page .member_reservations h2 {
+    color: #D5BFAA; 
+    font-size: 3.5vh;
+    margin: 1vh 1vw;
+}
+.teams_page .member_reservations .line {
+    height: 0.5vh;
+    background-color: #D5BFAA;
+    margin-bottom: 1vh;
+}
+.teams_page .reservation_displays .display {
+    height: 17vh;
+    margin-left: 1vw;
+    margin-bottom: 1vh;
+    width: 17vh;
+    float: left;
+    background-color: #D5BFAA;
+}
+.teams_page .reservation_displays .display p {
+    text-align: center;
+    padding-top: 4.8vh;
+}
+/*----------------------------------------*/
 /* RESERVE PAGE */
+
 .reserve_page h1 {
     width: 48vw;
     margin-top: 1vw;
@@ -655,7 +777,7 @@ body, div, h1, h3 {
     height: 22.5vh;
 }
 .admin_page .nameList, .admin_page .RoleList {
-    height: 18.5vh;
+    height: 17vh;
 }
 
 .admin_page .workplace_config {
@@ -684,6 +806,10 @@ body, div, h1, h3 {
     .nav_bar header img {
         height: 6vh;
         padding: 2px 20px;
+    }
+    .nav_bar header #google_pf {
+        height: 6vh;
+        margin: 2px 20px;
     }
     .nav_bar li a{
         padding: 0 2.3vw;
@@ -738,11 +864,65 @@ body, div, h1, h3 {
     .overview_page .upcoming_reservations h1 {
         font-size: 0.7em;
     } 
-    .overview_page .upcoming_reservations .line{
+    .overview_page .upcoming_reservations .line {
         width: 42vw;
         height: 0.5vh;
     }
-
+    .overview_page .upcoming_reservations .reservation_displays {
+        height: 25vh;
+    }
+    .overview_page .upcoming_reservations .reservation_displays .display {
+        width: 23vw;
+        height: 13vh;
+    }
+    /* TEAMS PAGE */
+    .teams_page h1 {
+        font-size: 1.5em;
+    }
+    .teams_page .select_team, .teams_page .team_reservations {
+        height: 36vh;
+    }
+        .teams_page .select_team, .teams_page .select_team .line, .teams_page .team_reservations, .teams_page .member_reservations {
+            width: 92vw;
+        }
+    .teams_page .team_selection {
+        height: 27vh;
+        width: 88vw;
+    }
+    .teams_page .team_selection .member_showcase {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        width: 40vw;
+    }
+    .teams_page .team_display {
+        width: 42vw;
+        height: 26vh;
+        float: left;
+        margin-right: 2vw;
+    }
+    .teams_page .team_selection_scroll {
+        height: 29vh;
+    }
+    .teams_page .team_selection button {
+        font-size: 2.5vh;
+        width: 40vw;
+    }
+    .teams_page .team_selection .member {
+        width: 40vw;
+    }
+    .teams_page .reservation_displays {
+        height: 14vh;
+    }
+    .teams_page .team_reservations .display {
+        width: 16vh;
+        height: 14vh;
+    }
+    .teams_page .team_reservations .all_members {
+        height: 35vh;
+    }
+    .teams_page .member_reservations h2 {
+        font-size: 3vh;
+    }
     /*RESERVE PAGE*/
     .reserve_page .left_side, .reserve_page .right_side {
         width: 92vw;
@@ -845,11 +1025,11 @@ body, div, h1, h3 {
         height: 20vh;
     }
     .admin_page .left_side, .admin_page .right_side {
-        width: 30vw;
+        width: 28vw;
         height: 19.5vh;
     }
     .admin_page .employees .nameList, .admin_page .RoleList {
-        height: 14.5vh;
+        height: 16vh;
     }
     .admin_page .workplaces {
         margin-top: 2vh;

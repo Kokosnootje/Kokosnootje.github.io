@@ -20,7 +20,7 @@
                 <ul>
                     <li><a href="@Url.Action("Index", "Overview", new { personId = ViewData["PersonId"] } )" id="@ViewData["ID Overview"]">Overview</a></li>
                     <li>-</li>
-                    <li><a href="" id="@ViewData["ID Team"]">Team</a></li>
+                    <li><a href="@Url.Action("Index", "Teams")" id="@ViewData["ID Team"]">Team</a></li>
                     <li>-</li>
                     <li><a href="@Url.Action("Index", "Reservation", new { personId = ViewData["PersonId"] } )" id="@ViewData["ID Reserve"]">Reserve</a></li>
                     <li>-</li>
