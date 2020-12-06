@@ -80,12 +80,12 @@ namespace NGTI_Calender.Controllers
             if (ModelState.IsValid && selectedObjects.Length != 0 && selectedTimeslots.Length != 0)
             {
                 Popup popup = new Popup();
-                popup.popupMessage = "";
+                popup.popupMessage = "The following reservation have been made:||";
                 for (int j = 0; j < selectedObjects.Length; j++)
                 {
                     for (int i = 0; i < selectedTimeslots.Length; i++)
                     {
-                        popup.popupMessage += revList[j][i].Person + revList[j][i].Date + " : " + time[revList[j][i].Timeslot.TimeslotId] + " || ";
+                        popup.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
                         _context.Add(revList[j][i]);
                         await _context.SaveChangesAsync();
                     }

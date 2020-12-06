@@ -1,10 +1,25 @@
-﻿@model IEnumerable<Timeslot>
+﻿@model Tuple<List<Timeslot>, Popup, List<Person>, string>
 @{
     ViewData["Title"] = "Admin Dashboard";
     ViewData["ID Reserve"] = "null";
     ViewData["ID Overview"] = "null";
     ViewData["ID Team"] = "null";
     ViewData["ID Admin Dashboard"] = "current_page";
+    ViewData["PersonId"] = Model.Item4;
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item4);
+
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item3)
+        {
+            if (personId == item.PersonId.ToString())
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
+
 }
 
 <head>
@@ -14,25 +29,76 @@
 </head>
 <body>
     <div class="admin_page">
-        <div class="teams"></div>
+        <div class="teams">
+            <h1 id="t_h1">Teams</h1>
+            <div class="line"></div>
+            <form asp-action="">
+                <button type="submit">Add team</button>
+                <div class="person_selection">
+                    @{
+                        int i = 0;
+                        foreach (var item in Model.Item3) {
+                            <div>
+                                <input type="checkbox" id="p@(i)" name="selectedPersons" value="@item.PersonId" />
+                                <label for="p@(i)">@item.PersonName</label>
+                            </div>
+                            i++;
+                        }
+                    }
+                </div>
+            </form>
+            <div class="team_configuration">
+                @* load teams + remove member button *@
+            </div>
+        </div>
         <div class="timeslots">
             <h1>Timeslots</h1>
             <div class="timeslot_config">
-                @foreach(var item in Model) {
-                    <div>
-                    <p class="ts">@item.TimeStart - @item.TimeEnd</p>
-                    <p><a href="">change</a> | <a href="">delete</a></p>
-                    </div>
+                @foreach (var item in Model.Item1) {
+                    <form asp-action="Index">
+                        <p class="ts">@item.TimeStart - @item.TimeEnd</p>
+                        <input type="hidden" name="timeslotId" value=@item.TimeslotId />
+                        <button type="submit">X</button>
+                    </form>
                 }
             </div>
-            <a id="add_timeslot" href="">add timeslot</a>
+            <form asp-action="AddTimeslot">
+                <input placeholder="09:00" name="startTime"/>
+                <input placeholder="11:00" name="endTime"/>
+                <button type="submit">add timeslot</button>
+            </form>
         </div>
-        <div class="employees"></div>
+        <div class="employees">
+            <h1 id="e_h1">Employees</h1>
+            <div class="employee_config">
+                <div class="left_side">
+                    <h1>Name</h1>
+                    <div class="nameList">
+                        @* load employees in this div *@
+                    </div>
+                </div>
+                <div class="right_side">
+                    <h1>Role</h1>
+                    <div class="RoleList">
+                        @* load roles in this div *@
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="workplaces">
             <h1>Workplaces</h1>
             <div class="workplace_config">
-                <p><a href="">  -  </a>  17  <a href="">  +  </a></p>
+                <p><a asp-action="">  -  </a>  17  <a asp-action="">  +  </a></p>
             </div>
         </div>
     </div>
+
+    <script>
+        if ("@Model.Item2.popupMessage" != "") {
+            var s = "@Html.Raw(Model.Item2.popupMessage)";
+            var s = s.split("|").join("\r");
+            var s = s.split("||").join("\n");
+            setTimeout(() =>  window.alert(s), 100);
+        }
+    </script>
 </body>
