@@ -16,8 +16,8 @@ namespace NGTI_Calender.Controllers {
             _context = context;
         }
 
-        public IActionResult Index() {
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList());
+        public IActionResult Index(string personId) {
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId);
             return View(tuple);
         }
 

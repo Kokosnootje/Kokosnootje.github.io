@@ -143,7 +143,7 @@
             <h1>My upcoming reservations:</h1>
             <div class="line"></div>
             <div class="reservation_displays">
-                <form asp-action="Index" onsubmit="return confirm('Do you really want to delete this reservation?')">
+                <form asp-action="Delete" onsubmit="return confirm('Do you really want to delete this reservation?')">
                     @{
                         <input type="hidden" name="personId" value="@Model.Item2">
                         string lastDate = "";

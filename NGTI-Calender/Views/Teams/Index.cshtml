@@ -1,10 +1,24 @@
-﻿@model Tuple<List<Timeslot>, Popup, List<Person>>
+﻿@model Tuple<string, List<Person>>
 @{
     ViewData["Title"] = "Admin Dashboard";
     ViewData["ID Reserve"] = "null";
     ViewData["ID Overview"] = "null";
     ViewData["ID Team"] = "current_page";
     ViewData["ID Admin Dashboard"] = "null";
+    ViewData["PersonId"] = Model.Item1;
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item1);
+
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item2)
+        {
+            if (personId == item.PersonId.ToString())
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
 }
 
 <head>

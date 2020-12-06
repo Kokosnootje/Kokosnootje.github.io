@@ -58,7 +58,7 @@ namespace NGTI_Calender.Controllers
             return View(_context.Timeslot.ToArray());
         }
         // POST: Overview/Index
-        [HttpPost, ActionName("Index")]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string resList, string personId)
         {
