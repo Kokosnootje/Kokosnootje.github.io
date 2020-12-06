@@ -93,6 +93,7 @@ namespace NGTI_Calender.Controllers
                 {
                     for (int i = 0; i < selectedTimeslots.Length; i++)
                     {
+                        Calender(revList[j][i]);
                         popup.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
                         _context.Add(revList[j][i]);
                         await _context.SaveChangesAsync();
