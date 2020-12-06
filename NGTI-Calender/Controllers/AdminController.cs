@@ -23,7 +23,7 @@ namespace NGTI_Calender.Controllers {
 
         //remove timeslot from database
         [HttpPost]
-        public async Task<IActionResult> Index(int timeslotId) {
+        public async Task<IActionResult> Index(int timeslotId, string personId) {
             foreach (var item in _context.Timeslot.ToList()) {
                 if (item.TimeslotId == timeslotId) {
                     foreach (var res in _context.Reservation.ToList()) {
@@ -38,6 +38,7 @@ namespace NGTI_Calender.Controllers {
                             bool c = dt >= DateTime.Today;
                             bool b = DateTime.Parse(res.Timeslot.TimeStart) >= DateTime.Now;
                             if (a || (b &&c)) {
+                                Console.WriteLine();
                                 //SendMail(res.Date, res.Timeslot.TimeStart, res.Timeslot.TimeEnd, res.PersonId);
                             }
                             _context.Reservation.Remove(res);
@@ -46,17 +47,17 @@ namespace NGTI_Calender.Controllers {
                     //must cascade drop
                     _context.Timeslot.Remove(item);
                     await _context.SaveChangesAsync();
-                    var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "The timeslot has been removed." }, _context.Person.ToList());
+                    var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "The timeslot has been removed." }, _context.Person.ToList(), personId);
                     return View(tuple2);
                 }
             }
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage="An error has occured." }, _context.Person.ToList());
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage="An error has occured." }, _context.Person.ToList(), personId);
             return View(tuple);
         }
 
         //add timeslot to database
         [HttpPost]
-        public async Task<IActionResult> AddTimeslot(string startTime, string endTime) {
+        public async Task<IActionResult> AddTimeslot(string startTime, string endTime, string personId) {
             var timeslotList = _context.Timeslot.ToList();
             bool overlap = false;
             //check for correct input 
@@ -81,12 +82,12 @@ namespace NGTI_Calender.Controllers {
                 }
             } catch {
                 //wrong input message
-                var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList());
+                var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId);
                 return View(tuple1);
             }
             //check if there are null values
             if (string.IsNullOrWhiteSpace(startTime) || string.IsNullOrWhiteSpace(endTime)){
-                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList());
+                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId);
                 return View(tuple);
             }
             //add to database if it does not overlap
@@ -94,11 +95,11 @@ namespace NGTI_Calender.Controllers {
                 _context.Timeslot.Add(new Timeslot() { TimeStart = startTime, TimeEnd = endTime });
                 await _context.SaveChangesAsync();
                 //timeslot has been added message
-                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The timeslot has been added." }, _context.Person.ToList());
+                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The timeslot has been added." }, _context.Person.ToList(), personId);
                 return View(tuple2);
             } else {
                 //overlapping input message
-                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The input overlaps with an existing timeslot." }, _context.Person.ToList());
+                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The input overlaps with an existing timeslot." }, _context.Person.ToList(), personId);
                 return View(tuple);
             }
         }

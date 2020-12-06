@@ -58,6 +58,7 @@
                     <form asp-action="Index">
                         <p class="ts">@item.TimeStart - @item.TimeEnd</p>
                         <input type="hidden" name="timeslotId" value=@item.TimeslotId />
+                        <input type="hidden" name="personId" value="@Model.Item4"/>
                         <button type="submit">X</button>
                     </form>
                 }
@@ -65,6 +66,7 @@
             <form asp-action="AddTimeslot">
                 <input placeholder="09:00" name="startTime"/>
                 <input placeholder="11:00" name="endTime"/>
+                <input type="hidden" name="personId" value="@Model.Item4"/>
                 <button type="submit">add timeslot</button>
             </form>
         </div>
