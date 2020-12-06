@@ -10,6 +10,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Localization.Internal;
 using NGTI_Calender.Data;
 using NGTI_Calender.Models;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
+using System.IO;
+using System.Text;
+using System.Threading;
 
 namespace NGTI_Calender.Controllers
 {
@@ -85,6 +93,7 @@ namespace NGTI_Calender.Controllers
                 {
                     for (int i = 0; i < selectedTimeslots.Length; i++)
                     {
+                        Calender(revList[j][i]);
                         popup.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
                         _context.Add(revList[j][i]);
                         await _context.SaveChangesAsync();
@@ -225,6 +234,70 @@ namespace NGTI_Calender.Controllers
         private bool ReservationExists(int id)
         {
             return _context.Reservation.Any(e => e.ReservationId == id);
+        }
+
+        // If modifying these scopes, delete your previously saved credentials
+        // at ~/.credentials/calendar-dotnet-quickstart.json
+        static string[] Scopes = { CalendarService.Scope.Calendar };
+        static string ApplicationName = "NGTI-Calender";
+        public void Calender(Reservation newReservation)
+        {
+            UserCredential credential;
+
+            using (var stream =
+                new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+            {
+                // The file token.json stores the user's access and refresh tokens, and is created
+                // automatically when the authorization flow completes for the first time.
+                string credPath = "token.json";
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+                Console.WriteLine("Credential file saved to: " + credPath);
+            }
+
+            // Create Google Calendar API service.
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = ApplicationName,
+            });
+
+            // Refer to the .NET quickstart on how to setup the environment:
+            // https://developers.google.com/calendar/quickstart/dotnet
+            // Change the scope to CalendarService.Scope.Calendar and delete any stored
+            // credentials.
+            string startTime = DateTime.Parse(newReservation.Date + " " + newReservation.Timeslot.TimeStart).ToString("yyyy-MM-ddTHH:mm:ss");
+            string endTime = DateTime.Parse(newReservation.Date + " " + newReservation.Timeslot.TimeEnd).ToString("yyyy-MM-ddTHH:mm:ss");
+            string personMail = newReservation.Person.EMail;
+            Event newEvent = new Event()
+            {
+                Summary = "Going to work",
+                Location = "30K Delftseplein, Rotterdam, 3013 AA",
+                Description = "Planned to be at the office",
+                Start = new EventDateTime()
+                {
+                    DateTime = DateTime.Parse(startTime),
+                    TimeZone = "Europe/Amsterdam",
+                },
+                End = new EventDateTime()
+                {
+                    DateTime = DateTime.Parse(endTime),
+                    TimeZone = "Europe/Amsterdam",
+                },
+                Attendees = new EventAttendee[] {
+                    new EventAttendee() { Email = personMail }
+                }
+            };
+
+            // String calendarId = "primary"; // Standaard Calender van degene die ingelogged is
+            String calendarId = "s1ho1vvabdm0s2oabtmldef7e8@group.calendar.google.com";
+            EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
+            Event createdEvent = request.Execute();
+            Console.WriteLine("Event created: {0}", createdEvent.HtmlLink);
         }
     }
 }

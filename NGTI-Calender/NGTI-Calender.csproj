@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="FluentDateTime" Version="2.0.0" />
-    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.49.0.2119" />
+    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.49.0.2142" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.8" />
