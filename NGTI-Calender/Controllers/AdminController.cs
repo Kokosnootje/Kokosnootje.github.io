@@ -38,11 +38,7 @@ namespace NGTI_Calender.Controllers {
                             bool c = dt >= DateTime.Today;
                             bool b = DateTime.Parse(res.Timeslot.TimeStart) >= DateTime.Now;
                             if (a || (b &&c)) {
-<<<<<<< Updated upstream
-                                //SendMail(res.Date, res.Timeslot.TimeStart, res.Timeslot.TimeEnd, res.PersonId);
-=======
                                 SendMail(res.Date, res.Timeslot.TimeStart, res.Timeslot.TimeEnd, res.Person.PersonId);
->>>>>>> Stashed changes
                             }
                             _context.Reservation.Remove(res);
                         }
