@@ -39,7 +39,7 @@ namespace NGTI_Calender.Controllers {
                             bool b = DateTime.Parse(res.Timeslot.TimeStart) >= DateTime.Now;
                             if (a || (b &&c)) {
                                 Console.WriteLine();
-                                //SendMail(res.Date, res.Timeslot.TimeStart, res.Timeslot.TimeEnd, res.PersonId);
+                                //SendMail(res.Date, res.Timeslot.TimeStart, res.Timeslot.TimeEnd, res.Person.PersonId);
                             }
                             _context.Reservation.Remove(res);
                         }
@@ -125,7 +125,7 @@ namespace NGTI_Calender.Controllers {
             mail.From = new MailAddress("mailcinemaconfirmation@gmail.com");
             mail.To.Add(new MailAddress(email));
             mail.Subject = "Your reservation has been canceled.";
-            mail.Body = "Your reservation for " + date + " | " + timeStart + "-" + timeEnd + "has been canceled";
+            mail.Body = "Your reservation for:\n" + date + "\n" + timeStart + "-" + timeEnd + "\nhas been canceled.";
             
             SmtpServer.Send(mail);
         }

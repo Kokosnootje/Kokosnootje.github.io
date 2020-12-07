@@ -1,11 +1,9 @@
 ﻿
 /* SCROLLBAR
 -------------------------------------------------- */
-/* width */
-::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 10px;
 }
-
 /* Track */
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -228,7 +226,6 @@ body, div, h1, h3 {
     margin: 0.5vh 0.5vw;
     background-color: #444444;
 }
-
 .overview_page .day_block .timeslots {
     overflow-y: scroll;
     overflow-x: hidden;
@@ -512,7 +509,7 @@ body, div, h1, h3 {
 
 .reserve_page .timeslot_selection {
     overflow-y: scroll;
-    overflow-x: visible;
+    overflow-x: hidden;
     height: 35vh
 }
 
@@ -817,6 +814,9 @@ body, div, h1, h3 {
 
 /* RESPONSIVE PHONE */
 @media screen and (max-width:640px){
+    *::-webkit-scrollbar {
+        width: 2px;
+    }
     /*LOGIN PAGE*/
     .login_page h1, .login_page #ngti_logo {
         font-size: 9vh;
@@ -905,9 +905,9 @@ body, div, h1, h3 {
     .teams_page .select_team, .teams_page .team_reservations {
         height: 36vh;
     }
-        .teams_page .select_team, .teams_page .select_team .line, .teams_page .team_reservations, .teams_page .member_reservations {
-            width: 92vw;
-        }
+    .teams_page .select_team, .teams_page .select_team .line, .teams_page .team_reservations, .teams_page .member_reservations {
+        width: 92vw;
+    }
     .teams_page .team_selection {
         height: 27vh;
         width: 88vw;
