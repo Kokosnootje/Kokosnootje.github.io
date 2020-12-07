@@ -149,6 +149,9 @@ body, div, h1, h3 {
 
 /*----------------------------------------*/
 /* LOGIN PAGINA */
+.login_page {
+    overflow-x: hidden;
+}
 .login_page h1, .login_page h3 {
     text-align: center;
 }

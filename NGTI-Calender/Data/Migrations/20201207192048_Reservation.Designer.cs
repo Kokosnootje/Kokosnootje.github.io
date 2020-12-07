@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NGTI_Calender.Data;
 
-namespace NGTI_Calender.Data.Migrations
+namespace NGTI_Calender.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201120131524_ImageInPerson")]
-    partial class ImageInPerson
+    [Migration("20201207192048_Reservation")]
+    partial class Reservation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -237,7 +237,12 @@ namespace NGTI_Calender.Data.Migrations
                     b.Property<string>("PersonName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RolesId")
+                        .HasColumnType("int");
+
                     b.HasKey("PersonId");
+
+                    b.HasIndex("RolesId");
 
                     b.ToTable("Person");
                 });
@@ -265,6 +270,24 @@ namespace NGTI_Calender.Data.Migrations
                     b.HasIndex("TimeslotId");
 
                     b.ToTable("Reservation");
+                });
+
+            modelBuilder.Entity("NGTI_Calender.Models.Roles", b =>
+                {
+                    b.Property<int>("RolesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Admin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BHV")
+                        .HasColumnType("bit");
+
+                    b.HasKey("RolesId");
+
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("NGTI_Calender.Models.Timeslot", b =>
@@ -336,10 +359,17 @@ namespace NGTI_Calender.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NGTI_Calender.Models.Person", b =>
+                {
+                    b.HasOne("NGTI_Calender.Models.Roles", "Roles")
+                        .WithMany()
+                        .HasForeignKey("RolesId");
+                });
+
             modelBuilder.Entity("NGTI_Calender.Models.Reservation", b =>
                 {
                     b.HasOne("NGTI_Calender.Models.Person", "Person")
-                        .WithMany("Reservations")
+                        .WithMany()
                         .HasForeignKey("PersonId");
 
                     b.HasOne("NGTI_Calender.Models.Timeslot", "Timeslot")
