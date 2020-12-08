@@ -65,6 +65,7 @@ namespace NGTI_Calender
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            
         }
     }
 }

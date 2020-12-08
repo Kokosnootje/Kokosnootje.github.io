@@ -10,14 +10,14 @@ using NGTI_Calender.Data;
 namespace NGTI_Calender.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201013123229_ReservationMigrationTest")]
-    partial class ReservationMigrationTest
+    [Migration("20201113101207_Models")]
+    partial class Models
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -228,7 +228,7 @@ namespace NGTI_Calender.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Password")
+                    b.Property<string>("EMail")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PersonName")
@@ -246,17 +246,40 @@ namespace NGTI_Calender.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Date")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TimeslotId")
                         .HasColumnType("int");
 
                     b.HasKey("ReservationId");
 
                     b.HasIndex("PersonId");
 
+                    b.HasIndex("TimeslotId");
+
                     b.ToTable("Reservation");
+                });
+
+            modelBuilder.Entity("NGTI_Calender.Models.Timeslot", b =>
+                {
+                    b.Property<int>("TimeslotId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("TimeEnd")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TimeStart")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TimeslotId");
+
+                    b.ToTable("Timeslot");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -315,6 +338,10 @@ namespace NGTI_Calender.Data.Migrations
                     b.HasOne("NGTI_Calender.Models.Person", "Person")
                         .WithMany("Reservations")
                         .HasForeignKey("PersonId");
+
+                    b.HasOne("NGTI_Calender.Models.Timeslot", "Timeslot")
+                        .WithMany()
+                        .HasForeignKey("TimeslotId");
                 });
 #pragma warning restore 612, 618
         }

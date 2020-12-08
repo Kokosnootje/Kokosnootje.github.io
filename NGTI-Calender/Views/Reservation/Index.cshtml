@@ -1,35 +1,163 @@
-﻿@model IEnumerable<NGTI_Calender.Models.Reservation>
-
+﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>>
 @{
-    ViewData["Title"] = "Index";
+//@model IEnumerable<NGTI_Calender.Models.Reservation>
+    @using FluentDateTime
+    ViewData["Title"] = "Reserve";
+    ViewData["ID Reserve"] = "current_page";
+    ViewData["ID Overview"] = "null";
+    ViewData["ID Team"] = "null";
+    ViewData["ID Admin Dashboard"] = "null";
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item4);
+    ViewData["PersonId"] = Model.Item4;
+
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item5)
+        {
+            if(personId == item.PersonId.ToString())
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
+
+    static string[][] SelectDaysOfWeeks()
+    {
+        string[] daysOfWeekCalenderDays = new string[10];
+        string[] daysOfWeeksCalender = new string[10];
+        DateTime lastDay = DateTime.Now;
+        for (int i = 0; i < 10; i++)
+        {
+            if (lastDay.DayOfWeek == DayOfWeek.Saturday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
+                lastDay = lastDay.AddDays(3.0);
+            }
+            else if (lastDay.DayOfWeek == DayOfWeek.Sunday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(1.0).ToShortDateString();
+                lastDay = lastDay.AddDays(2.0);
+
+            }
+            else
+            {
+                if (lastDay.DayOfWeek == DayOfWeek.Monday)
+                {
+                    daysOfWeekCalenderDays[i] = "Mon.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                if (lastDay.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    daysOfWeekCalenderDays[i] = "Tue.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Wednesday)
+                {
+                    daysOfWeekCalenderDays[i] = "Wed.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Thursday)
+                {
+                    daysOfWeekCalenderDays[i] = "Thu.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Friday)
+                {
+                    daysOfWeekCalenderDays[i] = "Fri.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+
+            }
+        }
+        return new[] { daysOfWeekCalenderDays, daysOfWeeksCalender };
+
+    }
+    var calender = SelectDaysOfWeeks();
 }
 
-<h1>Index</h1>
+<head>
+    <meta charset="utf-8" />
+    <link href="./css/site.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    <div class="reserve_page">
+        <form asp-action="Index">
+            <div class="left_side">
+                <h1>Select date + timeslot:</h1>
+                <div id="line1"></div>
+                <!--DATE SELECTION-->
+                <div class="date_selection">
+                    @{
+                        for (int k = 0; k < 10; k++) {
+                            <label asp-for="Item1.Date" class="date_placeholder" for="CB@(k+1)" id="L@(k+1)">@calender[0][k] <br> @calender[1][k]</label>
+                            <input asp-for="Item1.Date" value="@calender[1][k]" type="checkbox" name="selectedObjects" id="CB@(k+1)" onclick="changeColor('CB@(k+1)', 'L@(k+1)', '#D5BFAA', '#444444')" />
+                        }
+                    }
+                </div>
+                <!--TIMESLOT SELECTION-->
+                <div class="timeslot_selection">
+                    @{
+                        int i = 1;
+                        foreach (var item in Model.Item2) {
+                            string[] abc = new string[3];
+                            abc[0] = item.TimeslotId.ToString();
+                            abc[1] = item.TimeStart;
+                            abc[2] = item.TimeEnd;
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ReservationId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ReservationId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReservationId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                            <div class="timeslot">
+                                <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
+                                <label for="TS@(i)">
+                                    @item.TimeStart-@item.TimeEnd
+                                    <div id="TS@(i)_slot_availability" class="slot_availability"><p>00/17</p></div>
+                                </label>
+                            </div>
+                            i++;
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="right_side">
+                <div class="select_team">
+                    <h1>Select Team(s)</h1>
+                    <div id="line2"></div>
+                    <div class="team_selection"></div>
+                </div>
+                <input type="hidden" name="personId" value="@Model.Item4">
+                <button id="reserve_button">BACK</button>
+                <button type="submit" id="reserve_button">RESERVE</button>
+                <a href="https://mail.google.com/mail/u/0/?logout&hl=en">Sign out</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        if ("@Model.Item3.popupMessage" != "") {
+            var s = "@Html.Raw(Model.Item3.popupMessage)";
+            var s = s.split("|").join("\r");
+            var s = s.split("||").join("\n");
+            setTimeout(() =>  window.alert(s), 100);
+        }
+
+        function changeColor(checkboxID, labelID, originColor, checkedColor) {
+            var checkBox = document.getElementById(checkboxID);
+            if (checkBox.checked == true) {
+                document.getElementById(labelID).style.color = checkedColor;
+                document.getElementById(labelID).style.backgroundColor = originColor;
+            } else {
+                document.getElementById(labelID).style.color = originColor;
+                document.getElementById(labelID).style.backgroundColor = checkedColor;
+            }
+        }
+    </script>
+</body>
+

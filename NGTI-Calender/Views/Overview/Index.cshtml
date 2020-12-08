@@ -1,0 +1,200 @@
+﻿
+@model Tuple<List<Timeslot>, string, List<Reservation>, List<Person>, Reservation>
+@{
+    @using FluentDateTime
+    ViewData["Title"] = "Overview";
+    ViewData["ID Reserve"] = "null";
+    ViewData["ID Overview"] = "current_page";
+    ViewData["ID Team"] = "null";
+    ViewData["ID Admin Dashboard"] = "null";
+    ViewData["PersonId"] = Model.Item2;
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item2);
+
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item4)
+        {
+            if (personId == item.PersonId.ToString())
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
+
+    static string[][] SelectDaysOfWeeks()
+    {
+        string[] daysOfWeekCalenderDays = new string[10];
+        string[] daysOfWeeksCalender = new string[10];
+        DateTime lastDay = DateTime.Now;
+        for (int i = 0; i < 10; i++)
+        {
+            if (lastDay.DayOfWeek == DayOfWeek.Monday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
+                lastDay = lastDay.AddDays(3.0);
+            }
+            else if (lastDay.DayOfWeek == DayOfWeek.Saturday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
+                lastDay = lastDay.AddDays(3.0);
+            }
+            else if (lastDay.DayOfWeek == DayOfWeek.Sunday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(1.0).ToShortDateString();
+                lastDay = lastDay.AddDays(2.0);
+
+            }
+            else
+            {
+                if (lastDay.DayOfWeek == DayOfWeek.Monday)
+                {
+                    daysOfWeekCalenderDays[i] = "Mon.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                if (lastDay.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    daysOfWeekCalenderDays[i] = "Tue.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Wednesday)
+                {
+                    daysOfWeekCalenderDays[i] = "Wed.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Thursday)
+                {
+                    daysOfWeekCalenderDays[i] = "Thu.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Friday)
+                {
+                    daysOfWeekCalenderDays[i] = "Fri.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+
+            }
+        }
+        return new[] { daysOfWeekCalenderDays, daysOfWeeksCalender };
+
+    }
+    var calender = SelectDaysOfWeeks();
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link href="./css/site.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    @*
+        MAIL SYSTEM
+
+        <form asp-action="Index">
+        <input type="hidden" name="personId" value="1"/>
+        <input type="hidden" name="subject" value="onderwerp"/>
+        <input type="hidden" name="body" value="tekst"/>
+        <button type="submit">SEND MAIL</button>
+    </form>*@
+    <div class="overview_page">
+        <div class="select_timeslot">
+            @{
+                int i = 0;
+                foreach (var day in calender[0])
+                {
+                    <div class="day_block">
+                        <h3>@calender[0][i] @calender[1][i]</h3>
+                        <div class="timeslots">
+                            @{
+                                int j = 0;
+                                foreach (var timeslot in Model.Item1)
+                                {
+                                    <button id="TSS@(j)">
+                                        @timeslot.TimeStart-@timeslot.TimeEnd
+                                        <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">00/17</div>
+                                    </button>
+                                    j++;
+                                }
+                            }
+                        </div>
+                    </div>
+                    i++;
+                }
+            }
+        </div>
+
+        <div class="selected_timeslot">
+            <h1>Selected timeslot:</h1>
+            <div class="colleagues">
+                <div class="date"><p id="date">date</p><p id="tsa">00/17</p></div>
+                <p>Name + Functions</p>
+                <div class="res">test</div>
+            </div>
+        </div>
+        <div class="upcoming_reservations">
+            <h1>My upcoming reservations:</h1>
+            <div class="line"></div>
+            <div class="reservation_displays">
+                <form asp-action="Delete" onsubmit="return confirm('Do you really want to delete this reservation?')">
+                    @{
+                        <input type="hidden" name="personId" value="@Model.Item2">
+                        string lastDate = "";
+                        foreach (var item in Model.Item3)
+                        {
+                            if (item.Person.PersonId.ToString() == Model.Item2)
+                            {
+                                if (lastDate != item.Date)
+                                {
+
+                <div class="display">
+                    <p style="font-weight: bold">@item.Date</p>
+                    @{
+                        string getResIds(string itemDate)
+                        {
+                            string theresses = "";
+                            foreach (var theRes in Model.Item3)
+                            {
+                                if (theRes.Date == itemDate)
+                                {
+                                    theresses = theresses + theRes.ReservationId.ToString() + " ";
+                                }
+                            }
+                            theresses = theresses.Remove(theresses.Length - 1);
+                            return theresses;
+                        }
+                        foreach (var times in Model.Item3)
+                        {
+                            if (times.Date == item.Date)
+                            {
+                                <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                            }
+                        }
+                        lastDate = item.Date;
+                    }
+                    <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
+                </div>
+                                }
+                            }
+                        }
+                    }
+                </form>
+            </div>
+            </div>
+        </div>
+    <script>
+
+    </script>
+</body>
+
+
+
+
+

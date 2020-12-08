@@ -10,22 +10,22 @@ using NGTI_Calender.Models;
 
 namespace NGTI_Calender.Controllers
 {
-    public class PersonController : Controller
+    public class TimeslotController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public PersonController(ApplicationDbContext context)
+        public TimeslotController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Person
+        // GET: Timeslot
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Person.ToListAsync());
+            return View(await _context.Timeslot.ToListAsync());
         }
 
-        // GET: Person/Details/5
+        // GET: Timeslot/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,41 +33,39 @@ namespace NGTI_Calender.Controllers
                 return NotFound();
             }
 
-            var person = await _context.Person
-                .FirstOrDefaultAsync(m => m.PersonId == id);
-            if (person == null)
+            var timeslot = await _context.Timeslot
+                .FirstOrDefaultAsync(m => m.TimeslotId == id);
+            if (timeslot == null)
             {
                 return NotFound();
             }
 
-            return View(person);
+            return View(timeslot);
         }
 
-        // GET: Person/Create
+        // GET: Timeslot/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Person/Create
+        // POST: Timeslot/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromBody] Person person)
+        public async Task<IActionResult> Create([Bind("TimeslotId,TimeStart,TimeEnd")] Timeslot timeslot)
         {
-            var myname = person.PersonName;
-
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(person);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            return View(person);
+            if (ModelState.IsValid)
+            {
+                _context.Add(timeslot);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(timeslot);
         }
 
-        // GET: Person/Edit/5
+        // GET: Timeslot/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +73,22 @@ namespace NGTI_Calender.Controllers
                 return NotFound();
             }
 
-            var person = await _context.Person.FindAsync(id);
-            if (person == null)
+            var timeslot = await _context.Timeslot.FindAsync(id);
+            if (timeslot == null)
             {
                 return NotFound();
             }
-            return View(person);
+            return View(timeslot);
         }
 
-        // POST: Person/Edit/5
+        // POST: Timeslot/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonId,PersonName,EMail")] Person person)
+        public async Task<IActionResult> Edit(int id, [Bind("TimeslotId,TimeStart,TimeEnd")] Timeslot timeslot)
         {
-            if (id != person.PersonId)
+            if (id != timeslot.TimeslotId)
             {
                 return NotFound();
             }
@@ -99,12 +97,12 @@ namespace NGTI_Calender.Controllers
             {
                 try
                 {
-                    _context.Update(person);
+                    _context.Update(timeslot);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonExists(person.PersonId))
+                    if (!TimeslotExists(timeslot.TimeslotId))
                     {
                         return NotFound();
                     }
@@ -115,10 +113,10 @@ namespace NGTI_Calender.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(person);
+            return View(timeslot);
         }
 
-        // GET: Person/Delete/5
+        // GET: Timeslot/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +124,30 @@ namespace NGTI_Calender.Controllers
                 return NotFound();
             }
 
-            var person = await _context.Person
-                .FirstOrDefaultAsync(m => m.PersonId == id);
-            if (person == null)
+            var timeslot = await _context.Timeslot
+                .FirstOrDefaultAsync(m => m.TimeslotId == id);
+            if (timeslot == null)
             {
                 return NotFound();
             }
 
-            return View(person);
+            return View(timeslot);
         }
 
-        // POST: Person/Delete/5
+        // POST: Timeslot/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var person = await _context.Person.FindAsync(id);
-            _context.Person.Remove(person);
+            var timeslot = await _context.Timeslot.FindAsync(id);
+            _context.Timeslot.Remove(timeslot);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonExists(int id)
+        private bool TimeslotExists(int id)
         {
-            return _context.Person.Any(e => e.PersonId == id);
+            return _context.Timeslot.Any(e => e.TimeslotId == id);
         }
     }
 }

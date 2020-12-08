@@ -1,24 +1,26 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿
+/* SCROLLBAR
+-------------------------------------------------- */
+*::-webkit-scrollbar {
+    width: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
 
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
-html {
-    font-size: 14px;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
 .border-top {
     border-top: 1px solid #e5e5e5;
 }
@@ -32,7 +34,7 @@ html {
 }
 
 button.accept-policy {
-    font-size: 1rem;
+    font-size: 1em;
     line-height: inherit;
 }
 
@@ -56,20 +58,20 @@ body {
     line-height: 40px; /* Vertically center the text there */
 }
 
-    .footer container {
-        color: #444444;
-    }
+.footer container {
+    color: #444444;
+}
 
-    .footer a {
-        font-size: 15px;
-        color: #D5BFAA;
-    }
+.footer a {
+    font-size: 0.75em;
+    color: #D5BFAA;
+}
 
-/-------------------------------------------------------------------/
+/*-------------------------------------------------------------*/
 /* ALGEMEEN */
 * {
     font-family: 'Segoe UI', 'Georgia', 'Times New Roman';
-    font-size: 20px;
+    font-size: 2.5vh;
 }
 
 #current_page {
@@ -80,6 +82,55 @@ body, div, h1, h3 {
     margin: 0;
     padding: 0;
     color: #444444;
+}
+
+/*NAVIGATION BAR*/
+.nav_bar {
+    box-sizing: border-box;
+}
+
+.nav_bar li, .nav_bar a {
+    text-decoration: none;
+}
+
+.nav_bar header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav_bar header img {
+    height: 10vh;
+    padding: 10px 50px;
+}
+
+.nav_bar header #google_pf {
+    border-radius: 3.75vh;
+    height: 7.5vh;
+    margin: 10px 50px;
+    padding: 0; 
+}
+
+.nav_bar ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.nav_bar li {
+    display: inline-block;
+}
+
+.nav_bar li a {
+    color: #444444;
+    transition: all 0.5s ease 0s;
+    padding: 0px 10px;
+    font-size: 2em;
+}
+
+.nav_bar li a:hover {
+    transition: all 0.5s ease 0s;
+    color: #D5BFAA;
 }
 
 /* CENTERED DIV - HORIZONTAAL EN VERTICAAL*/
@@ -96,18 +147,26 @@ body, div, h1, h3 {
     font-family: 'Segoe UI', 'Georgia', 'Times New Roman';
 }
 
+/*----------------------------------------*/
 /* LOGIN PAGINA */
 .login_page h1, .login_page h3 {
     text-align: center;
 }
 
 .login_page h1 {
-    font-size: 200px;
+    font-size: 10em;
+}
+
+.login_page #login_spacer {
+    margin-left: 38%;
+    width: 1px;
+    height: 1px;
+    float: left;
 }
 
 .login_page h3 {
     color: inherit;
-    font-size: 34px;
+    font-size: 1.7em;
     float: right;
     padding: 15px 10px 15px 0px;
 }
@@ -132,10 +191,10 @@ body, div, h1, h3 {
     -moz-box-shadow: 0px 5px 5px 0px rgba(194,194,194,1);
 }
 
-.login_page #login_button:hover {
+    .login_page #login_button:hover {
         color: #D5BFAA;
         border-color: #D5BFAA;
-}
+    }
 
 .login_page #google_logo {
     width: 46px;
@@ -143,43 +202,860 @@ body, div, h1, h3 {
 }
 
 .login_page #ngti_logo {
-    height: 140px;
+    font-size: 25vh;
+    height: 0.7em;
 }
 
-/NAVIGATION BAR/
-.nav_bar {
-    box-sizing: border-box;
+/*----------------------------------------*/
+/* OVERVIEW PAGE */
+
+.overview_page {
+    margin-top: 2vh;
+}
+.overview_page .select_timeslot {
+    margin-left: 4vw;
+    width: 60vw;
+    height: 50vh;
+    float: left;
 }
 
-.nav_bar li, .nav_bar a {
-    text-decoration: none;
+.overview_page .day_block {
+    width: 11vw;
+    height: 24vh;
+    float: left;
+    margin: 0.5vh 0.5vw;
+    background-color: #444444;
+}
+.overview_page .day_block .timeslots {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 19vh;
 }
 
-.nav_bar header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.overview_page .day_block h3 {
+    color: #D5BFAA;
+    text-align: center;
+    font-size: 2vh;
+    margin: 1vh 0;
 }
 
-    .nav_bar header img {
-        height: 10vh;
-        padding: 10px 50px;
+.overview_page .day_block button {
+    background-color: #D5BFAA;
+    text-align: center;
+    width: 9.8vw;
+    height: 5.5vh;
+    font-size: 0.7em;
+    margin: 0.5vh 0.3vw;
+}
+
+.overview_page .day_block button .TSS_availability {
+    text-align: center;
+    margin: 0.5vh;
+    width: 2vw;
+    height: 3vh;
+    background-color: #444444;
+    color: #D5BFAA;
+    float: right;
+    font-size: 0.5em;
+}
+
+.overview_page .selected_timeslot {
+    margin-right: 4vw;
+    width: 28vw;
+    height: 80vh;
+    background-color: #444444;
+    color: #D5BFAA;
+    float: right;
+}
+
+.overview_page .selected_timeslot h1 {
+    margin: 1vh 1vw;
+    height: 3vh;
+    font-size: 1.5em;
+    color: #D5BFAA;
+}
+
+    .overview_page .selected_timeslot .colleagues {
+        margin: 1vh 1vw;
+        font-size: 1.5em;
+        height: 73vh;
+        width: 26vw;
+        background-color: #D5BFAA;
+        color: #444444;
+        padding: 0.1vh 0.1vw;
     }
 
-.nav_bar ul {
-    list-style: none;
-}
-
-.nav_bar li {
-    display: inline-block;
-}
-
-.nav_bar li a {
-    color: #444444;
-    transition: all 0.5s ease 0s;
-    padding: 0px 10px;
-}
-
-.nav_bar li a:hover {
+.overview_page .selected_timeslot .colleagues .date{
+    margin: 0.5vh 1vw;
+    font-size: 1.5em;
+    height:4vh;
+    width: 23.8vw;
+    background-color: #444444;
     color: #D5BFAA;
+}
+
+.overview_page .selected_timeslot .colleagues .res{
+    height: 4vh;
+    width: 23.8vw;
+    background-color: #444444;
+    font-size: 0.8em;
+    margin: 0.5vh 1vw;
+    color: #D5BFAA;
+}
+
+.overview_page .selected_timeslot .colleagues p{
+    margin: 0.5vh 1vw;
+}
+
+.overview_page .selected_timeslot .colleagues .date #date{
+    float:left;
+    height: 2vh;
+    margin: 1vh;
+}
+
+.overview_page .selected_timeslot .colleagues .date #tsa{
+    float:right;
+    height: 2vh;
+    margin: 1vh;
+}
+
+.overview_page .upcoming_reservations {
+    width: 60vw;
+    height: 26.5vh;
+    margin-left: 4vw;
+    margin-top: 0.5vw;
+    background-color: #444444;
+    float:left;
+}
+
+.overview_page .upcoming_reservations h1{
+    margin: 1vh 1vw;
+    font-size: 1.5em;
+    color: #D5BFAA;
+}
+.overview_page .upcoming_reservations .line{
+    width:58vw;
+    height: 1vh;
+    margin-left:1vw;
+    background-color: #D5BFAA;
+}
+.overview_page .upcoming_reservations .reservation_displays {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 17vh;
+    margin-left: 10px;
+}
+
+.overview_page .upcoming_reservations .reservation_displays .display {
+    background-color: #D5BFAA;
+    height: 17vh;
+    margin: 1vh 4px;
+    width: 17vh;
+    float: left;
+}
+.overview_page .upcoming_reservations .reservation_displays .display .button{
+    text-align: center;
+    background-color: #444444;
+    border: none;
+    margin-left: 20px;
+    color: #D5BFAA;
+    padding: 10px 32px;
+    text-align: center;
+    font-size: 0.8em;
+}
+.overview_page .upcoming_reservations .reservation_displays .display a {
+    float: right;
+    margin-right: 10px;
+    font-size: 14px;
+}
+.overview_page .upcoming_reservations .reservation_displays .display p {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/*----------------------------------------*/
+/* TEAMS PAGE */
+.teams_page h1 {
+    font-size: 2em;
+    margin-left: 1vw;
+}
+.teams_page .select_team, .teams_page .team_reservations {
+    margin: 2vh 0;
+    height: 80vh;
+}
+.teams_page .select_team {
+    background-color: #444;
+    width: 34vw;
+    float: left;
+    margin-left: 4vw;
+}
+.teams_page .select_team .line {
+    width: 34vw;
+    height: 1vh;
+    margin: 1vh 0 0 0;
+    background-color: #D5BFAA;
+}
+.teams_page .select_team h1 {
+    color: #D5BFAA;
+}
+.teams_page .team_selection_scroll {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.teams_page .team_selection {
+    width: 30vw;
+    height: 70vh;
+    margin: 1vh 2vw;
+}
+.teams_page .team_display {
+    width: inherit;
+    background-color: #D5BFAA;
+    margin-top: 1vh;
+}
+.teams_page .team_selection button {
+    font-size: 3.5vh;
+    width: 28vw;
+    margin: 1vh 1vw;
+    background-color: #D5BFAA;
+}
+.teams_page .team_selection .member_showcase {
+    width: 28vw;
+    margin: 0 1vw;
+    padding-bottom: 1vh;
+}
+.teams_page .team_selection .member {
+    font-size: 2.5vh;
+    border: 2px solid #444;
+    width: 28vw;
+    height: 4.5vh;
+    margin-bottom: 1vh;
+}
+.teams_page .team_selection .member p {
+    text-align: center;
+}
+.teams_page .team_reservations {
+    width: 55vw;
+    float: right;
+    margin-right: 3vw;
+}
+.teams_page .team_reservations .all_members {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 74vh;
+}
+.teams_page .reservation_displays {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: inherit;
+    background-color: #444;
+    height: 17vh;
+}
+.teams_page .member_reservations {
+    background-color: #444;
+    padding: 1vh 0;
+    width: 53vw;
+    margin-left: 1vw;
+    margin-top: 1vh;
+}
+.teams_page .member_reservations h2 {
+    color: #D5BFAA; 
+    font-size: 3.5vh;
+    margin: 1vh 1vw;
+}
+.teams_page .member_reservations .line {
+    height: 0.5vh;
+    background-color: #D5BFAA;
+    margin-bottom: 1vh;
+}
+.teams_page .reservation_displays .display {
+    height: 17vh;
+    margin-left: 1vw;
+    margin-bottom: 1vh;
+    width: 17vh;
+    float: left;
+    background-color: #D5BFAA;
+}
+.teams_page .reservation_displays .display p {
+    text-align: center;
+    padding-top: 4.8vh;
+}
+/*----------------------------------------*/
+/* RESERVE PAGE */
+
+.reserve_page h1 {
+    width: 48vw;
+    margin-top: 1vw;
+    font-size: 2em;
+}
+
+.reserve_page #line1 {
+    width: 50vw;
+    height: 1vh;
+    background-color: #444444;
+}
+
+.reserve_page #line2 {
+    width: 100%;
+    height: 1vh;
+    background-color: #D5BFAA;
+}
+
+.reserve_page form {
+    overflow: hidden;
+    clear: both;
+    padding-bottom: 15px;
+}
+
+.reserve_page .timeslot_selection {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 35vh
+}
+
+.reserve_page .left_side {
+    width: 46vw;
+    margin-left: 4vw;
+    user-select: none;
+    float:left
+}
+
+    /*DATE SELECTION*/
+.reserve_page .date_selection {
+    height: 17.6vw;
+}
+
+.reserve_page .date_selection label {
+    background-color: #444444;
+    border-radius: 4.4vw;
+    width: 8.2vw;
+    height: 8.4vw;
+    margin: 0.2vw 0.4vw;
+    text-align: center;
+    color: #D5BFAA;
+    font-size: 1.5vw;
+    padding-top: 1.5vw;
+    float: left;
+}
+
+.reserve_page .date_selection label:hover {
+    cursor: pointer;
+}
+
+.reserve_page .date_selection input[type=checkbox] {
+    display: none;
+}
+
+    /*TIMESLOT SELECTION*/
+.reserve_page .timeslot label {
+    font-size: 2em;
+    background-color: #D5BFAA;
+    color: #444444;
+    height: 6vh;
+    width: 44vw;
+    margin: 1vh 0.4vw;
+    user-select: none;
+}
+
+.reserve_page .timeslot input[type=checkbox] {
+    display: none;
+}
+
+.reserve_page .timeslot input[type=checkbox] + label {
+    display: inline-block;
+    cursor: pointer;
+    font-size: inherit;
+}
+
+    /*EMPTY CHECKBOX*/
+.reserve_page .timeslot input[type=checkbox] + label:before {
+    background-color: #D5BFAA;
+    border-color: #444444;
+    content: "\2714";
+    border: 2px solid #000;
+    border-radius: 0.2em;
+    display: inline-block;
+    width: 3vw;
+    height: 5vh;
+    vertical-align: baseline;
+    color: transparent;
+    transition: .2s;
+    margin: 0.5vh;
+}
+
+    /*CHECKED CHECKBOX*/
+.reserve_page .timeslot input[type=checkbox]:checked + label:before {
+    background-color: #444444;
+    border-color: #444444;
+    color: #D5BFAA;
+    text-align: center;
+    vertical-align: inherit;
+}
+
+.reserve_page .timeslot .slot_availability {
+    text-align: center;
+    margin: 1vh;
+    width: 5vw;
+    height: 4vh;
+    background-color: #444444;
+    color: #D5BFAA;
+    float: right;
+}
+
+    /*RIGHT SIDE*/
+.reserve_page .right_side {
+    float: right;
+    width: 46vw;
+    margin-right: 0.4vw;
+    color: #D5BFAA;
+}
+
+.reserve_page .select_team {
+    background-color: #444444;
+}
+
+.reserve_page .right_side h1 {
+    margin-left: 1vw;
+    color: #D5BFAA;
+}
+
+.reserve_page .team_selection {
+    width: 100%;
+    height: 55vh;
+}
+
+.reserve_page .right_side #reserve_button {
+    transition: all 0.5s ease 0s;
+    background-color: #444444;
+    color: #D5BFAA;
+    font-size: 1.5em;
+    box-shadow: 0px 5px 5px 0px rgba(194,194,194,1);
+    padding: 20px;
+    margin: 30px 70px;
+}
+/*----------------------------------------*/
+/* ADMIN PAGE */
+.admin_page .teams {
+    float: left;
+    width: 42vw;
+    height: 80vh;
+    margin-left: 4vw;
+    margin-top: 2vh;
+}
+.admin_page .teams .person_selection {
+    width: 12vw;
+    overflow-y: scroll;
+    height: 7.5vh;
+    float: right;
+}
+.admin_page .teams #t_h1 {
+    float: left;
+    margin-left: 1vw;
+}
+.admin_page .teams form button {
+    float: right;
+    margin-top: 1.5vh;
+    height: 5.5vh;
+    background-color: white;
+    color: #444;
+    border: none;
+}
+.admin_page .teams form label {
+    font-size: 2vh; 
+}
+.admin_page .team_configuration {
+    width: 41vw;
+    height: 71vh;
+    margin: 9vh 0.5vw 0 0.5vw;
+    background-color: #444;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.admin_page .timeslots {
+    float: right;
+    width: 46vw;
+    height: 50vh;
+    margin-right: 4vw;
+    margin-top: 2vh;
+}
+.admin_page .teams .line {
+    height: 1vh;
+    width: 11vw;
+    background-color: black;
+    float: left;
+    margin-left: 0.5vw;
+    margin-top: 4vh;
+}
+.admin_page .timeslots h1{
+    font-size: 4vh;    
+}
+
+.admin_page .timeslots .timeslot_config{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 42vh;
+    background-color: #444444;
+    text-align: center;
+    padding: 2vh 2vw;
+}
+.admin_page .timeslots .timeslot_config .ts{
+    float: left;
+    margin-left: 4vw;
+}
+
+.admin_page .timeslots .timeslot_config form {
+    background-color: #D5BFAA;
+    width: 42vw; 
+    height: 6vh;
+    padding-top: 1vh;
+    margin: 2vh 0;
+}
+
+.admin_page .timeslots form, .admin_page .timeslots form input {
+    background-color: #444444;
+}
+
+.admin_page .timeslots form button {
+    float: right;
+    background-color: #444444;
+    color: #D5BFAA;
+    outline: none;
+}
+
+.admin_page .timeslots .timeslot_config form button {
+    background-color: #D5BFAA;
+    border: none;
+    margin-left: 20vw;
+    margin-top: 0.3vh;
+    color: #444;
+}
+
+.admin_page .timeslots .timeslot_config p{
+    font-size: 3vh;
+}
+
+
+.admin_page .timeslots #add_timeslot:hover{
+    text-decoration: underline;
+    color: white;
+}
+
+.admin_page .timeslots #add_timeslot{
+    width: inherit;
+    background-color: #444;
+    float: right;
+    color: #D5BFAA;
+    padding-left: 10px;
+}
+
+.admin_page .employees {
+    float: right;
+    width: 30vw;
+    height: 28vh;
+    margin-right: 4vw;
+    margin-top: 2vh;
+}
+
+.admin_page .employees h1 {
+    font-size: 4vh;
+}
+.admin_page .employees .employee_config{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 30vw;
+    height: 23vh;
+    background-color: #444444;
+}
+.admin_page .employees .employee_config h1 {
+    color: #D5BFAA;
+    text-decoration: underline;
+}
+.admin_page .workplaces {
+    float: right;
+    width: 15vw;
+    height: 12vh;
+    margin-right: 1vw;
+    margin-top: 19vh;
+}
+
+.admin_page #e_h1 {
+    margin-left: 1vw;
+}
+.admin_page .workplaces h1 {
+    font-size: 3vh;
+}
+.admin_page .left_side {
+    float: left;
+}
+.admin_page .right_side {
+    margin: 0.5vh 0 0 0;
+    float: right;
+}
+.admin_page .left_side, .admin_page .right_side {
+    width: 12.9vw;
+    margin: 0.5vh 0 0 1vw;
+    height: 22.5vh;
+}
+.admin_page .nameList, .admin_page .RoleList {
+    height: 17vh;
+}
+
+.admin_page .workplace_config {
+    height: 7vh;
+    background-color: #444444;
+    text-align: center;
+    padding: 2vh 2vw;
+}
+
+.admin_page .workplace_config p {
+    background-color: #D5BFAA;
+    font-size: 2vh;
+}
+
+/* RESPONSIVE PHONE */
+@media screen and (max-width:640px){
+    *::-webkit-scrollbar {
+        width: 2px;
+    }
+    /*LOGIN PAGE*/
+    .login_page h1, .login_page #ngti_logo {
+        font-size: 9vh;
+    }
+    .login_page #login_spacer {
+        margin-left: 2%;
+    }
+    
+    /*NAV BAR*/
+    .nav_bar header img {
+        height: 6vh;
+        padding: 2px 20px;
+    }
+    .nav_bar header #google_pf {
+        height: 6vh;
+        margin: 2px 20px;
+    }
+    .nav_bar li a{
+        padding: 0 2.3vw;
+        font-size: 1em;
+    }
+    
+    /*OVERVIEW PAGE*/
+    .overview_page .select_timeslot {
+        width: 92vw;
+    }
+    .overview_page .day_block {
+        width: 17.4vw;
+    }
+    .overview_page .day_block .timeslots {
+        height: 17vh;
+    }
+    .overview_page .day_block button {
+        width: 16.4vw;
+        font-size: 0.5em;
+    }
+    .overview_page .day_block button .TSS_availability {
+        height: 2vh;
+        width: 11.4vw;
+        float: none;
+        font-size: 1em;
+    }
+    .overview_page .selected_timeslot {
+        width: 45vw;
+        height: 31vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    } 
+    .overview_page .selected_timeslot h1 {
+        font-size: 0.7em;
+    }
+    .overview_page .selected_timeslot .colleagues {
+        width: 42vw;
+        height: 25vh;
+    }
+    .overview_page .selected_timeslot .colleagues .date {
+        width: 40vw;
+    }
+    .overview_page .selected_timeslot .colleagues p {
+        font-size: 0.3em;
+    }
+    .overview_page .upcoming_reservations {
+        width: 45vw;
+        height: 31vh;
+        margin-top: 0;
+        margin-left: 4.5vw;
+    }
+    .overview_page .upcoming_reservations h1 {
+        font-size: 0.7em;
+    } 
+    .overview_page .upcoming_reservations .line {
+        width: 42vw;
+        height: 0.5vh;
+    }
+    .overview_page .upcoming_reservations .reservation_displays {
+        height: 25vh;
+    }
+    .overview_page .upcoming_reservations .reservation_displays .display {
+        width: 23vw;
+        height: 13vh;
+    }
+    /* TEAMS PAGE */
+    .teams_page h1 {
+        font-size: 1.5em;
+    }
+    .teams_page .select_team, .teams_page .team_reservations {
+        height: 36vh;
+    }
+    .teams_page .select_team, .teams_page .select_team .line, .teams_page .team_reservations, .teams_page .member_reservations {
+        width: 92vw;
+    }
+    .teams_page .team_selection {
+        height: 27vh;
+        width: 88vw;
+    }
+    .teams_page .team_selection .member_showcase {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        width: 40vw;
+    }
+    .teams_page .team_display {
+        width: 42vw;
+        height: 26vh;
+        float: left;
+        margin-right: 2vw;
+    }
+    .teams_page .team_selection_scroll {
+        height: 29vh;
+    }
+    .teams_page .team_selection button {
+        font-size: 2.5vh;
+        width: 40vw;
+    }
+    .teams_page .team_selection .member {
+        width: 40vw;
+    }
+    .teams_page .reservation_displays {
+        height: 14vh;
+    }
+    .teams_page .team_reservations .display {
+        width: 16vh;
+        height: 14vh;
+    }
+    .teams_page .team_reservations .all_members {
+        height: 35vh;
+    }
+    .teams_page .member_reservations h2 {
+        font-size: 3vh;
+    }
+    /*RESERVE PAGE*/
+    .reserve_page .left_side, .reserve_page .right_side {
+        width: 92vw;
+        margin: 0 4vw;
+        float: none;
+    }
+    .reserve_page h1 {
+        font-size: 1em;
+        margin-left: 20vw;
+        text-align: center;
+    }
+    .reserve_page #line1, .reserve_page #line2 {
+        width: 100%;
+    }
+    .reserve_page .date_selection {
+        height: 35.2vw;
+    }
+    .reserve_page .date_selection label {
+        width: 16.8vw;
+        height: 16.8vw;
+        border-radius: 8.8vw;
+        font-size: 2.5vw;
+        padding-top: 4vw;
+    }
+    .reserve_page .timeslot_selection {
+        height: 21vh;
+        margin-bottom: 5px;
+    }
+    .reserve_page .timeslot label {
+        width: 90vw;
+        height: 5vh;
+    }
+    .reserve_page .timeslot input[type=checkbox] + label:before {
+        width: 6vw;
+        height: 4vh;
+    }
+    .reserve_page .timeslot .slot_availability {
+        width: 15vw;
+        margin: 0.5vh;
+    }
+    .reserve_page .team_selection {
+        height: 25vh;
+        overflow-y: scroll;
+    }
+    .reserve_page .right_side #reserve_button {
+        margin: 10px;
+        padding: 0;
+    }
+
+    /*ADMIN SCREEN*/
+    .admin_page .teams {
+        height: 27vh;
+        width: 92vw;
+    }
+    .admin_page .teams .team_selection {
+        width: 24vw;
+    }
+    .admin_page .teams form label {
+        font-size: 1.5vh;
+    }
+    .admin_page .team_configuration {
+        width: 91vw;
+        height: 18vh;
+    }
+    .admin_page .timeslots h1 {
+        font-size: 3vh;
+    }
+    .admin_page .timeslots {
+        width: 92vw;
+        height: 26vh;
+    }
+    .admin_page .timeslots .timeslot_config {
+        height: 19vh;
+    }
+    .admin_page .timeslots .timeslot_config p {
+        font-size: 2vh;
+    }
+    .admin_page .timeslots .timeslot_config form {
+    background-color: #D5BFAA;
+    width: 87vw; 
+    height: 6vh;
+    padding-top: 1vh;
+    margin: 2vh 0;
+    }
+    .admin_page .timeslots .timeslot_config form button {
+    margin-left: 50vw;
+    }
+    .admin_page .timeslots form, .admin_page .timeslots form input {
+        font-size: 0.76em;
+    }
+    .admin_page .employees {
+        width: 62vw;
+        height: 25vh;
+    }
+    .admin_page .employees h1 {
+        font-size: 3vh;
+    }
+    .admin_page .employees .employee_config {
+        width: 62vw;
+        height: 20vh;
+    }
+    .admin_page .left_side, .admin_page .right_side {
+        width: 28vw;
+        height: 19.5vh;
+    }
+    .admin_page .employees .nameList, .admin_page .RoleList {
+        height: 16vh;
+    }
+    .admin_page .workplaces {
+        margin-top: 2vh;
+        width: 29vw;
+    }
 }
