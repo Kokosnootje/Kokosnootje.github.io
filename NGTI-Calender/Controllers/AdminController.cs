@@ -62,23 +62,25 @@ namespace NGTI_Calender.Controllers {
             bool overlap = false;
             //check for correct input 
             try {
-                string[] s = startTime.Split(":");
-                if (s[0].Length == 1) {
-                    s[0] = "0" + s[0];
-                }
-                startTime = s[0] + ":" + s[1];
-                s = endTime.Split(":");
-                if (s[0].Length == 1) {
-                    s[0] = "0" + s[0];
-                }
-                endTime = s[0] + ":" + s[1];
-                var startA = DateTime.Parse(startTime);
-                var endA = DateTime.Parse(endTime);
-                //check if time overlaps
-                foreach (var item in timeslotList) {
-                    var startB = DateTime.Parse(item.TimeStart);
-                    var endB = DateTime.Parse(item.TimeEnd);
-                    overlap = !(startA >= endB || startB >= endA) || overlap;
+                if (!(string.IsNullOrEmpty(startTime) && string.IsNullOrEmpty(endTime))) {
+                    string[] s = startTime.Split(":");
+                    if (s[0].Length == 1) {
+                        s[0] = "0" + s[0];
+                    }
+                    startTime = s[0] + ":" + s[1];
+                    s = endTime.Split(":");
+                    if (s[0].Length == 1) {
+                        s[0] = "0" + s[0];
+                    }
+                    endTime = s[0] + ":" + s[1];
+                    var startA = DateTime.Parse(startTime);
+                    var endA = DateTime.Parse(endTime);
+                    //check if time overlaps
+                    foreach (var item in timeslotList) {
+                        var startB = DateTime.Parse(item.TimeStart);
+                        var endB = DateTime.Parse(item.TimeEnd);
+                        overlap = !(startA >= endB || startB >= endA) || overlap;
+                    }
                 }
             } catch {
                 //wrong input message
