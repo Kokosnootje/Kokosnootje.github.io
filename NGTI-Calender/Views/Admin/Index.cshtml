@@ -1,4 +1,4 @@
-﻿@model Tuple<List<Timeslot>, Popup, List<Person>, string>
+﻿@model Tuple<List<Timeslot>, Popup, List<Person>, string, Seats>
 @{
     ViewData["Title"] = "Admin Dashboard";
     ViewData["ID Reserve"] = "null";
@@ -90,7 +90,11 @@
         <div class="workplaces">
             <h1>Workplaces</h1>
             <div class="workplace_config">
-                <p><a asp-action="">  -  </a>  17  <a asp-action="">  +  </a></p>
+                <form asp-action="ChangeSeatsAmount">
+                    <input type="hidden" name="personId" value="@Model.Item4" />
+                    <input name="amount" placeholder="@Model.Item5.places"/>
+                    <button type="submit">save</button>
+                </form>
             </div>
         </div>
     </div>

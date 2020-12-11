@@ -17,7 +17,7 @@ namespace NGTI_Calender.Controllers {
         }
 
         public IActionResult Index(string personId) {
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId);
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
             return View(tuple);
         }
 
@@ -47,11 +47,11 @@ namespace NGTI_Calender.Controllers {
                     //must cascade drop
                     _context.Timeslot.Remove(item);
                     await _context.SaveChangesAsync();
-                    var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "The timeslot has been removed." }, _context.Person.ToList(), personId);
+                    var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "The timeslot has been removed." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
                     return View(tuple2);
                 }
             }
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage="An error has occured." }, _context.Person.ToList(), personId);
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage="An error has occured." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
             return View(tuple);
         }
 
@@ -84,12 +84,12 @@ namespace NGTI_Calender.Controllers {
                 }
             } catch {
                 //wrong input message
-                var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId);
+                var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
                 return View(tuple1);
             }
             //check if there are null values
             if (string.IsNullOrWhiteSpace(startTime) || string.IsNullOrWhiteSpace(endTime)){
-                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId);
+                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
                 return View(tuple);
             }
             //add to database if it does not overlap
@@ -97,15 +97,33 @@ namespace NGTI_Calender.Controllers {
                 _context.Timeslot.Add(new Timeslot() { TimeStart = startTime, TimeEnd = endTime });
                 await _context.SaveChangesAsync();
                 //timeslot has been added message
-                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The timeslot has been added." }, _context.Person.ToList(), personId);
+                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The timeslot has been added." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
                 return View(tuple2);
             } else {
                 //overlapping input message
-                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The input overlaps with an existing timeslot." }, _context.Person.ToList(), personId);
+                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The input overlaps with an existing timeslot." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
                 return View(tuple);
             }
         }
 
+        //change seats amount
+        [HttpPost]
+        public async Task<IActionResult> ChangeSeatsAmount(string amount ,string personId) {
+            try {
+                int places = int.Parse(amount);
+                if (places >= 0) {
+                    _context.Seats.ToList()[0].places = places;
+                    await _context.SaveChangesAsync();
+                    var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
+                    return View(tuple1);
+                }
+            } catch (Exception) {
+                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
+                return View(tuple2);
+            }
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
+            return View(tuple);
+        }
         private void SendMail(string date, string timeStart, string timeEnd, int personId) {
             string email = "";
             foreach (var person in _context.Person.ToList()) {
