@@ -29,74 +29,92 @@
 </head>
 <body>
     <div class="admin_page">
-        <div class="teams">
-            <h1 id="t_h1">Teams</h1>
-            <div class="line"></div>
-            <form asp-action="">
-                <button type="submit">Add team</button>
-                <div class="person_selection">
-                    @{
-                        int i = 0;
-                        foreach (var item in Model.Item3) {
-                            <div>
-                                <input type="checkbox" id="p@(i)" name="selectedPersons" value="@item.PersonId" />
-                                <label for="p@(i)">@item.PersonName</label>
-                            </div>
-                            i++;
-                        }
+
+        @{
+            bool admin = false;
+            foreach (var p in Model.Item3) {
+                if (p.PersonId.ToString() == Model.Item4) {
+                    if (p.Roles.Admin == true) {
+                        admin = true;
                     }
-                </div>
-            </form>
-            <div class="team_configuration">
-                @* load teams + remove member button *@
-            </div>
-        </div>
-        <div class="timeslots">
-            <h1>Timeslots</h1>
-            <div class="timeslot_config">
-                @foreach (var item in Model.Item1) {
-                    <form asp-action="Index">
-                        <p class="ts">@item.TimeStart - @item.TimeEnd</p>
-                        <input type="hidden" name="timeslotId" value=@item.TimeslotId />
-                        <input type="hidden" name="personId" value="@Model.Item4"/>
-                        <button type="submit">X</button>
-                    </form>
                 }
-            </div>
-            <form asp-action="AddTimeslot">
-                <input placeholder="09:00" name="startTime"/>
-                <input placeholder="11:00" name="endTime"/>
-                <input type="hidden" name="personId" value="@Model.Item4"/>
-                <button type="submit">add timeslot</button>
-            </form>
-        </div>
-        <div class="employees">
-            <h1 id="e_h1">Employees</h1>
-            <div class="employee_config">
-                <div class="left_side">
-                    <h1>Name</h1>
-                    <div class="nameList">
-                        @* load employees in this div *@
+            }
+            if (admin) {
+                <div class="teams">
+                    <h1 id="t_h1">Teams</h1>
+                    <div class="line"></div>
+                    <form asp-action="">
+                        <button type="submit">Add team</button>
+                        <div class="person_selection">
+                            @{
+                                int i = 0;
+                                foreach (var item in Model.Item3) {
+                                    <div>
+                                        <input type="checkbox" id="p@(i)" name="selectedPersons" value="@item.PersonId" />
+                                        <label for="p@(i)">@item.PersonName</label>
+                                    </div>
+                                    i++;
+                                }
+                            }
+                        </div>
+                    </form>
+                    <div class="team_configuration">
+                        @* load teams + remove member button *@
                     </div>
                 </div>
-                <div class="right_side">
-                    <h1>Role</h1>
-                    <div class="RoleList">
-                        @* load roles in this div *@
+                <div class="timeslots">
+                    <h1>Timeslots</h1>
+                    <div class="timeslot_config">
+                        @foreach (var item in Model.Item1) {
+                            <form asp-action="Index">
+                                <p class="ts">@item.TimeStart - @item.TimeEnd</p>
+                                <input type="hidden" name="timeslotId" value=@item.TimeslotId />
+                                <input type="hidden" name="personId" value="@Model.Item4" />
+                                <button type="submit">X</button>
+                            </form>
+                        }
+                    </div>
+                    <form asp-action="AddTimeslot">
+                        <input placeholder="09:00" name="startTime" />
+                        <input placeholder="11:00" name="endTime" />
+                        <input type="hidden" name="personId" value="@Model.Item4" />
+                        <button type="submit">add timeslot</button>
+                    </form>
+                </div>
+                <div class="employees">
+                    <h1 id="e_h1">Employees</h1>
+                    <div class="employee_config">
+                        <div class="left_side">
+                            <h1>Name</h1>
+                            <div class="nameList">
+                                @* load employees in this div *@
+                            </div>
+                        </div>
+                        <div class="right_side">
+                            <h1>Role</h1>
+                            <div class="RoleList">
+                                @* load roles in this div *@
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="workplaces">
-            <h1>Workplaces</h1>
-            <div class="workplace_config">
-                <form asp-action="ChangeSeatsAmount">
-                    <input type="hidden" name="personId" value="@Model.Item4" />
-                    <input name="amount" placeholder="@Model.Item5.places"/>
-                    <button type="submit">save</button>
-                </form>
-            </div>
-        </div>
+                <div class="workplaces">
+                    <h1>Workplaces</h1>
+                    <div class="workplace_config">
+                        <form asp-action="ChangeSeatsAmount">
+                            <input type="hidden" name="personId" value="@Model.Item4" />
+                            <input name="amount" placeholder="@Model.Item5.places" />
+                            <button type="submit">save</button>
+                        </form>
+                    </div>
+                </div>
+            } else { 
+                <div class="not_admin"><h1>You are not an admin.</h1></div>
+            }
+        }
+
+
+
     </div>
 
     <script>
