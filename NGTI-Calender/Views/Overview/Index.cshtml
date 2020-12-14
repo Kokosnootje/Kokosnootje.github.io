@@ -1,5 +1,5 @@
 ﻿
-@model Tuple<List<Timeslot>, string, List<Reservation>, List<Person>, Reservation>
+@model Tuple<List<Timeslot>, string, List<Reservation>, List<Person>, Reservation, int[][], int>
 @{
     @using FluentDateTime
     ViewData["Title"] = "Overview";
@@ -9,7 +9,7 @@
     ViewData["ID Admin Dashboard"] = "null";
     ViewData["PersonId"] = Model.Item2;
     ViewData["ProfilePicture"] = GetProfilePicture(Model.Item2);
-
+    var amountRes = Model.Item6;
     string GetProfilePicture(string personId)
     {
         foreach (var item in Model.Item4)
@@ -87,6 +87,10 @@
 
     }
     var calender = SelectDaysOfWeeks();
+    static int getResAmount(int i, int j, int[][] res)
+    {
+        return res[i][j];
+    }
 }
 
 <head>
@@ -119,7 +123,7 @@
                                 {
                                     <button id="TSS@(j)">
                                         @timeslot.TimeStart-@timeslot.TimeEnd
-                                        <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">00/17</div>
+                                        <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item7</div>
                                     </button>
                                     j++;
                                 }

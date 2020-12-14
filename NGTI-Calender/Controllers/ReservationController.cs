@@ -35,7 +35,7 @@ namespace NGTI_Calender.Controllers
         // GET: Reservation/Create
         public IActionResult Index(string personId)
         {
-            AmountReservedPlaces();
+            var AmountRes = AmountReservedPlaces();
             var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList());
             //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
             return View(tuple);
@@ -304,7 +304,7 @@ namespace NGTI_Calender.Controllers
             Console.WriteLine("Event created: {0}", createdEvent.HtmlLink);
         }
 
-        public void AmountReservedPlaces() {
+        public int[][] AmountReservedPlaces() {
             //load upcoming 2 weeks - weekend
             DateTime[] days = new DateTime[10];
             DateTime lastDay = DateTime.Now;
@@ -360,6 +360,7 @@ namespace NGTI_Calender.Controllers
                 }
                 indexI++;
             }
+            return count;
         }
     }
 }
