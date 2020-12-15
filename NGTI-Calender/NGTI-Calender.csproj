@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Migrations\" />
     <Folder Include="Views\Overview\" />
     <Content Update="credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

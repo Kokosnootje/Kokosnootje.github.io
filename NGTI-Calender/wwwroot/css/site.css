@@ -149,6 +149,9 @@ body, div, h1, h3 {
 
 /*----------------------------------------*/
 /* LOGIN PAGINA */
+.login_page {
+    overflow-x: hidden;
+}
 .login_page h1, .login_page h3 {
     text-align: center;
 }
@@ -804,13 +807,26 @@ body, div, h1, h3 {
     height: 7vh;
     background-color: #444444;
     text-align: center;
-    padding: 2vh 2vw;
 }
 
-.admin_page .workplace_config p {
-    background-color: #D5BFAA;
+.admin_page .workplace_config form {
+    background-color: #444;
     font-size: 2vh;
+    padding: 1.5vh 0 0 0;
 }
+
+.admin_page .workplace_config input {
+    width: 8vw;
+    background-color: #D5BFAA;
+    text-align: center;
+}
+
+.admin_page .workplace_config button {
+    width: 4.5vw;
+    background-color: #D5BFAA;
+    color: #444;
+}
+
 
 /* RESPONSIVE PHONE */
 @media screen and (max-width:640px){
@@ -1057,5 +1073,19 @@ body, div, h1, h3 {
     .admin_page .workplaces {
         margin-top: 2vh;
         width: 29vw;
+    }
+    .admin_page .workplace_config form {
+        background-color: #444;
+        font-size: 2vh;
+        padding: 1.5vh 0 0 0;
+    }
+    .admin_page .workplace_config input {
+        width: 10vw;
+        background-color: #D5BFAA;
+    }
+    .admin_page .workplace_config button {
+        width: 11vw;
+        background-color: #D5BFAA;
+        color: #444;
     }
 }
