@@ -19,10 +19,11 @@ namespace NGTI_Calender.Controllers
         }
 
         // GET: Overview/Index
-        public IActionResult Index(string personId)
+        public IActionResult Index(string personId, string SelectedDate = "", string SelectedTimeslot = "", string AmountAvailablePlaces = "")
         {
             var amountRes = AmountReservedPlaces();
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), personId, _context.Reservation.ToList(), _context.Person.ToList(), new Reservation(), amountRes, _context.Seats.ToList()[0].places);
+            string[] selectedReservation = new string[] { SelectedDate, SelectedTimeslot };
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), Tuple.Create(SelectedDate, SelectedTimeslot, personId, AmountAvailablePlaces), _context.Reservation.ToList(), _context.Person.ToList(), new Reservation(), amountRes, _context.Seats.ToList()[0].places);
             return View(tuple);
         }
 
@@ -77,6 +78,14 @@ namespace NGTI_Calender.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction("Index", new { personId = personId });
+        }
+
+        // POST: Overview/GetAllReservations
+        [HttpPost, ActionName("GetAllReservations")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GetAllReservations(string selectedDate, string selectedTimeslot, string personId, string amountAvailablePlaces)
+        {
+            return RedirectToAction("Index", new { personId = personId, SelectedDate = selectedDate, SelectedTimeslot = selectedTimeslot, AmountAvailablePlaces = amountAvailablePlaces });
         }
         public int[][] AmountReservedPlaces()
         {
