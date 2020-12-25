@@ -323,7 +323,7 @@ body, div, h1, h3 {
 
 .overview_page .upcoming_reservations {
     width: 60vw;
-    height: 26.5vh;
+    height: 29.2vh;
     margin-left: 4vw;
     margin-top: 0.5vw;
     background-color: #444444;
@@ -344,7 +344,7 @@ body, div, h1, h3 {
 .overview_page .upcoming_reservations .reservation_displays {
     overflow-x: hidden;
     overflow-y: scroll;
-    height: 17vh;
+    height: 20vh;
     margin-left: 10px;
 }
 
@@ -352,18 +352,22 @@ body, div, h1, h3 {
     background-color: #D5BFAA;
     height: 17vh;
     margin: 1vh 4px;
-    width: 17vh;
+    width: 12vh;
     float: left;
+    position: relative;
 }
 .overview_page .upcoming_reservations .reservation_displays .display .button{
     text-align: center;
     background-color: #444444;
     border: none;
-    margin-left: 20px;
+    margin-left: 1vh;
     color: #D5BFAA;
-    padding: 10px 32px;
+    padding: 1vh 2vh;
     text-align: center;
     font-size: 0.8em;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 1vh;
 }
 .overview_page .upcoming_reservations .reservation_displays .display a {
     float: right;
