@@ -1,5 +1,5 @@
 ﻿
-@model Tuple<List<Timeslot>, string, List<Reservation>, List<Person>, Reservation>
+@model Tuple<List<Timeslot>, Tuple<string, string, string, string>, List<Reservation>, List<Person>, Reservation, int[][], int>
 @{
     @using FluentDateTime
     ViewData["Title"] = "Overview";
@@ -7,9 +7,9 @@
     ViewData["ID Overview"] = "current_page";
     ViewData["ID Team"] = "null";
     ViewData["ID Admin Dashboard"] = "null";
-    ViewData["PersonId"] = Model.Item2;
-    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item2);
-
+    ViewData["PersonId"] = Model.Item2.Item3;
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item2.Item3);
+    var amountRes = Model.Item6;
     string GetProfilePicture(string personId)
     {
         foreach (var item in Model.Item4)
@@ -87,6 +87,10 @@
 
     }
     var calender = SelectDaysOfWeeks();
+    static int getResAmount(int i, int j, int[][] res)
+    {
+        return res[i][j];
+    }
 }
 
 <head>
@@ -117,10 +121,16 @@
                                 int j = 0;
                                 foreach (var timeslot in Model.Item1)
                                 {
-                                    <button id="TSS@(j)">
+                                    <form asp-action="GetAllReservations">
+                                    <input type="hidden" name="personId" value="@Model.Item2.Item3">
+                                    <input type="hidden" name="selectedDate" value="@calender[1][i]">
+                                    <input type="hidden" name="selectedTimeslot" value="@timeslot.TimeStart-@timeslot.TimeEnd">
+                                    <input type="hidden" name="amountAvailablePlaces" value="@getResAmount(i, j, amountRes) / @Model.Item7">
+                                    <button id="TSS@(j)" type="submit">
                                         @timeslot.TimeStart-@timeslot.TimeEnd
-                                        <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">00/17</div>
+                                        <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item7</div>
                                     </button>
+                                    </form>
                                     j++;
                                 }
                             }
@@ -132,11 +142,20 @@
         </div>
 
         <div class="selected_timeslot">
-            <h1>Selected timeslot:</h1>
+            <h1>@Model.Item2.Item1</h1>
             <div class="colleagues">
-                <div class="date"><p id="date">date</p><p id="tsa">00/17</p></div>
+                <div class="date"><p id="date">@Model.Item2.Item2</p><p id="tsa">@Model.Item2.Item4</p></div>
                 <p>Name + Functions</p>
-                <div class="res">test</div>
+                @{
+                    foreach (var res in Model.Item3)
+                    {
+                        if (res.Date == Model.Item2.Item1 && res.Timeslot.TimeStart + "-" + res.Timeslot.TimeEnd == Model.Item2.Item2)
+                        {
+                            <div class="res">@res.Person.PersonName</div>
+                        }
+
+                    }
+                }
             </div>
         </div>
         <div class="upcoming_reservations">
@@ -145,11 +164,11 @@
             <div class="reservation_displays">
                 <form asp-action="Delete" onsubmit="return confirm('Do you really want to delete this reservation?')">
                     @{
-                        <input type="hidden" name="personId" value="@Model.Item2">
+                        <input type="hidden" name="personId" value="@Model.Item2.Item3">
                         string lastDate = "";
                         foreach (var item in Model.Item3)
                         {
-                            if (item.Person.PersonId.ToString() == Model.Item2)
+                            if (item.Person.PersonId.ToString() == Model.Item2.Item3)
                             {
                                 if (lastDate != item.Date)
                                 {
