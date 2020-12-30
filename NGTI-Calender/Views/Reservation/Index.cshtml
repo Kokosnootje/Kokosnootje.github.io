@@ -1,4 +1,4 @@
-﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>>
+﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>,int[][]>
 @{
 //@model IEnumerable<NGTI_Calender.Models.Reservation>
     @using FluentDateTime
@@ -100,6 +100,7 @@
                         for (int k = 0; k < 10; k++) {
                             <label asp-for="Item1.Date" class="date_placeholder" for="CB@(k+1)" id="L@(k+1)">@calender[0][k] <br> @calender[1][k]</label>
                             <input asp-for="Item1.Date" value="@calender[1][k]" type="checkbox" name="selectedObjects" id="CB@(k+1)" onclick="changeColor('CB@(k+1)', 'L@(k+1)', '#D5BFAA', '#444444')" />
+                            
                         }
                     }
                 </div>

@@ -54,7 +54,7 @@ namespace NGTI_Calender.Controllers
         public IActionResult Index(string personId)
         {
             var AmountRes = AmountReservedPlaces();
-            var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList());
+            var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList(), AmountRes);
             //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
             return View(tuple);
         }
