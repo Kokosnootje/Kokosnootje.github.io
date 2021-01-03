@@ -1,5 +1,5 @@
 ﻿
-@model Tuple<List<Timeslot>, Tuple<string, string, string, string>, List<Reservation>, List<Person>, Reservation, int[][], int>
+@model Tuple<List<Timeslot>, Tuple<string, string, string, string>, List<Reservation>, List<Person>, Reservation, Tuple<int[][], int, int[][]>, List<Roles>>
 @{
     @using FluentDateTime
     ViewData["Title"] = "Overview";
@@ -9,7 +9,7 @@
     ViewData["ID Admin Dashboard"] = "null";
     ViewData["PersonId"] = Model.Item2.Item3;
     ViewData["ProfilePicture"] = GetProfilePicture(Model.Item2.Item3);
-    var amountRes = Model.Item6;
+    var amountRes = Model.Item6.Item1;
     string GetProfilePicture(string personId)
     {
         foreach (var item in Model.Item4)
@@ -109,6 +109,20 @@
         <button type="submit">SEND MAIL</button>
     </form>*@
     <div class="overview_page">
+        @{ 
+            bool admin = false;
+            bool bhv = false;
+            foreach (var p in Model.Item4) {
+                if (p.PersonId.ToString() == Model.Item2.Item3) {
+                    foreach (var roles in Model.Item7) {
+                        if (p.RolesId == roles.RolesId) {
+                            admin = roles.Admin;
+                            bhv = roles.BHV;
+                        }
+                    }
+                }
+            }
+        }
         <div class="select_timeslot">
             @{
                 int i = 0;
@@ -125,11 +139,18 @@
                                     <input type="hidden" name="personId" value="@Model.Item2.Item3">
                                     <input type="hidden" name="selectedDate" value="@calender[1][i]">
                                     <input type="hidden" name="selectedTimeslot" value="@timeslot.TimeStart-@timeslot.TimeEnd">
-                                    <input type="hidden" name="amountAvailablePlaces" value="@getResAmount(i, j, amountRes) / @Model.Item7">
-                                    <button id="TSS@(j)" type="submit">
-                                        @timeslot.TimeStart-@timeslot.TimeEnd
-                                        <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item7</div>
-                                    </button>
+                                    <input type="hidden" name="amountAvailablePlaces" value="@getResAmount(i, j, amountRes) / @Model.Item6.Item2">
+                                        @if (Model.Item6.Item3[i][j] != 0 && (bhv || admin)) {
+                                            <button style="color: limegreen;" id="TSS@(j)" type="submit">
+                                                @timeslot.TimeStart-@timeslot.TimeEnd
+                                                <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                            </button>
+                                        } else {
+                                            <button id="TSS@(j)" type="submit">
+                                                @timeslot.TimeStart-@timeslot.TimeEnd
+                                                <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                            </button>
+                                        }
                                     </form>
                                     j++;
                                 }
@@ -147,16 +168,21 @@
                 <div class="date"><p id="date">@Model.Item2.Item2</p><p id="tsa">@Model.Item2.Item4</p></div>
                 <p>Name + Functions</p>
                 @{
-                    foreach (var res in Model.Item3)
-                    {
-                        if (res.Date == Model.Item2.Item1 && res.Timeslot.TimeStart + "-" + res.Timeslot.TimeEnd == Model.Item2.Item2)
-                        {
+                    foreach (var res in Model.Item3) {
+                        if (res.Date == Model.Item2.Item1 && res.Timeslot.TimeStart + "-" + res.Timeslot.TimeEnd == Model.Item2.Item2) {
                             <div class="res">@res.Person.PersonName</div>
-                        }
+                            if (admin) {
+                                <form asp-action="RemoveReservation">
+                                    <input type="hidden" name="personId" value="@Model.Item2.Item3">
+                                    <input type="hidden" name="reservationId" value="@res.ReservationId" />
+                                    <button type="submit">X</button>
+                                </form>
+                                }
+                            }
 
+                        }
                     }
-                }
-            </div>
+                </div>
         </div>
         <div class="upcoming_reservations">
             <h1>My upcoming reservations:</h1>
