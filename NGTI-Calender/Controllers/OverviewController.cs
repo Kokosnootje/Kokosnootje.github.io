@@ -19,9 +19,11 @@ namespace NGTI_Calender.Controllers
         }
 
         // GET: Overview/Index
-        public IActionResult Index(string personId)
+        public IActionResult Index(string personId, string SelectedDate = "", string SelectedTimeslot = "", string AmountAvailablePlaces = "")
         {
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), personId, _context.Reservation.ToList(), _context.Person.ToList(), new Reservation());
+            var amountRes = AmountReservedPlaces();
+            string[] selectedReservation = new string[] { SelectedDate, SelectedTimeslot };
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), Tuple.Create(SelectedDate, SelectedTimeslot, personId, AmountAvailablePlaces), _context.Reservation.ToList(), _context.Person.ToList(), new Reservation(), amountRes, _context.Seats.ToList()[0].places);
             return View(tuple);
         }
 
@@ -76,6 +78,91 @@ namespace NGTI_Calender.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction("Index", new { personId = personId });
+        }
+
+        // POST: Overview/GetAllReservations
+        [HttpPost, ActionName("GetAllReservations")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GetAllReservations(string selectedDate, string selectedTimeslot, string personId, string amountAvailablePlaces)
+        {
+            return RedirectToAction("Index", new { personId = personId, SelectedDate = selectedDate, SelectedTimeslot = selectedTimeslot, AmountAvailablePlaces = amountAvailablePlaces });
+        }
+        public int[][] AmountReservedPlaces()
+        {
+            //load upcoming 2 weeks - weekend
+            DateTime[] days = new DateTime[10];
+            DateTime lastDay = DateTime.Now;
+            for (int i = 0; i < 10; i++)
+            {
+                if (lastDay.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    lastDay = lastDay.AddDays(2.0);
+                    days[i] = lastDay;
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    lastDay = lastDay.AddDays(1.0);
+                    days[i] = lastDay;
+                    lastDay = lastDay.AddDays(1.0);
+
+                }
+                else
+                {
+                    if (lastDay.DayOfWeek == DayOfWeek.Monday)
+                    {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    }
+                    if (lastDay.DayOfWeek == DayOfWeek.Tuesday)
+                    {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    }
+                    else if (lastDay.DayOfWeek == DayOfWeek.Wednesday)
+                    {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    }
+                    else if (lastDay.DayOfWeek == DayOfWeek.Thursday)
+                    {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    }
+                    else if (lastDay.DayOfWeek == DayOfWeek.Friday)
+                    {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    }
+
+                }
+            }
+            int[][] count = new int[10][];
+            int indexI = 0;
+            int indexJ = 0;
+            foreach (var dt in days)
+            {
+                indexJ = 0;
+                //create 2d array with amount of timeslots
+                count[indexI] = new int[_context.Timeslot.ToArray().Length];
+                foreach (var ts in _context.Timeslot.ToArray())
+                {
+                    foreach (var res in _context.Reservation.ToArray())
+                        //check date overlap between day & res
+                        if (res.Date == dt.Date.ToShortDateString())
+                        {
+                            //check timeslot overlap between ts & res
+                            if (res.Timeslot.TimeslotId == ts.TimeslotId)
+                            {
+                                //if overlap add count
+                                count[indexI][indexJ]++;
+                            }
+                        }
+                    indexJ++;
+                }
+                indexI++;
+            }
+            return count;
         }
     }
 }

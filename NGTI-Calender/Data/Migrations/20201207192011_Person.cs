@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace NGTI_Calender.Data.Migrations
+namespace NGTI_Calender.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class Person : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,11 +47,39 @@ namespace NGTI_Calender.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    RolesId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BHV = table.Column<bool>(nullable: false),
+                    Admin = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.RolesId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Timeslot",
+                columns: table => new
+                {
+                    TimeslotId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TimeStart = table.Column<string>(nullable: true),
+                    TimeEnd = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Timeslot", x => x.TimeslotId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -73,7 +100,7 @@ namespace NGTI_Calender.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -153,6 +180,55 @@ namespace NGTI_Calender.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Person",
+                columns: table => new
+                {
+                    PersonId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RolesId = table.Column<int>(nullable: true),
+                    PersonName = table.Column<string>(nullable: true),
+                    EMail = table.Column<string>(nullable: true),
+                    Image = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Person", x => x.PersonId);
+                    table.ForeignKey(
+                        name: "FK_Person_Role_RolesId",
+                        column: x => x.RolesId,
+                        principalTable: "Role",
+                        principalColumn: "RolesId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reservation",
+                columns: table => new
+                {
+                    ReservationId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersonId = table.Column<int>(nullable: true),
+                    TimeslotId = table.Column<int>(nullable: true),
+                    Date = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservation", x => x.ReservationId);
+                    table.ForeignKey(
+                        name: "FK_Reservation_Person_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "Person",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Reservation_Timeslot_TimeslotId",
+                        column: x => x.TimeslotId,
+                        principalTable: "Timeslot",
+                        principalColumn: "TimeslotId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +267,21 @@ namespace NGTI_Calender.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Person_RolesId",
+                table: "Person",
+                column: "RolesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservation_PersonId",
+                table: "Reservation",
+                column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reservation_TimeslotId",
+                table: "Reservation",
+                column: "TimeslotId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +302,22 @@ namespace NGTI_Calender.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Reservation");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Person");
+
+            migrationBuilder.DropTable(
+                name: "Timeslot");
+
+            migrationBuilder.DropTable(
+                name: "Role");
         }
     }
 }

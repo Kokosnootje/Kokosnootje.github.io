@@ -1,11 +1,9 @@
 ﻿
 /* SCROLLBAR
 -------------------------------------------------- */
-/* width */
-::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 10px;
 }
-
 /* Track */
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -146,11 +144,13 @@ body, div, h1, h3 {
     -o-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    font-family: 'Segoe UI', 'Georgia', 'Times New Roman';
 }
 
 /*----------------------------------------*/
 /* LOGIN PAGINA */
+.login_page {
+    overflow-x: hidden;
+}
 .login_page h1, .login_page h3 {
     text-align: center;
 }
@@ -228,7 +228,6 @@ body, div, h1, h3 {
     margin: 0.5vh 0.5vw;
     background-color: #444444;
 }
-
 .overview_page .day_block .timeslots {
     overflow-y: scroll;
     overflow-x: hidden;
@@ -259,7 +258,7 @@ body, div, h1, h3 {
     background-color: #444444;
     color: #D5BFAA;
     float: right;
-    font-size: 0.5em;
+    font-size: 0.7em;
 }
 
 .overview_page .selected_timeslot {
@@ -324,7 +323,7 @@ body, div, h1, h3 {
 
 .overview_page .upcoming_reservations {
     width: 60vw;
-    height: 26.5vh;
+    height: 29.2vh;
     margin-left: 4vw;
     margin-top: 0.5vw;
     background-color: #444444;
@@ -345,7 +344,7 @@ body, div, h1, h3 {
 .overview_page .upcoming_reservations .reservation_displays {
     overflow-x: hidden;
     overflow-y: scroll;
-    height: 17vh;
+    height: 20vh;
     margin-left: 10px;
 }
 
@@ -353,18 +352,22 @@ body, div, h1, h3 {
     background-color: #D5BFAA;
     height: 17vh;
     margin: 1vh 4px;
-    width: 17vh;
+    width: 12vh;
     float: left;
+    position: relative;
 }
 .overview_page .upcoming_reservations .reservation_displays .display .button{
     text-align: center;
     background-color: #444444;
     border: none;
-    margin-left: 20px;
+    margin-left: 1vh;
     color: #D5BFAA;
-    padding: 10px 32px;
+    padding: 1vh 2vh;
     text-align: center;
     font-size: 0.8em;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 1vh;
 }
 .overview_page .upcoming_reservations .reservation_displays .display a {
     float: right;
@@ -512,7 +515,7 @@ body, div, h1, h3 {
 
 .reserve_page .timeslot_selection {
     overflow-y: scroll;
-    overflow-x: visible;
+    overflow-x: hidden;
     height: 35vh
 }
 
@@ -807,16 +810,46 @@ body, div, h1, h3 {
     height: 7vh;
     background-color: #444444;
     text-align: center;
-    padding: 2vh 2vw;
 }
 
-.admin_page .workplace_config p {
-    background-color: #D5BFAA;
+.admin_page .workplace_config form {
+    background-color: #444;
     font-size: 2vh;
+    padding: 1.5vh 0 0 0;
+}
+
+.admin_page .workplace_config input {
+    width: 8vw;
+    background-color: #D5BFAA;
+    text-align: center;
+}
+
+.admin_page .workplace_config button {
+    width: 4.5vw;
+    background-color: #D5BFAA;
+    color: #444;
+}
+.admin_page .not_admin {
+    width: 80vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.admin_page .not_admin h1 {
+    text-align: center;
+    font-size: 2em;
 }
 
 /* RESPONSIVE PHONE */
 @media screen and (max-width:640px){
+    *::-webkit-scrollbar {
+        width: 2px;
+    }
     /*LOGIN PAGE*/
     .login_page h1, .login_page #ngti_logo {
         font-size: 9vh;
@@ -905,9 +938,9 @@ body, div, h1, h3 {
     .teams_page .select_team, .teams_page .team_reservations {
         height: 36vh;
     }
-        .teams_page .select_team, .teams_page .select_team .line, .teams_page .team_reservations, .teams_page .member_reservations {
-            width: 92vw;
-        }
+    .teams_page .select_team, .teams_page .select_team .line, .teams_page .team_reservations, .teams_page .member_reservations {
+        width: 92vw;
+    }
     .teams_page .team_selection {
         height: 27vh;
         width: 88vw;
@@ -1057,5 +1090,19 @@ body, div, h1, h3 {
     .admin_page .workplaces {
         margin-top: 2vh;
         width: 29vw;
+    }
+    .admin_page .workplace_config form {
+        background-color: #444;
+        font-size: 2vh;
+        padding: 1.5vh 0 0 0;
+    }
+    .admin_page .workplace_config input {
+        width: 10vw;
+        background-color: #D5BFAA;
+    }
+    .admin_page .workplace_config button {
+        width: 11vw;
+        background-color: #D5BFAA;
+        color: #444;
     }
 }
