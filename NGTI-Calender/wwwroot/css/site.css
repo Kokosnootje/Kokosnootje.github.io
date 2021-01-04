@@ -300,11 +300,20 @@ body, div, h1, h3 {
 
 .overview_page .selected_timeslot .colleagues .res{
     height: 4vh;
-    width: 23.8vw;
+    width: 20.2vw;
+    float: left;
     background-color: #444444;
     font-size: 0.8em;
     margin: 0.5vh 1vw;
     color: #D5BFAA;
+}
+
+.overview_page .selected_timeslot .colleagues form {
+    float: left;
+}
+
+.overview_page .selected_timeslot .colleagues form button {
+    width: 2.5vw;
 }
 
 .overview_page .selected_timeslot .colleagues p{

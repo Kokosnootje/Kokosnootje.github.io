@@ -86,18 +86,32 @@
                 <div class="employees">
                     <h1 id="e_h1">Employees</h1>
                     <div class="employee_config">
-                        <div class="left_side">
-                            <h1>Name</h1>
-                            <div class="nameList">
-                                @* load employees in this div *@
+                        <form asp-action="EmployeeConfig">
+                            <div class="left_side">
+                                <h1>Name</h1>
+                                <div class="nameList">
+                                    @* load employees in this div *@
+                                    @foreach (var person in Model.Item3) {
+                                        <p>@person.PersonName</p>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div class="right_side">
-                            <h1>Role</h1>
-                            <div class="RoleList">
-                                @* load roles in this div *@
+                            <div class="right_side">
+                                <h1>Role</h1>
+                                <div class="RoleList">
+                                    @* load roles in this div *@
+                                    @foreach (var roles in Model.Item6) {
+                                        <input name="personId" type="hidden" value="@Model.Item4"/>
+                                        <input name="RolesIds" type="hidden" value="@roles.RolesId" />
+                                        <input onclick="SwapValues('A@(roles.RolesId)')" type="checkbox" checked="@roles.Admin" />
+                                        <input type="hidden" id="A@(roles.RolesId)" name="AdminBools" value="@roles.Admin.ToString()" />
+                                        <input onclick="SwapValues('B@(roles.RolesId)')" type="checkbox" checked="@roles.BHV" />
+                                        <input type="hidden" id="B@(roles.RolesId)" name="BHVBools" value="@roles.BHV.ToString()" />
+                                    }
+                                </div>
                             </div>
-                        </div>
+                            <button type="submit">save</button>
+                        </form>
                     </div>
                 </div>
                 <div class="workplaces">
@@ -125,6 +139,15 @@
             var s = s.split("|").join("\r");
             var s = s.split("||").join("\n");
             setTimeout(() =>  window.alert(s), 100);
+        }
+
+        function SwapValues(id) {
+            var input = document.getElementById(id);
+            if (input.value == "True") {
+                input.value = "False";
+            } else {
+                input.value = "True";
+            }
         }
     </script>
 </body>
