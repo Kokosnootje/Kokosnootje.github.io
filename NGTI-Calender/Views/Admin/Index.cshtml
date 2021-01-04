@@ -61,7 +61,18 @@
                         </div>
                     </form>
                     <div class="team_configuration">
-                        @* load teams + remove member button *@
+                        @*foreach (var item in Model.Item) {
+                            <div>
+                                <label for="p@(i)">@item.TeamName</label>
+                                int i = 0;
+                                foreach (var item in Model.Item3 in Model.Item) {
+                                    <div>
+                                        <input type"checkbox" id="p@(i)" name="selectedPersonsPerTeam" value="@item.PersonId" />
+                                        <label for="p@(i)">@item.PersonName</label>
+                                    </div>
+                            </div>
+                                }
+                            }*@
                     </div>
                 </div>
                 <div class="timeslots">

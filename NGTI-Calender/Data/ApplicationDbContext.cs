@@ -16,5 +16,6 @@ namespace NGTI_Calender.Data
         public DbSet<NGTI_Calender.Models.Timeslot> Timeslot { get; set; }
         public DbSet<NGTI_Calender.Models.Roles> Role { get; set; }
         public DbSet<NGTI_Calender.Models.Seats> Seats { get; set; }
+        public DbSet<NGTI_Calender.Models.Team> Team { get; set; }
     }
 }
