@@ -22,9 +22,69 @@ namespace NGTI_Calender.Controllers
         public IActionResult Index(string personId, string SelectedDate = "", string SelectedTimeslot = "", string AmountAvailablePlaces = "")
         {
             var amountRes = AmountReservedPlaces();
+            List<Reservation> allRes = _context.Reservation.ToList();
+            var testVar = sortAllRes(allRes);
             string[] selectedReservation = new string[] { SelectedDate, SelectedTimeslot };
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), Tuple.Create(SelectedDate, SelectedTimeslot, personId, AmountAvailablePlaces), _context.Reservation.ToList(), _context.Person.ToList(), new Reservation(), amountRes, _context.Seats.ToList()[0].places);
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), Tuple.Create(SelectedDate, SelectedTimeslot, personId, AmountAvailablePlaces), testVar, _context.Person.ToList(), new Reservation(), amountRes, _context.Seats.ToList()[0].places);
             return View(tuple);
+        }
+
+        public List<Reservation> sortAllRes(List<Reservation> allTheRes)
+        {
+            List<Reservation> allTheSortedRes = new List<Reservation>();
+            string[][] sortedRes = new string[allTheRes.Count][];
+            int i = 0;
+            foreach(var res in allTheRes)
+            {
+                sortedRes[i] = res.Date.Split('-');
+                i++;
+            }
+            string[] sortedResTogetherNotDistinct = new string[allTheRes.Count];
+            i = 0;
+            foreach(string[] stringDates in sortedRes)
+            {
+                if(stringDates[1].Length < 2)
+                {
+                    stringDates[1] = "0" + stringDates[1];
+                }
+                if(stringDates[0].Length < 2)
+                {
+                    stringDates[0] = "0" + stringDates[0];
+                }
+                sortedResTogetherNotDistinct[i] = stringDates[2] + stringDates[1] + stringDates[0];
+                i++;
+            }
+            string[] sortedResTogether = sortedResTogetherNotDistinct.Distinct().ToArray();
+            sortedResTogether = sortedResTogether.OrderBy(x => x).ToArray();
+            foreach(string sortedDate in sortedResTogether)
+            {
+
+                string Year = sortedDate[0].ToString() + sortedDate[1].ToString() + sortedDate[2].ToString() + sortedDate[3].ToString();
+                string Month = "";
+                string Day = "";
+                if(sortedDate[4].ToString() == "0")
+                {
+                    Month = sortedDate[5].ToString();
+                } else
+                {
+                    Month = sortedDate[4].ToString() + sortedDate[5].ToString();
+                }
+                if (sortedDate[6].ToString() == "0")
+                {
+                    Day = sortedDate[7].ToString();
+                } else {
+                    Day = sortedDate[6].ToString() + sortedDate[7].ToString();
+                }
+                string completedComparableDate = Day + "-" + Month + "-" + Year;
+                foreach (Reservation res in allTheRes)
+                {
+                    if(completedComparableDate == res.Date)
+                    {
+                        allTheSortedRes.Add(res);
+                    }
+                }
+            }
+            return allTheSortedRes;
         }
 
         // SEND MAIL + RETURN VIEW

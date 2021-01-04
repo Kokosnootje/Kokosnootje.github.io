@@ -271,27 +271,29 @@ body, div, h1, h3 {
 }
 
 .overview_page .selected_timeslot h1 {
-    margin: 1vh 1vw;
     height: 3vh;
     font-size: 1.5em;
     color: #D5BFAA;
+    margin-left: 1vw;
+    margin-top: 0.5vh;
+    margin-bottom: 1.5vh;
 }
 
-    .overview_page .selected_timeslot .colleagues {
-        margin: 1vh 1vw;
-        font-size: 1.5em;
-        height: 73vh;
-        width: 26vw;
-        background-color: #D5BFAA;
-        color: #444444;
-        padding: 0.1vh 0.1vw;
-    }
-
-.overview_page .selected_timeslot .colleagues .date{
-    margin: 0.5vh 1vw;
+.overview_page .selected_timeslot .colleagues {
+    margin: 1vh 1vw;
     font-size: 1.5em;
-    height:4vh;
-    width: 23.8vw;
+    height: 73vh;
+    width: 26vw;
+    background-color: #D5BFAA;
+    color: #444444;
+    padding: 0.1vh 0.1vw;
+}
+
+.overview_page .selected_timeslot .colleagues .date {
+    margin: 0.5vh 0.5vw;
+    font-size: 1.5em;
+    height: 4vh;
+    width: 24.8vw;
     background-color: #444444;
     color: #D5BFAA;
 }
@@ -312,13 +314,13 @@ body, div, h1, h3 {
 .overview_page .selected_timeslot .colleagues .date #date{
     float:left;
     height: 2vh;
-    margin: 1vh;
+    margin: 0.4vh 1vh;
 }
 
 .overview_page .selected_timeslot .colleagues .date #tsa{
     float:right;
     height: 2vh;
-    margin: 1vh;
+    margin: 0.4vh 1vh;
 }
 
 .overview_page .upcoming_reservations {
