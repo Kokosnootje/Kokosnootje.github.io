@@ -22,60 +22,39 @@
         return "./img/NGTI Logo.png";
     }
 
-    static string[][] SelectDaysOfWeeks()
-    {
+    static string[][] SelectDaysOfWeeks() {
         string[] daysOfWeekCalenderDays = new string[10];
         string[] daysOfWeeksCalender = new string[10];
         DateTime lastDay = DateTime.Now;
-        for (int i = 0; i < 10; i++)
-        {
-            if (lastDay.DayOfWeek == DayOfWeek.Monday)
-            {
+        for (int i = 0; i < 10; i++) {
+            if (lastDay.DayOfWeek == DayOfWeek.Saturday) {
                 daysOfWeekCalenderDays[i] = "Mon.";
                 daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
                 lastDay = lastDay.AddDays(3.0);
-            }
-            else if (lastDay.DayOfWeek == DayOfWeek.Saturday)
-            {
-                daysOfWeekCalenderDays[i] = "Mon.";
-                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
-                lastDay = lastDay.AddDays(3.0);
-            }
-            else if (lastDay.DayOfWeek == DayOfWeek.Sunday)
-            {
+            } else if (lastDay.DayOfWeek == DayOfWeek.Sunday) {
                 daysOfWeekCalenderDays[i] = "Mon.";
                 daysOfWeeksCalender[i] = lastDay.AddDays(1.0).ToShortDateString();
                 lastDay = lastDay.AddDays(2.0);
 
-            }
-            else
-            {
-                if (lastDay.DayOfWeek == DayOfWeek.Monday)
-                {
+            } else {
+                if (lastDay.DayOfWeek == DayOfWeek.Monday) {
                     daysOfWeekCalenderDays[i] = "Mon.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
                 }
-                if (lastDay.DayOfWeek == DayOfWeek.Tuesday)
-                {
+                if (lastDay.DayOfWeek == DayOfWeek.Tuesday) {
                     daysOfWeekCalenderDays[i] = "Tue.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
-                }
-                else if (lastDay.DayOfWeek == DayOfWeek.Wednesday)
-                {
+                } else if (lastDay.DayOfWeek == DayOfWeek.Wednesday) {
                     daysOfWeekCalenderDays[i] = "Wed.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
-                }
-                else if (lastDay.DayOfWeek == DayOfWeek.Thursday)
-                {
+                } else if (lastDay.DayOfWeek == DayOfWeek.Thursday) {
                     daysOfWeekCalenderDays[i] = "Thu.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
-                }
-                else if (lastDay.DayOfWeek == DayOfWeek.Friday)
-                {
+                } else if (lastDay.DayOfWeek == DayOfWeek.Friday) {
                     daysOfWeekCalenderDays[i] = "Fri.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
@@ -141,9 +120,9 @@
                                     <input type="hidden" name="selectedTimeslot" value="@timeslot.TimeStart-@timeslot.TimeEnd">
                                     <input type="hidden" name="amountAvailablePlaces" value="@getResAmount(i, j, amountRes) / @Model.Item6.Item2">
                                         @if (Model.Item6.Item3[i][j] != 0 && (bhv || admin)) {
-                                            <button style="color: limegreen;" id="TSS@(j)" type="submit">
+                                            <button id="TSS@(j)" type="submit">
                                                 @timeslot.TimeStart-@timeslot.TimeEnd
-                                                <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                                <div style="color: limegreen;" id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
                                             </button>
                                         } else {
                                             <button id="TSS@(j)" type="submit">
