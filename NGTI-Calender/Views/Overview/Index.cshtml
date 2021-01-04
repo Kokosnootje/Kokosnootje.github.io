@@ -220,14 +220,18 @@
                             theresses = theresses.Remove(theresses.Length - 1);
                             return theresses;
                         }
-                        foreach (var times in Model.Item3)
-                        {
-                            if (times.Date == item.Date)
+                        <div class="timeslots_of_res">
+                        @{ foreach (var times in Model.Item3)
                             {
-                                <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                                if (times.Date == item.Date)
+                                {
+                                    <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                                }
                             }
+
+                            lastDate = item.Date;
                         }
-                        lastDate = item.Date;
+                        </div>
                     }
                     <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
                 </div>
