@@ -22,9 +22,69 @@ namespace NGTI_Calender.Controllers
         public IActionResult Index(string personId, string SelectedDate = "", string SelectedTimeslot = "", string AmountAvailablePlaces = "")
         {
             var amountRes = AmountReservedPlaces();
+            List<Reservation> allRes = _context.Reservation.ToList();
+            var testVar = sortAllRes(allRes);
             string[] selectedReservation = new string[] { SelectedDate, SelectedTimeslot };
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), Tuple.Create(SelectedDate, SelectedTimeslot, personId, AmountAvailablePlaces), _context.Reservation.ToList(), _context.Person.ToList(), new Reservation(), amountRes, _context.Seats.ToList()[0].places);
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), Tuple.Create(SelectedDate, SelectedTimeslot, personId, AmountAvailablePlaces), testVar, _context.Person.ToList(), new Reservation(), Tuple.Create(amountRes, _context.Seats.ToList()[0].places, WhenBHV()), _context.Role.ToList());
             return View(tuple);
+        }
+
+        public List<Reservation> sortAllRes(List<Reservation> allTheRes)
+        {
+            List<Reservation> allTheSortedRes = new List<Reservation>();
+            string[][] sortedRes = new string[allTheRes.Count][];
+            int i = 0;
+            foreach(var res in allTheRes)
+            {
+                sortedRes[i] = res.Date.Split('-');
+                i++;
+            }
+            string[] sortedResTogetherNotDistinct = new string[allTheRes.Count];
+            i = 0;
+            foreach(string[] stringDates in sortedRes)
+            {
+                if(stringDates[1].Length < 2)
+                {
+                    stringDates[1] = "0" + stringDates[1];
+                }
+                if(stringDates[0].Length < 2)
+                {
+                    stringDates[0] = "0" + stringDates[0];
+                }
+                sortedResTogetherNotDistinct[i] = stringDates[2] + stringDates[1] + stringDates[0];
+                i++;
+            }
+            string[] sortedResTogether = sortedResTogetherNotDistinct.Distinct().ToArray();
+            sortedResTogether = sortedResTogether.OrderBy(x => x).ToArray();
+            foreach(string sortedDate in sortedResTogether)
+            {
+
+                string Year = sortedDate[0].ToString() + sortedDate[1].ToString() + sortedDate[2].ToString() + sortedDate[3].ToString();
+                string Month = "";
+                string Day = "";
+                if(sortedDate[4].ToString() == "0")
+                {
+                    Month = sortedDate[5].ToString();
+                } else
+                {
+                    Month = sortedDate[4].ToString() + sortedDate[5].ToString();
+                }
+                if (sortedDate[6].ToString() == "0")
+                {
+                    Day = sortedDate[7].ToString();
+                } else {
+                    Day = sortedDate[6].ToString() + sortedDate[7].ToString();
+                }
+                string completedComparableDate = Day + "-" + Month + "-" + Year;
+                foreach (Reservation res in allTheRes)
+                {
+                    if(completedComparableDate == res.Date)
+                    {
+                        allTheSortedRes.Add(res);
+                    }
+                }
+            }
+            return allTheSortedRes;
         }
 
         // SEND MAIL + RETURN VIEW
@@ -87,6 +147,19 @@ namespace NGTI_Calender.Controllers
         {
             return RedirectToAction("Index", new { personId = personId, SelectedDate = selectedDate, SelectedTimeslot = selectedTimeslot, AmountAvailablePlaces = amountAvailablePlaces });
         }
+
+        public async Task<IActionResult> RemoveReservation(string personId, string reservationId) {
+            foreach (var res in _context.Reservation.ToList()) {
+                if (res.ReservationId.ToString() == reservationId) {
+                    _context.Reservation.Remove(res);
+                    await _context.SaveChangesAsync();
+                    break;
+                }
+            }
+            return RedirectToAction("Index", new { personId = personId });
+        }
+
+
         public int[][] AmountReservedPlaces()
         {
             //load upcoming 2 weeks - weekend
@@ -163,6 +236,76 @@ namespace NGTI_Calender.Controllers
                 indexI++;
             }
             return count;
+        }
+
+        protected int[][] WhenBHV() {
+
+            //load upcoming 2 weeks - weekend
+            DateTime[] days = new DateTime[10];
+            DateTime lastDay = DateTime.Now;
+            for (int i = 0; i < 10; i++) {
+                if (lastDay.DayOfWeek == DayOfWeek.Saturday) {
+                    lastDay = lastDay.AddDays(2.0);
+                    days[i] = lastDay;
+                    lastDay = lastDay.AddDays(1.0);
+                } else if (lastDay.DayOfWeek == DayOfWeek.Sunday) {
+                    lastDay = lastDay.AddDays(1.0);
+                    days[i] = lastDay;
+                    lastDay = lastDay.AddDays(1.0);
+
+                } else {
+                    if (lastDay.DayOfWeek == DayOfWeek.Monday) {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    }
+                    if (lastDay.DayOfWeek == DayOfWeek.Tuesday) {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    } else if (lastDay.DayOfWeek == DayOfWeek.Wednesday) {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    } else if (lastDay.DayOfWeek == DayOfWeek.Thursday) {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    } else if (lastDay.DayOfWeek == DayOfWeek.Friday) {
+                        days[i] = lastDay;
+                        lastDay = lastDay.AddDays(1.0);
+                    }
+
+                }
+            }
+            int[][] arr = new int[10][];
+            int indexI = 0;
+            int indexJ = 0;
+            foreach (var dt in days) {
+                indexJ = 0;
+                //create 2d array with amount of timeslots
+                arr[indexI] = new int[_context.Timeslot.ToArray().Length];
+                foreach (var ts in _context.Timeslot.ToArray()) {
+                    foreach (var res in _context.Reservation.ToArray())
+                        //check date overlap between day & res
+                        if (res.Date == dt.Date.ToShortDateString()) {
+                            //check timeslot overlap between ts & res
+                            foreach(var person in _context.Person.ToList()) {
+                                //match person + roles to the reservation
+                                if(person.PersonId == res.PersonId) {
+                                    foreach(var role in _context.Role.ToList()) {
+                                        if (person.RolesId == role.RolesId) {
+                                            if (role.BHV && res.Timeslot.TimeslotId == ts.TimeslotId) {
+                                                //if person is a BHV add count
+                                                arr[indexI][indexJ]++;
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    indexJ++;
+                }
+                indexI++;
+            }
+            return arr;
         }
     }
 }
