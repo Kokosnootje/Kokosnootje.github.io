@@ -229,7 +229,7 @@ body, div, h1, h3 {
     background-color: #444444;
 }
 .overview_page .day_block .timeslots {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     height: 19vh;
 }
@@ -354,7 +354,7 @@ body, div, h1, h3 {
 }
 .overview_page .upcoming_reservations .reservation_displays {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 20vh;
     margin-left: 10px;
 }
@@ -424,7 +424,7 @@ body, div, h1, h3 {
 }
 .teams_page .team_selection_scroll {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .teams_page .team_selection {
     width: 30vw;
@@ -464,12 +464,12 @@ body, div, h1, h3 {
 }
 .teams_page .team_reservations .all_members {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 74vh;
 }
 .teams_page .reservation_displays {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: inherit;
     background-color: #444;
     height: 17vh;
@@ -531,7 +531,7 @@ body, div, h1, h3 {
 }
 
 .reserve_page .timeslot_selection {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     height: 35vh
 }
@@ -667,7 +667,7 @@ body, div, h1, h3 {
 }
 .admin_page .teams .person_selection {
     width: 12vw;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 7.5vh;
     float: right;
 }
@@ -691,7 +691,7 @@ body, div, h1, h3 {
     height: 71vh;
     margin: 9vh 0.5vw 0 0.5vw;
     background-color: #444;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 .admin_page .timeslots {
@@ -713,8 +713,8 @@ body, div, h1, h3 {
     font-size: 4vh;    
 }
 
-.admin_page .timeslots .timeslot_config{
-    overflow-y: scroll;
+.admin_page .timeslots .timeslot_config {
+    overflow-y: auto;
     overflow-x: hidden;
     height: 42vh;
     background-color: #444444;
@@ -784,7 +784,7 @@ body, div, h1, h3 {
 }
 .admin_page .employees .employee_config{
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: 30vw;
     height: 23vh;
     background-color: #444444;
@@ -912,7 +912,7 @@ body, div, h1, h3 {
     .overview_page .selected_timeslot {
         width: 45vw;
         height: 31vh;
-        overflow-y: scroll;
+        overflow-y: auto;
         overflow-x: hidden;
     } 
     .overview_page .selected_timeslot h1 {
@@ -964,7 +964,7 @@ body, div, h1, h3 {
     }
     .teams_page .team_selection .member_showcase {
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
         width: 40vw;
     }
     .teams_page .team_display {
@@ -1038,7 +1038,7 @@ body, div, h1, h3 {
     }
     .reserve_page .team_selection {
         height: 25vh;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .reserve_page .right_side #reserve_button {
         margin: 10px;
