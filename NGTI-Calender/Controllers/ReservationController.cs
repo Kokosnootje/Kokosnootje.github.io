@@ -53,6 +53,7 @@ namespace NGTI_Calender.Controllers
         // GET: Reservation/Create
         public IActionResult Index(string personId)
         {
+            checkAllReservationsForExpired();
             var AmountRes = AmountReservedPlaces();
             var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList());
             //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
@@ -390,6 +391,26 @@ namespace NGTI_Calender.Controllers
                 indexI++;
             }
             return count;
+        }
+
+        public void checkAllReservationsForExpired()
+        {
+            List<int> reservationIds = new List<int>();
+            DateTime now = DateTime.Now;
+            foreach (var res in _context.Reservation)
+            {
+                DateTime dateToCheck = DateTime.Parse(res.Date);
+                if(dateToCheck < now.AddDays(-7))
+                {
+                    reservationIds.Add(res.ReservationId);
+                }
+            }
+            foreach(int i in reservationIds)
+            {
+                var reservation = _context.Reservation.Find(i);
+                _context.Reservation.Remove(reservation);
+                _context.SaveChanges();
+            }
         }
     }
 }

@@ -369,7 +369,7 @@ body, div, h1, h3 {
 }
 
 .overview_page .upcoming_reservations .reservation_displays .display .timeslots_of_res{
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 8vh;
 }
 
