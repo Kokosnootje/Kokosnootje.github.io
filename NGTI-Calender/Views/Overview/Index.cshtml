@@ -221,17 +221,21 @@
                             return theresses;
                         }
                         <div class="timeslots_of_res">
-                        @{ foreach (var times in Model.Item3)
-                            {
-                                if (times.Date == item.Date)
+                            @{ foreach (var times in Model.Item3)
                                 {
-                                    <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
-                                }
-                            }
+                                    if (Model.Item2.Item3 == times.PersonId.ToString())
+                                    {
+                                        if (times.Date == item.Date)
+                                        {
+                                            <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                                        }
+                                    }
 
-                            lastDate = item.Date;
-                        }
-                        </div>
+                                }
+
+                                lastDate = item.Date;
+                            }
+                                        </div>
                     }
                     <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
                 </div>

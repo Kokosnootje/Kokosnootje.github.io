@@ -55,8 +55,7 @@ namespace NGTI_Calender.Controllers
         {
             checkAllReservationsForExpired();
             var AmountRes = AmountReservedPlaces();
-            var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList());
-            //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+            var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
             return View(tuple);
         }
         // POST: Reservation
@@ -121,25 +120,25 @@ namespace NGTI_Calender.Controllers
                             await _context.SaveChangesAsync();
                         }
                     }
-                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList());
-                    //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+                    var AmountRes = AmountReservedPlaces();
+                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
                     return View(tuple);
                 }
                 else
                 {
+                    var AmountRes = AmountReservedPlaces();
                     Popup popup = new Popup();
                     popup.popupMessage = "an error has occured";
-                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList());
-                    //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
                     return View(tuple);
                 }
             }
             else
             {
+                var AmountRes = AmountReservedPlaces();
                 Popup popup = new Popup();
                 popup.popupMessage = "One of your selected reservations is already made, please check which you tried to reserve double.";
-                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList());
-                //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
                 return View(tuple);
             }
             
