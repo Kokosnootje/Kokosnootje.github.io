@@ -10,6 +10,33 @@
     ViewData["PersonId"] = Model.Item2.Item3;
     ViewData["ProfilePicture"] = GetProfilePicture(Model.Item2.Item3);
     var amountRes = Model.Item6.Item1;
+    static string[] getTitelText(string item1, string item2)
+    {
+        string titelTekst;
+        string onderTitelTekst;
+        if (item1 == "")
+        {
+            titelTekst = "Select one of the timeslots";
+            onderTitelTekst = "To show all reservations";
+        }
+        else
+        {
+            titelTekst = item1;
+            onderTitelTekst = item2;
+        }
+        string[] deTekst = new string[] { titelTekst, onderTitelTekst };
+        return deTekst;
+    }
+    if(Model.Item2.Item1 == "")
+    {
+        var titelTekst = "Select one of the timeslots";
+        var onderTitelTekst = "To show all reservations";
+    } else
+    {
+        var titelTekst = Model.Item2.Item1;
+        var onderTitelTekst = Model.Item2.Item2;
+    }
+
     string GetProfilePicture(string personId)
     {
         foreach (var item in Model.Item4)
@@ -142,10 +169,9 @@
         </div>
 
         <div class="selected_timeslot">
-            <h1>@Model.Item2.Item1</h1>
+            <h1>@getTitelText(Model.Item2.Item1, Model.Item2.Item2)[0]</h1>
             <div class="colleagues">
-                <div class="date"><p id="date">@Model.Item2.Item2</p><p id="tsa">@Model.Item2.Item4</p></div>
-                <p>Name + Functions</p>
+                <div class="date"><p id="date">@getTitelText(Model.Item2.Item1, Model.Item2.Item2)[1]</p><p id="tsa">@Model.Item2.Item4</p></div>
                 @{
                     foreach (var res in Model.Item3) {
                         if (res.Date == Model.Item2.Item1 && res.Timeslot.TimeStart + "-" + res.Timeslot.TimeEnd == Model.Item2.Item2) {
@@ -197,14 +223,22 @@
                             theresses = theresses.Remove(theresses.Length - 1);
                             return theresses;
                         }
-                        foreach (var times in Model.Item3)
-                        {
-                            if (times.Date == item.Date)
-                            {
-                                <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                        <div class="timeslots_of_res">
+                            @{ foreach (var times in Model.Item3)
+                                {
+                                    if (Model.Item2.Item3 == times.PersonId.ToString())
+                                    {
+                                        if (times.Date == item.Date)
+                                        {
+                                            <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                                        }
+                                    }
+
+                                }
+
+                                lastDate = item.Date;
                             }
-                        }
-                        lastDate = item.Date;
+                                        </div>
                     }
                     <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
                 </div>
