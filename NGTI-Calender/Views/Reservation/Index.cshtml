@@ -97,35 +97,38 @@
                 <!--DATE SELECTION-->
                 <div class="date_selection">
                     @{
-                        for (int k = 0; k < 10; k++) {
+                        for (int k = 0; k < 10; k++)
+                        {
                             <label asp-for="Item1.Date" class="date_placeholder" for="CB@(k+1)" id="L@(k+1)">@calender[0][k] <br> @calender[1][k]</label>
                             <input asp-for="Item1.Date" value="@calender[1][k]" type="checkbox" name="selectedObjects" id="CB@(k+1)" onclick="changeColor('CB@(k+1)', 'L@(k+1)', '#D5BFAA', '#444444')" />
-                            <div class="timeslot_selection">
-                                @{
-                                    int i = 1;
-                                    foreach (var item in Model.Item2)
-                                    {
-                                        string[] abc = new string[3];
-                                        abc[0] = item.TimeslotId.ToString();
-                                        abc[1] = item.TimeStart;
-                                        abc[2] = item.TimeEnd;
 
-                                        <div class="timeslot">
-                                            <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
-                                            <label for="TS@(i)">
-                                                @item.TimeStart-@item.TimeEnd
-                                                <div id="TS@(i)_slot_availability" class="slot_availability"><p>00/17</p></div>
-                                            </label>
-                                        </div>
-                                        i++;
-                                    }
-                                }
-                            </div>
+
                         }
                     }
                 </div>
                 <!--TIMESLOT SELECTION-->
-                
+                <div class="timeslot_selection">
+                    @{
+                        int i = 1;
+                        foreach (var item in Model.Item2)
+                        {
+                            string[] abc = new string[3];
+                            abc[0] = item.TimeslotId.ToString();
+                            abc[1] = item.TimeStart;
+                            abc[2] = item.TimeEnd;
+
+                            <div class="timeslot">
+                                <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
+                                <label for="TS@(i)">
+                                    @item.TimeStart-@item.TimeEnd
+                                    <div id="TS@(i)_slot_availability" class="slot_availability"><p>00/17</p></div>
+                                </label>
+                            </div>
+                            i++;
+                        }
+                    }
+                </div>
+
             </div>
 
             <div class="right_side">
