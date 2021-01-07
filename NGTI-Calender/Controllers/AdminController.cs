@@ -115,8 +115,7 @@ namespace NGTI_Calender.Controllers {
                 if (places >= 0) {
                     _context.Seats.ToList()[0].places = places;
                     await _context.SaveChangesAsync();
-                    var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-                    return View(tuple1);
+                    return RedirectToAction("Index", new { personId = personId, message = "" });
                 }
             } catch (Exception) {
                 return RedirectToAction("Index", new { personId = personId, message = "Please enter valid input" });
