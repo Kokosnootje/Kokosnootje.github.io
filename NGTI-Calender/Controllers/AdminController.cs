@@ -118,7 +118,7 @@ namespace NGTI_Calender.Controllers {
                 if (places >= 0) {
                     _context.Seats.ToList()[0].places = places;
                     await _context.SaveChangesAsync();
-                    var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId, _context.Seats.ToList()[0]);
+                    var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
                     return View(tuple1);
                 }
             } catch (Exception) {
@@ -128,7 +128,28 @@ namespace NGTI_Calender.Controllers {
             var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
             return View(tuple);
         }
-        private void SendMail(string date, string timeStart, string timeEnd, string email) {
+
+        public async Task<IActionResult> EmployeeConfig(string personId, string[] RolesIds, string[] AdminBools, string[] BHVBools) {
+            for (int i = 0; i < RolesIds.Length; i++){
+                foreach(var role in _context.Role.ToList()) {
+                    if(role.RolesId.ToString() == RolesIds[i]) {
+                        if (AdminBools[i] == "True") {
+                            role.Admin = true;
+                        } else {
+                            role.Admin = false;
+                        }
+                        if (BHVBools[i] == "True") {
+                            role.BHV = true;
+                        } else {
+                            role.BHV = false;
+                        }
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", new { personId = personId });
+        }
+        public static void SendMail(string date, string timeStart, string timeEnd, string email) {
             // Server settings
             SmtpClient SmtpServer = new SmtpClient();
             SmtpServer.Port = 587;

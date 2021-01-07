@@ -1,6 +1,6 @@
-﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>,int[][]>
+﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>, int[][], int>
 @{
-//@model IEnumerable<NGTI_Calender.Models.Reservation>
+    //@model IEnumerable<NGTI_Calender.Models.Reservation>
     @using FluentDateTime
     ViewData["Title"] = "Reserve";
     ViewData["ID Reserve"] = "current_page";
@@ -14,12 +14,23 @@
     {
         foreach (var item in Model.Item5)
         {
-            if(personId == item.PersonId.ToString())
+            if (personId == item.PersonId.ToString())
             {
                 return item.Image;
             }
         }
         return "./img/NGTI Logo.png";
+    }
+
+
+    string getAmountOfPlaces(int selectedDay)
+    {
+        string s = "";
+        foreach(var item in Model.Item6[selectedDay])
+        {
+            s += item.ToString() + "-";
+        }
+        return s;
     }
 
     static string[][] SelectDaysOfWeeks()
@@ -99,10 +110,9 @@
                     @{
                         for (int k = 0; k < 10; k++)
                         {
-                            <label asp-for="Item1.Date" class="date_placeholder" for="CB@(k+1)" id="L@(k+1)">@calender[0][k] <br> @calender[1][k]</label>
-                            <input asp-for="Item1.Date" value="@calender[1][k]" type="checkbox" name="selectedObjects" id="CB@(k+1)" onclick="changeColor('CB@(k+1)', 'L@(k+1)', '#D5BFAA', '#444444')" />
-
-
+                            string allResPlaces = getAmountOfPlaces(k);
+                            <label asp-for="Item1.Date" class="date_placeholder" for="CB@(k + 1)" id="L@(k + 1)">@calender[0][k] <br> @calender[1][k]</label>
+                            <input asp-for="Item1.Date" value="@calender[1][k]" type="checkbox" name="selectedObjects" id="CB@(k + 1)" onclick="changeColor('CB@(k + 1)', 'L@(k + 1)', '#D5BFAA', '#444444', @Model.Item2.Count, '@allResPlaces')" />
                         }
                     }
                 </div>
@@ -153,16 +163,33 @@
             setTimeout(() =>  window.alert(s), 100);
         }
 
-        function changeColor(checkboxID, labelID, originColor, checkedColor) {
+        function changeColor(checkboxID, labelID, originColor, checkedColor, amountOfTimeslots, theString) {
             var checkBox = document.getElementById(checkboxID);
+            var stringArray = theString.split('-');
+            console.log(stringArray);
             if (checkBox.checked == true) {
                 document.getElementById(labelID).style.color = checkedColor;
                 document.getElementById(labelID).style.backgroundColor = originColor;
+                var i;
+                for (i = 0; i < amountOfTimeslots; i++) {
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").innerHTML = stringArray[i] + " / " + "@(Model.Item7)";
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").style.backgroundColor = "#444";
+                }
+                @*for (int i = 0; i < @Model.Item2.Count; i++)
+                {
+                    document.getElementById("TS"+i.toString()+"_slot_availability").innerHTML = "Hallo";
+                }*@
+
             } else {
                 document.getElementById(labelID).style.color = originColor;
                 document.getElementById(labelID).style.backgroundColor = checkedColor;
+                var i;
+                for (i = 0; i < amountOfTimeslots; i++) {
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").innerHTML = "";
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").style.backgroundColor = "#D5BFAA";
+
+                }
             }
         }
     </script>
 </body>
-

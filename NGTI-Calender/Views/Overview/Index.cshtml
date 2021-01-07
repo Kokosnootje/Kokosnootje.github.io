@@ -1,5 +1,5 @@
 ﻿
-@model Tuple<List<Timeslot>, Tuple<string, string, string, string>, List<Reservation>, List<Person>, Reservation, int[][], int>
+@model Tuple<List<Timeslot>, Tuple<string, string, string, string>, List<Reservation>, List<Person>, Reservation, Tuple<int[][], int, int[][]>, List<Roles>>
 @{
     @using FluentDateTime
     ViewData["Title"] = "Overview";
@@ -9,7 +9,34 @@
     ViewData["ID Admin Dashboard"] = "null";
     ViewData["PersonId"] = Model.Item2.Item3;
     ViewData["ProfilePicture"] = GetProfilePicture(Model.Item2.Item3);
-    var amountRes = Model.Item6;
+    var amountRes = Model.Item6.Item1;
+    static string[] getTitelText(string item1, string item2)
+    {
+        string titelTekst;
+        string onderTitelTekst;
+        if (item1 == "")
+        {
+            titelTekst = "Select one of the timeslots";
+            onderTitelTekst = "To show all reservations";
+        }
+        else
+        {
+            titelTekst = item1;
+            onderTitelTekst = item2;
+        }
+        string[] deTekst = new string[] { titelTekst, onderTitelTekst };
+        return deTekst;
+    }
+    if(Model.Item2.Item1 == "")
+    {
+        var titelTekst = "Select one of the timeslots";
+        var onderTitelTekst = "To show all reservations";
+    } else
+    {
+        var titelTekst = Model.Item2.Item1;
+        var onderTitelTekst = Model.Item2.Item2;
+    }
+
     string GetProfilePicture(string personId)
     {
         foreach (var item in Model.Item4)
@@ -22,60 +49,39 @@
         return "./img/NGTI Logo.png";
     }
 
-    static string[][] SelectDaysOfWeeks()
-    {
+    static string[][] SelectDaysOfWeeks() {
         string[] daysOfWeekCalenderDays = new string[10];
         string[] daysOfWeeksCalender = new string[10];
         DateTime lastDay = DateTime.Now;
-        for (int i = 0; i < 10; i++)
-        {
-            if (lastDay.DayOfWeek == DayOfWeek.Monday)
-            {
+        for (int i = 0; i < 10; i++) {
+            if (lastDay.DayOfWeek == DayOfWeek.Saturday) {
                 daysOfWeekCalenderDays[i] = "Mon.";
                 daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
                 lastDay = lastDay.AddDays(3.0);
-            }
-            else if (lastDay.DayOfWeek == DayOfWeek.Saturday)
-            {
-                daysOfWeekCalenderDays[i] = "Mon.";
-                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
-                lastDay = lastDay.AddDays(3.0);
-            }
-            else if (lastDay.DayOfWeek == DayOfWeek.Sunday)
-            {
+            } else if (lastDay.DayOfWeek == DayOfWeek.Sunday) {
                 daysOfWeekCalenderDays[i] = "Mon.";
                 daysOfWeeksCalender[i] = lastDay.AddDays(1.0).ToShortDateString();
                 lastDay = lastDay.AddDays(2.0);
 
-            }
-            else
-            {
-                if (lastDay.DayOfWeek == DayOfWeek.Monday)
-                {
+            } else {
+                if (lastDay.DayOfWeek == DayOfWeek.Monday) {
                     daysOfWeekCalenderDays[i] = "Mon.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
                 }
-                if (lastDay.DayOfWeek == DayOfWeek.Tuesday)
-                {
+                if (lastDay.DayOfWeek == DayOfWeek.Tuesday) {
                     daysOfWeekCalenderDays[i] = "Tue.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
-                }
-                else if (lastDay.DayOfWeek == DayOfWeek.Wednesday)
-                {
+                } else if (lastDay.DayOfWeek == DayOfWeek.Wednesday) {
                     daysOfWeekCalenderDays[i] = "Wed.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
-                }
-                else if (lastDay.DayOfWeek == DayOfWeek.Thursday)
-                {
+                } else if (lastDay.DayOfWeek == DayOfWeek.Thursday) {
                     daysOfWeekCalenderDays[i] = "Thu.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
-                }
-                else if (lastDay.DayOfWeek == DayOfWeek.Friday)
-                {
+                } else if (lastDay.DayOfWeek == DayOfWeek.Friday) {
                     daysOfWeekCalenderDays[i] = "Fri.";
                     daysOfWeeksCalender[i] = lastDay.ToShortDateString();
                     lastDay = lastDay.AddDays(1.0);
@@ -109,6 +115,20 @@
         <button type="submit">SEND MAIL</button>
     </form>*@
     <div class="overview_page">
+        @{ 
+            bool admin = false;
+            bool bhv = false;
+            foreach (var p in Model.Item4) {
+                if (p.PersonId.ToString() == Model.Item2.Item3) {
+                    foreach (var roles in Model.Item7) {
+                        if (p.RolesId == roles.RolesId) {
+                            admin = roles.Admin;
+                            bhv = roles.BHV;
+                        }
+                    }
+                }
+            }
+        }
         <div class="select_timeslot">
             @{
                 int i = 0;
@@ -125,11 +145,18 @@
                                     <input type="hidden" name="personId" value="@Model.Item2.Item3">
                                     <input type="hidden" name="selectedDate" value="@calender[1][i]">
                                     <input type="hidden" name="selectedTimeslot" value="@timeslot.TimeStart-@timeslot.TimeEnd">
-                                    <input type="hidden" name="amountAvailablePlaces" value="@getResAmount(i, j, amountRes) / @Model.Item7">
-                                    <button id="TSS@(j)" type="submit">
-                                        @timeslot.TimeStart-@timeslot.TimeEnd
-                                        <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item7</div>
-                                    </button>
+                                    <input type="hidden" name="amountAvailablePlaces" value="@getResAmount(i, j, amountRes) / @Model.Item6.Item2">
+                                        @if (Model.Item6.Item3[i][j] != 0 && (bhv || admin)) {
+                                            <button id="TSS@(j)" type="submit">
+                                                @timeslot.TimeStart-@timeslot.TimeEnd
+                                                <div style="color: limegreen;" id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                            </button>
+                                        } else {
+                                            <button id="TSS@(j)" type="submit">
+                                                @timeslot.TimeStart-@timeslot.TimeEnd
+                                                <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                            </button>
+                                        }
                                     </form>
                                     j++;
                                 }
@@ -142,21 +169,25 @@
         </div>
 
         <div class="selected_timeslot">
-            <h1>@Model.Item2.Item1</h1>
+            <h1>@getTitelText(Model.Item2.Item1, Model.Item2.Item2)[0]</h1>
             <div class="colleagues">
-                <div class="date"><p id="date">@Model.Item2.Item2</p><p id="tsa">@Model.Item2.Item4</p></div>
-                <p>Name + Functions</p>
+                <div class="date"><p id="date">@getTitelText(Model.Item2.Item1, Model.Item2.Item2)[1]</p><p id="tsa">@Model.Item2.Item4</p></div>
                 @{
-                    foreach (var res in Model.Item3)
-                    {
-                        if (res.Date == Model.Item2.Item1 && res.Timeslot.TimeStart + "-" + res.Timeslot.TimeEnd == Model.Item2.Item2)
-                        {
+                    foreach (var res in Model.Item3) {
+                        if (res.Date == Model.Item2.Item1 && res.Timeslot.TimeStart + "-" + res.Timeslot.TimeEnd == Model.Item2.Item2) {
                             <div class="res">@res.Person.PersonName</div>
-                        }
+                            if (admin) {
+                                <form asp-action="RemoveReservation">
+                                    <input type="hidden" name="personId" value="@Model.Item2.Item3">
+                                    <input type="hidden" name="reservationId" value="@res.ReservationId" />
+                                    <button type="submit">X</button>
+                                </form>
+                                }
+                            }
 
+                        }
                     }
-                }
-            </div>
+                </div>
         </div>
         <div class="upcoming_reservations">
             <h1>My upcoming reservations:</h1>
@@ -189,14 +220,22 @@
                             theresses = theresses.Remove(theresses.Length - 1);
                             return theresses;
                         }
-                        foreach (var times in Model.Item3)
-                        {
-                            if (times.Date == item.Date)
-                            {
-                                <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                        <div class="timeslots_of_res">
+                            @{ foreach (var times in Model.Item3)
+                                {
+                                    if (Model.Item2.Item3 == times.PersonId.ToString())
+                                    {
+                                        if (times.Date == item.Date)
+                                        {
+                                            <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                                        }
+                                    }
+
+                                }
+
+                                lastDate = item.Date;
                             }
-                        }
-                        lastDate = item.Date;
+                                        </div>
                     }
                     <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
                 </div>

@@ -53,9 +53,9 @@ namespace NGTI_Calender.Controllers
         // GET: Reservation/Create
         public IActionResult Index(string personId)
         {
+            checkAllReservationsForExpired();
             var AmountRes = AmountReservedPlaces();
-            var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList(), AmountRes);
-            //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+            var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
             return View(tuple);
         }
         // POST: Reservation
@@ -114,34 +114,34 @@ namespace NGTI_Calender.Controllers
                     {
                         for (int i = 0; i < selectedTimeslots.Length; i++)
                         {
-                            //Calender(revList[j][i]);
+                            Calender(revList[j][i]);
                             popup.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
                             _context.Add(revList[j][i]);
                             await _context.SaveChangesAsync();
                         }
                     }
-                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList());
-                    //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+                    var AmountRes = AmountReservedPlaces();
+                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
                     return View(tuple);
                 }
                 else
                 {
+                    var AmountRes = AmountReservedPlaces();
                     Popup popup = new Popup();
                     popup.popupMessage = "an error has occured";
-                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList());
-                    //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
                     return View(tuple);
                 }
             }
             else
             {
+                var AmountRes = AmountReservedPlaces();
                 Popup popup = new Popup();
                 popup.popupMessage = "One of your selected reservations is already made, please check which you tried to reserve double.";
-                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList());
-                //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
                 return View(tuple);
             }
-            
+
         }
 
         // GET: Reservation/Details/5
@@ -169,7 +169,7 @@ namespace NGTI_Calender.Controllers
         }
 
         // POST: Reservation/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -201,7 +201,7 @@ namespace NGTI_Calender.Controllers
         }
 
         // POST: Reservation/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -390,6 +390,26 @@ namespace NGTI_Calender.Controllers
                 indexI++;
             }
             return count;
+        }
+
+        public void checkAllReservationsForExpired()
+        {
+            List<int> reservationIds = new List<int>();
+            DateTime now = DateTime.Now;
+            foreach (var res in _context.Reservation)
+            {
+                DateTime dateToCheck = DateTime.Parse(res.Date);
+                if(dateToCheck < now.AddDays(-7))
+                {
+                    reservationIds.Add(res.ReservationId);
+                }
+            }
+            foreach(int i in reservationIds)
+            {
+                var reservation = _context.Reservation.Find(i);
+                _context.Reservation.Remove(reservation);
+                _context.SaveChanges();
+            }
         }
     }
 }
