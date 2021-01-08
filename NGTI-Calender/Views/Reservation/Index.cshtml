@@ -131,7 +131,7 @@
                                 <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
                                 <label for="TS@(i)">
                                     @item.TimeStart-@item.TimeEnd
-                                    <div id="TS@(i)_slot_availability" class="slot_availability"><p>00/17</p></div>
+                                    <div id="TS@(i)_slot_availability" class="slot_availability"><p>@Model.Item7.ToString()</p></div>
                                 </label>
                             </div>
                             i++;
