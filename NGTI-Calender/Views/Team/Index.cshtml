@@ -1,35 +1,87 @@
-﻿@model IEnumerable<NGTI_Calender.Models.Team>
-
+﻿@model Tuple<string, List<Person>>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Admin Dashboard";
+    ViewData["ID Reserve"] = "null";
+    ViewData["ID Overview"] = "null";
+    ViewData["ID Team"] = "current_page";
+    ViewData["ID Admin Dashboard"] = "null";
+    ViewData["PersonId"] = Model.Item1;
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item1);
+
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item2)
+        {
+            if (personId == item.PersonId.ToString())
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TeamName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TeamName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TeamId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TeamId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TeamId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<head>
+    <meta charset="utf-8" />
+    <link href="./css/site.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    <div class="teams_page">
+        <div class="select_team">
+            <h1>Select Team</h1>
+            <div class="line"></div>
+            <div class="team_selection_scroll">
+                <form class="team_selection">
+                    @* PUT CODE BELOW IN FOREACH LOOP*@
+                    <div class="team_display">
+                        @*Load in teamname*@
+                        <button type="submit">
+                            Teamname
+                        </button>
+                        <div class="member_showcase">
+                            @* load in teammembers - 1 member = one div*@
+                            <div class="member">
+                                <p>Name | Role</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team_display">
+                        @*Load in teamname*@
+                        <button type="submit">
+                            Teamname
+                        </button>
+                        <div class="member_showcase">
+                            @* load in teammembers - 1 member = one div*@
+                            <div class="member">
+                                <p>Name | Role</p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="team_reservations">
+            <h1>Team Reservations</h1>
+            <div class="all_members">
+                @* load reservations for each member - 1 div per member*@
+                <div class="member_reservations">
+                    <h2>Name | Role</h2>
+                    <div class="line"></div>
+                    <div class="reservation_displays">
+                        @* 1 display = 1 day of reservations --> use implementation at home screen (no remove button)*@
+                        <div class="display">
+                            <p>Day + Date<br />Timeslots</p>
+                        </div>
+                        <div class="display">
+                            <p>Day + Date<br />Timeslots</p>
+                        </div>
+                        <div class="display">
+                            <p>Day + Date<br />Timeslots</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

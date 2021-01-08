@@ -20,9 +20,9 @@ namespace NGTI_Calender.Controllers
         }
 
         // GET: Team
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Teams.ToListAsync());
+        public IActionResult Index(string personId) {
+            var tuple = Tuple.Create(personId, _context.Person.ToList());
+            return View(tuple);
         }
 
         // GET: Team/Details/5
@@ -56,6 +56,7 @@ namespace NGTI_Calender.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team)
         {
+            // Maak een team aan en edit alle aangeven users om dit TeamID te krijgen.
             if (ModelState.IsValid)
             {
                 _context.Add(team);
