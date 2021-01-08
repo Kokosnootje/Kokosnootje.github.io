@@ -369,7 +369,7 @@ body, div, h1, h3 {
 }
 
 .overview_page .upcoming_reservations .reservation_displays .display .timeslots_of_res{
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 8vh;
 }
 
@@ -942,11 +942,17 @@ body, div, h1, h3 {
         height: 0.5vh;
     }
     .overview_page .upcoming_reservations .reservation_displays {
-        height: 25vh;
+        height: 22vh;
+    }
+    .overview_page .upcoming_reservations .reservation_displays .display .button {
+        
+    }
+    .overview_page .upcoming_reservations .reservation_displays .display .timeslots_of_res {
+        height: 10vh;
     }
     .overview_page .upcoming_reservations .reservation_displays .display {
-        width: 23vw;
-        height: 13vh;
+        width: 17vh;
+        height: 20vh;
     }
     /* TEAMS PAGE */
     .teams_page h1 {

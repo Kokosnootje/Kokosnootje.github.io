@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NGTI_Calender.Data;
 using System.Net.Mail;
 using NGTI_Calender.Models;
+using System.Globalization;
 
 namespace NGTI_Calender.Controllers
 {
@@ -148,15 +149,44 @@ namespace NGTI_Calender.Controllers
             return RedirectToAction("Index", new { personId = personId, SelectedDate = selectedDate, SelectedTimeslot = selectedTimeslot, AmountAvailablePlaces = amountAvailablePlaces });
         }
 
-        public async Task<IActionResult> RemoveReservation(string personId, string reservationId) {
+        public async Task<IActionResult> RemoveReservation(string selectedDate, string selectedTimeslot, string personId, string amountAvailablePlaces, string reservationId) {
             foreach (var res in _context.Reservation.ToList()) {
                 if (res.ReservationId.ToString() == reservationId) {
                     _context.Reservation.Remove(res);
                     await _context.SaveChangesAsync();
+                    foreach(var person in _context.Person.ToList()) {
+                        if (res.PersonId == person.PersonId) {
+                            foreach(var ts in _context.Timeslot.ToList()) {
+                                if (res.TimeslotId == ts.TimeslotId) {
+                                    string[] s = res.Date.Split("-");
+                                    if (s[0].Length != 2) {
+                                        s[0] = "0" + s[0];
+                                    }
+                                    if (s[1].Length != 2) {
+                                        s[1] = "0" + s[1];
+                                    }
+                                    string s2 = s[0] + "/" + s[1] + "/" + s[2];
+                                    DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                    if (DateTime.Parse(ts.TimeStart) >= DateTime.Now || dt > DateTime.Today) {
+                                        AdminController.SendMail(date: res.Date, timeStart: ts.TimeStart, timeEnd: ts.TimeEnd, email: person.EMail);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     break;
                 }
             }
-            return RedirectToAction("Index", new { personId = personId });
+            //lower amount available places by 1
+            string[] arr = amountAvailablePlaces.Split(" / ");
+            try {
+                int i = int.Parse(arr[0]);
+                i--;
+                amountAvailablePlaces = i.ToString() + " / " + arr[1];
+            } catch (Exception) {
+                throw;
+            }
+            return RedirectToAction("Index", new { personId = personId, SelectedDate = selectedDate, SelectedTimeslot = selectedTimeslot, AmountAvailablePlaces = amountAvailablePlaces });
         }
 
 

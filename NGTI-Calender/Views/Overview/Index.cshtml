@@ -180,6 +180,9 @@
                                 <form asp-action="RemoveReservation">
                                     <input type="hidden" name="personId" value="@Model.Item2.Item3">
                                     <input type="hidden" name="reservationId" value="@res.ReservationId" />
+                                    <input type="hidden" name="selectedDate" value="@Model.Item2.Item1">
+                                    <input type="hidden" name="selectedTimeslot" value="@Model.Item2.Item2">
+                                    <input type="hidden" name="amountAvailablePlaces" value="@Model.Item2.Item4">
                                     <button type="submit">X</button>
                                 </form>
                                 }
@@ -221,17 +224,21 @@
                             return theresses;
                         }
                         <div class="timeslots_of_res">
-                        @{ foreach (var times in Model.Item3)
-                            {
-                                if (times.Date == item.Date)
+                            @{ foreach (var times in Model.Item3)
                                 {
-                                    <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
-                                }
-                            }
+                                    if (Model.Item2.Item3 == times.PersonId.ToString())
+                                    {
+                                        if (times.Date == item.Date)
+                                        {
+                                            <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                                        }
+                                    }
 
-                            lastDate = item.Date;
-                        }
-                        </div>
+                                }
+
+                                lastDate = item.Date;
+                            }
+                                        </div>
                     }
                     <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
                 </div>
