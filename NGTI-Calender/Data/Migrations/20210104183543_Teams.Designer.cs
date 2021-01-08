@@ -10,8 +10,8 @@ using NGTI_Calender.Data;
 namespace NGTI_Calender.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210104144742_TeamMigration")]
-    partial class TeamMigration
+    [Migration("20210104183543_Teams")]
+    partial class Teams
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -240,14 +240,9 @@ namespace NGTI_Calender.Migrations
                     b.Property<int>("RolesId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TeamId")
-                        .HasColumnType("int");
-
                     b.HasKey("PersonId");
 
                     b.HasIndex("RolesId");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("Person");
                 });
@@ -308,21 +303,6 @@ namespace NGTI_Calender.Migrations
                     b.HasKey("SeatsId");
 
                     b.ToTable("Seats");
-                });
-
-            modelBuilder.Entity("NGTI_Calender.Models.Team", b =>
-                {
-                    b.Property<int>("TeamId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("TeamName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TeamId");
-
-                    b.ToTable("Team");
                 });
 
             modelBuilder.Entity("NGTI_Calender.Models.Timeslot", b =>
@@ -401,10 +381,6 @@ namespace NGTI_Calender.Migrations
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("NGTI_Calender.Models.Team", null)
-                        .WithMany("TeamMembers")
-                        .HasForeignKey("TeamId");
                 });
 
             modelBuilder.Entity("NGTI_Calender.Models.Reservation", b =>

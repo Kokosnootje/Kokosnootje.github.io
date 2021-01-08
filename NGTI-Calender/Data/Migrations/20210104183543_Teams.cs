@@ -2,10 +2,14 @@
 
 namespace NGTI_Calender.Migrations
 {
-    public partial class TeamMigration : Migration
+    public partial class Teams : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Person_Role_RolesId",
+                table: "Person");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Reservation_Person_PersonId",
                 table: "Reservation");
@@ -38,29 +42,6 @@ namespace NGTI_Calender.Migrations
                 oldType: "int",
                 oldNullable: true);
 
-            migrationBuilder.AddColumn<int>(
-                name: "TeamId",
-                table: "Person",
-                nullable: true);
-
-            migrationBuilder.CreateTable(
-                name: "Team",
-                columns: table => new
-                {
-                    TeamId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TeamName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Team", x => x.TeamId);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Person_TeamId",
-                table: "Person",
-                column: "TeamId");
-
             migrationBuilder.AddForeignKey(
                 name: "FK_Person_Role_RolesId",
                 table: "Person",
@@ -68,14 +49,6 @@ namespace NGTI_Calender.Migrations
                 principalTable: "Role",
                 principalColumn: "RolesId",
                 onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Person_Team_TeamId",
-                table: "Person",
-                column: "TeamId",
-                principalTable: "Team",
-                principalColumn: "TeamId",
-                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Reservation_Person_PersonId",
@@ -101,27 +74,12 @@ namespace NGTI_Calender.Migrations
                 table: "Person");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Person_Team_TeamId",
-                table: "Person");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_Reservation_Person_PersonId",
                 table: "Reservation");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Reservation_Timeslot_TimeslotId",
                 table: "Reservation");
-
-            migrationBuilder.DropTable(
-                name: "Team");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Person_TeamId",
-                table: "Person");
-
-            migrationBuilder.DropColumn(
-                name: "TeamId",
-                table: "Person");
 
             migrationBuilder.AlterColumn<int>(
                 name: "TimeslotId",

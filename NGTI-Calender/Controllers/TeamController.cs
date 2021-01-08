@@ -22,7 +22,7 @@ namespace NGTI_Calender.Controllers
         // GET: Team
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Team.ToListAsync());
+            return View(await _context.Teams.ToListAsync());
         }
 
         // GET: Team/Details/5
@@ -33,7 +33,7 @@ namespace NGTI_Calender.Controllers
                 return NotFound();
             }
 
-            var team = await _context.Team
+            var team = await _context.Teams
                 .FirstOrDefaultAsync(m => m.TeamId == id);
             if (team == null)
             {
@@ -73,7 +73,7 @@ namespace NGTI_Calender.Controllers
                 return NotFound();
             }
 
-            var team = await _context.Team.FindAsync(id);
+            var team = await _context.Teams.FindAsync(id);
             if (team == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace NGTI_Calender.Controllers
                 return NotFound();
             }
 
-            var team = await _context.Team
+            var team = await _context.Teams
                 .FirstOrDefaultAsync(m => m.TeamId == id);
             if (team == null)
             {
@@ -139,15 +139,15 @@ namespace NGTI_Calender.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var team = await _context.Team.FindAsync(id);
-            _context.Team.Remove(team);
+            var team = await _context.Teams.FindAsync(id);
+            _context.Teams.Remove(team);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TeamExists(int id)
         {
-            return _context.Team.Any(e => e.TeamId == id);
+            return _context.Teams.Any(e => e.TeamId == id);
         }
     }
 }

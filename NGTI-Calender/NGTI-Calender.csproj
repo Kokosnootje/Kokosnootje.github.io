@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20210104143141_TeamMigration.cs" />
-    <Compile Remove="Data\Migrations\20210104143141_TeamMigration.Designer.cs" />
-    <Compile Remove="Data\Migrations\20210104144415_TeamMigration.cs" />
-    <Compile Remove="Data\Migrations\20210104144415_TeamMigration.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="FluentDateTime" Version="2.0.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.49.0.2142" />
@@ -30,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Migrations\" />
     <Folder Include="Views\Overview\" />
     <Content Update="credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

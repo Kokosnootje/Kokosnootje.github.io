@@ -10,8 +10,8 @@ using NGTI_Calender.Data;
 namespace NGTI_Calender.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210104150424_PersonMigration")]
-    partial class PersonMigration
+    [Migration("20210104184014_Team2")]
+    partial class Team2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -322,7 +322,7 @@ namespace NGTI_Calender.Migrations
 
                     b.HasKey("TeamId");
 
-                    b.ToTable("Team");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("NGTI_Calender.Models.Timeslot", b =>
