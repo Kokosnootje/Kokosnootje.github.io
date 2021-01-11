@@ -1,10 +1,25 @@
-﻿@model IEnumerable<Timeslot>
+﻿@model Tuple<List<Timeslot>, Popup, List<Person>, string, Seats, List<Roles>>
 @{
     ViewData["Title"] = "Admin Dashboard";
     ViewData["ID Reserve"] = "null";
     ViewData["ID Overview"] = "null";
     ViewData["ID Team"] = "null";
     ViewData["ID Admin Dashboard"] = "current_page";
+    ViewData["PersonId"] = Model.Item4;
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item4);
+
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item3)
+        {
+            if (personId == item.PersonId.ToString())
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
+
 }
 
 <head>
@@ -14,25 +29,134 @@
 </head>
 <body>
     <div class="admin_page">
-        <div class="teams"></div>
-        <div class="timeslots">
-            <h1>Timeslots</h1>
-            <div class="timeslot_config">
-                @foreach(var item in Model) {
-                    <div>
-                    <p class="ts">@item.TimeStart - @item.TimeEnd</p>
-                    <p><a href="">change</a> | <a href="">delete</a></p>
-                    </div>
+
+        @{
+            bool admin = false;
+            foreach (var p in Model.Item3) {
+                if (p.PersonId.ToString() == Model.Item4) {
+                    foreach (var roles in Model.Item6) {
+                        if (p.RolesId == roles.RolesId) {
+                            admin = roles.Admin;
+                        }
+                    }
                 }
-                <a id="add_timeslot" href="">add timeslot</a>
-            </div>
-        </div>
-        <div class="employees"></div>
-        <div class="workplaces">
-            <h1>Workplaces</h1>
-            <div class="workplace_config">
-                <p><a href="">  -  </a>  17  <a href="">  +  </a></p>
-            </div>
-        </div>
+            }
+            if (admin) {
+                <div class="teams">
+                    <h1 id="t_h1">Teams</h1>
+                    <div class="line"></div>
+                    <form asp-action="Create">
+                        <button type="submit">Add team</button>
+                        <input type="text" name="TeamName" placeholder="TeamName" />
+                        <div class="person_selection">
+                            @{
+                                int i = 0;
+                                foreach (var item in Model.Item3) {
+                                    <div>
+                                        <input type="checkbox" id="p@(i)" name="selectedPersons" value="@item.PersonId" />
+                                        <label for="p@(i)">@item.PersonName</label>
+                                    </div>
+                                    i++;
+                                }
+                            }
+                        </div>
+                    </form>
+                    <div class="team_configuration">
+
+                    </div>
+                </div>
+                <div class="timeslots">
+                    <h1>Timeslots</h1>
+                    <div class="timeslot_config">
+                        @foreach (var item in Model.Item1) {
+                            <form asp-action="Index">
+                                <p class="ts">@item.TimeStart - @item.TimeEnd</p>
+                                <input type="hidden" name="timeslotId" value=@item.TimeslotId />
+                                <input type="hidden" name="personId" value="@Model.Item4" />
+                                <button type="submit">X</button>
+                            </form>
+                        }
+                    </div>
+                    <form asp-action="AddTimeslot">
+                        <input placeholder="09:00" name="startTime" />
+                        <input placeholder="11:00" name="endTime" />
+                        <input type="hidden" name="personId" value="@Model.Item4" />
+                        <button type="submit">add timeslot</button>
+                    </form>
+                </div>
+                <div class="employees">
+                    <h1 id="e_h1">Employees</h1>
+                    <div class="e_container">
+                        <div style="width: inherit; height: 5vh;">
+                            <h1 id="name">Name</h1>
+                            <h1 id="role">Role</h1>
+                        </div>
+                        <form asp-action="EmployeeConfig">
+                            <div class="employee_config">
+                                <div class="left_side">
+                                    <div class="nameList">
+                                        @* load employees in this div *@
+                                        @foreach (var person in Model.Item3) {
+                                            <p>@person.PersonName</p>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="right_side">
+                                    <div class="RoleList">
+                                        @* load roles in this div *@
+                                        @foreach (var roles in Model.Item6) {
+                                            <input name="personId" type="hidden" value="@Model.Item4" />
+                                            <input name="RolesIds" type="hidden" value="@roles.RolesId" />
+                                            <div class="role_section">
+                                                <input id="IA@(roles.RolesId)" onclick="SwapValues('A@(roles.RolesId)')" type="checkbox" checked="@roles.Admin" />
+                                                <label for="IA@(roles.RolesId)">Admin</label>
+                                                <input type="hidden" id="A@(roles.RolesId)" name="AdminBools" value="@roles.Admin.ToString()" />
+                                                <input id="IB@(roles.RolesId)" onclick="SwapValues('B@(roles.RolesId)')" type="checkbox" checked="@roles.BHV" />
+                                                <label for="IB@(roles.RolesId)">BHV</label>
+                                                <input type="hidden" id="B@(roles.RolesId)" name="BHVBools" value="@roles.BHV.ToString()" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit">save</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="workplaces">
+                    <h1>Workplaces</h1>
+                    <div class="workplace_config">
+                        <form asp-action="ChangeSeatsAmount">
+                            <input type="hidden" name="personId" value="@Model.Item4" />
+                            <input name="amount" placeholder="@Model.Item5.places" />
+                            <button type="submit">save</button>
+                        </form>
+                    </div>
+                </div>
+            } else { 
+                <div class="not_admin"><h1>You are not an admin.</h1></div>
+            }
+        }
+
+
+
     </div>
+
+    <script>
+        if ("@Model.Item2.popupMessage" != "") {
+            var s = "@Html.Raw(Model.Item2.popupMessage)";
+            var s = s.split("|").join("\r");
+            var s = s.split("||").join("\n");
+            setTimeout(() =>  window.alert(s), 100);
+        }
+
+        function SwapValues(id) {
+            var input = document.getElementById(id);
+            if (input.value == "True") {
+                input.value = "False";
+            } else {
+                input.value = "True";
+            }
+        }
+    </script>
 </body>

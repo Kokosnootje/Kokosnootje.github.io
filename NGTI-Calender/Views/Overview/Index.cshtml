@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<Timeslot>
+@model Tuple<List<Timeslot>, Tuple<string, string, string, string>, List<Reservation>, List<Person>, Reservation, Tuple<int[][], int, int[][]>, List<Roles>>
 @{
     @using FluentDateTime
     ViewData["Title"] = "Overview";
@@ -7,17 +7,54 @@
     ViewData["ID Overview"] = "current_page";
     ViewData["ID Team"] = "null";
     ViewData["ID Admin Dashboard"] = "null";
+    ViewData["PersonId"] = Model.Item2.Item3;
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item2.Item3);
+    var amountRes = Model.Item6.Item1;
+    static string[] getTitelText(string item1, string item2)
+    {
+        string titelTekst;
+        string onderTitelTekst;
+        if (item1 == "")
+        {
+            titelTekst = "Select one of the timeslots";
+            onderTitelTekst = "To show all reservations";
+        }
+        else
+        {
+            titelTekst = item1;
+            onderTitelTekst = item2;
+        }
+        string[] deTekst = new string[] { titelTekst, onderTitelTekst };
+        return deTekst;
+    }
+    if(Model.Item2.Item1 == "")
+    {
+        var titelTekst = "Select one of the timeslots";
+        var onderTitelTekst = "To show all reservations";
+    } else
+    {
+        var titelTekst = Model.Item2.Item1;
+        var onderTitelTekst = Model.Item2.Item2;
+    }
+
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item4)
+        {
+            if (personId == item.PersonId.ToString())
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
 
     static string[][] SelectDaysOfWeeks() {
         string[] daysOfWeekCalenderDays = new string[10];
         string[] daysOfWeeksCalender = new string[10];
         DateTime lastDay = DateTime.Now;
         for (int i = 0; i < 10; i++) {
-            if (lastDay.DayOfWeek == DayOfWeek.Monday) {
-                daysOfWeekCalenderDays[i] = "Mon.";
-                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
-                lastDay = lastDay.AddDays(3.0);
-            } else if (lastDay.DayOfWeek == DayOfWeek.Saturday) {
+            if (lastDay.DayOfWeek == DayOfWeek.Saturday) {
                 daysOfWeekCalenderDays[i] = "Mon.";
                 daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
                 lastDay = lastDay.AddDays(3.0);
@@ -56,6 +93,10 @@
 
     }
     var calender = SelectDaysOfWeeks();
+    static int getResAmount(int i, int j, int[][] res)
+    {
+        return res[i][j];
+    }
 }
 
 <head>
@@ -64,43 +105,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
+    @*
+        MAIL SYSTEM
+
+        <form asp-action="Index">
+        <input type="hidden" name="personId" value="1"/>
+        <input type="hidden" name="subject" value="onderwerp"/>
+        <input type="hidden" name="body" value="tekst"/>
+        <button type="submit">SEND MAIL</button>
+    </form>*@
     <div class="overview_page">
-        <div class="select_timeslot">
-        @{
-            int i = 0;
-            foreach (var day in calender[0]) {
-                <div class="day_block">
-                    <h3>@calender[0][i] @calender[1][i]</h3>
-                    @{ 
-                        int j = 0;
-                        foreach(var timeslot in Model) {
-                            <button id="TSS@(j)">
-                                @timeslot.TimeStart-@timeslot.TimeEnd
-                                <div id="TSS@(i)_slot_availability" class="TSS_availability">00/17</div>
-                                </button>
-                            j++;
+        @{ 
+            bool admin = false;
+            bool bhv = false;
+            foreach (var p in Model.Item4) {
+                if (p.PersonId.ToString() == Model.Item2.Item3) {
+                    foreach (var roles in Model.Item7) {
+                        if (p.RolesId == roles.RolesId) {
+                            admin = roles.Admin;
+                            bhv = roles.BHV;
                         }
                     }
                 }
-            </div>
-            i++;
+            }
         }
-    }
-    </div>
-        
-    <div class="selected_timeslot">
-        <h1>Selected timeslot:</h1>
-        <div class="colleagues">
-            <div class="date"><p id="date">date</p><p id="tsa">00/17</p></div>
-            <p>Name + Functions</p>
+        <div class="select_timeslot">
+            @{
+                int i = 0;
+                foreach (var day in calender[0])
+                {
+                    <div class="day_block">
+                        <h3>@calender[0][i] @calender[1][i]</h3>
+                        <div class="timeslots">
+                            @{
+                                int j = 0;
+                                foreach (var timeslot in Model.Item1)
+                                {
+                                    <form asp-action="GetAllReservations">
+                                    <input type="hidden" name="personId" value="@Model.Item2.Item3">
+                                    <input type="hidden" name="selectedDate" value="@calender[1][i]">
+                                    <input type="hidden" name="selectedTimeslot" value="@timeslot.TimeStart-@timeslot.TimeEnd">
+                                    <input type="hidden" name="amountAvailablePlaces" value="@getResAmount(i, j, amountRes) / @Model.Item6.Item2">
+                                        @if (Model.Item6.Item3[i][j] != 0 && (bhv || admin)) {
+                                            <button id="TSS@(j)" type="submit">
+                                                @timeslot.TimeStart-@timeslot.TimeEnd
+                                                <div style="color: limegreen;" id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                            </button>
+                                        } else {
+                                            <button id="TSS@(j)" type="submit">
+                                                @timeslot.TimeStart-@timeslot.TimeEnd
+                                                <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                            </button>
+                                        }
+                                    </form>
+                                    j++;
+                                }
+                            }
+                        </div>
+                    </div>
+                    i++;
+                }
+            }
         </div>
-    </div>
-    
-    <div class="upcoming_reservations">
-        <h1>My upcoming reservations:</h1>
-        <div class="line"></div>
-    </div>
-    </div>
+
+        <div class="selected_timeslot">
+            <h1>@getTitelText(Model.Item2.Item1, Model.Item2.Item2)[0]</h1>
+            <div class="colleagues">
+                <div class="date"><p id="date">@getTitelText(Model.Item2.Item1, Model.Item2.Item2)[1]</p><p id="tsa">@Model.Item2.Item4</p></div>
+                @{
+                    foreach (var res in Model.Item3) {
+                        if (res.Date == Model.Item2.Item1 && res.Timeslot.TimeStart + "-" + res.Timeslot.TimeEnd == Model.Item2.Item2) {
+                            <div class="res">@res.Person.PersonName</div>
+                            if (admin) {
+                                <form asp-action="RemoveReservation">
+                                    <input type="hidden" name="personId" value="@Model.Item2.Item3">
+                                    <input type="hidden" name="reservationId" value="@res.ReservationId" />
+                                    <input type="hidden" name="selectedDate" value="@Model.Item2.Item1">
+                                    <input type="hidden" name="selectedTimeslot" value="@Model.Item2.Item2">
+                                    <input type="hidden" name="amountAvailablePlaces" value="@Model.Item2.Item4">
+                                    <button type="submit">X</button>
+                                </form>
+                                }
+                            }
+
+                        }
+                    }
+                </div>
+        </div>
+        <div class="upcoming_reservations">
+            <h1>My upcoming reservations:</h1>
+            <div class="line"></div>
+            <div class="reservation_displays">
+                <form asp-action="Delete" onsubmit="return confirm('Do you really want to delete this reservation?')">
+                    @{
+                        <input type="hidden" name="personId" value="@Model.Item2.Item3">
+                        string lastDate = "";
+                        foreach (var item in Model.Item3)
+                        {
+                            if (item.Person.PersonId.ToString() == Model.Item2.Item3)
+                            {
+                                if (lastDate != item.Date)
+                                {
+
+                <div class="display">
+                    <p style="font-weight: bold">@item.Date</p>
+                    @{
+                        string getResIds(string itemDate)
+                        {
+                            string theresses = "";
+                            foreach (var theRes in Model.Item3)
+                            {
+                                if (theRes.Date == itemDate)
+                                {
+                                    theresses = theresses + theRes.ReservationId.ToString() + " ";
+                                }
+                            }
+                            theresses = theresses.Remove(theresses.Length - 1);
+                            return theresses;
+                        }
+                        <div class="timeslots_of_res">
+                            @{ foreach (var times in Model.Item3)
+                                {
+                                    if (Model.Item2.Item3 == times.PersonId.ToString())
+                                    {
+                                        if (times.Date == item.Date)
+                                        {
+                                            <p>@times.Timeslot.TimeStart - @times.Timeslot.TimeEnd</p>
+                                        }
+                                    }
+
+                                }
+
+                                lastDate = item.Date;
+                            }
+                                        </div>
+                    }
+                    <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
+                </div>
+                                }
+                            }
+                        }
+                    }
+                </form>
+            </div>
+            </div>
+        </div>
+    <script>
+
+    </script>
 </body>
 
 

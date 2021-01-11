@@ -54,14 +54,16 @@ namespace NGTI_Calender.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonId,PersonName,Password")] Person person)
+        public async Task<IActionResult> Create([FromBody] Person person)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(person);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            var myname = person.PersonName;
+
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(person);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
             return View(person);
         }
 
@@ -86,7 +88,7 @@ namespace NGTI_Calender.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonId,PersonName,Password")] Person person)
+        public async Task<IActionResult> Edit(int id, [Bind("PersonId,PersonName,EMail")] Person person)
         {
             if (id != person.PersonId)
             {

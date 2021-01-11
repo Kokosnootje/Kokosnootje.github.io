@@ -1,28 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace NGTI_Calender.Data.Migrations
+namespace NGTI_Calender.Migrations
 {
-    public partial class PersonMigrateTest : Migration
+    public partial class Seats : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Person",
+                name: "Seats",
                 columns: table => new
                 {
-                    PersonId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                    SeatsId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    places = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Person", x => x.PersonId);
+                    table.PrimaryKey("PK_Seats", x => x.SeatsId);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Person");
+                name: "Seats");
         }
     }
 }

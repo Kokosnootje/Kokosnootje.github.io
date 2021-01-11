@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NGTI_Calender.Data;
 
-namespace NGTI_Calender.Data.Migrations
+namespace NGTI_Calender.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201026123336_TimeSlotMigration")]
-    partial class TimeSlotMigration
+    [Migration("20210111135424_Teams")]
+    partial class Teams
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -228,13 +228,21 @@ namespace NGTI_Calender.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Password")
+                    b.Property<string>("EMail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PersonName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RolesId")
+                        .HasColumnType("int");
+
                     b.HasKey("PersonId");
+
+                    b.HasIndex("RolesId");
 
                     b.ToTable("Person");
                 });
@@ -249,10 +257,10 @@ namespace NGTI_Calender.Data.Migrations
                     b.Property<string>("Date")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PersonId")
+                    b.Property<int>("PersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TimeslotId")
+                    b.Property<int>("TimeslotId")
                         .HasColumnType("int");
 
                     b.HasKey("ReservationId");
@@ -262,6 +270,69 @@ namespace NGTI_Calender.Data.Migrations
                     b.HasIndex("TimeslotId");
 
                     b.ToTable("Reservation");
+                });
+
+            modelBuilder.Entity("NGTI_Calender.Models.Roles", b =>
+                {
+                    b.Property<int>("RolesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Admin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("BHV")
+                        .HasColumnType("bit");
+
+                    b.HasKey("RolesId");
+
+                    b.ToTable("Role");
+                });
+
+            modelBuilder.Entity("NGTI_Calender.Models.Seats", b =>
+                {
+                    b.Property<int>("SeatsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("places")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeatsId");
+
+                    b.ToTable("Seats");
+                });
+
+            modelBuilder.Entity("NGTI_Calender.Models.Team", b =>
+                {
+                    b.Property<int>("TeamId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("TeamName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TeamId");
+
+                    b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("NGTI_Calender.Models.TeamMember", b =>
+                {
+                    b.Property<int>("TeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeamId", "PersonId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("TeamMember");
                 });
 
             modelBuilder.Entity("NGTI_Calender.Models.Timeslot", b =>
@@ -333,15 +404,43 @@ namespace NGTI_Calender.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NGTI_Calender.Models.Person", b =>
+                {
+                    b.HasOne("NGTI_Calender.Models.Roles", "Roles")
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("NGTI_Calender.Models.Reservation", b =>
                 {
                     b.HasOne("NGTI_Calender.Models.Person", "Person")
-                        .WithMany("Reservations")
-                        .HasForeignKey("PersonId");
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("NGTI_Calender.Models.Timeslot", "Timeslot")
                         .WithMany()
-                        .HasForeignKey("TimeslotId");
+                        .HasForeignKey("TimeslotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("NGTI_Calender.Models.TeamMember", b =>
+                {
+                    b.HasOne("NGTI_Calender.Models.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NGTI_Calender.Models.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

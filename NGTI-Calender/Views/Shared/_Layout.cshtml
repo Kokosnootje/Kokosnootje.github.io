@@ -6,24 +6,28 @@
     <title>@ViewData["Title"] - NGTI Calender</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    <script type="text/javascript">
+        
+    </script>
 </head>
 <body>
     <!--NAVIGATION BAR-->
     <div class="nav_bar">
         <header>
-            <img src="./img/NGTI Logo.png" />
+            <img src="https://i.imgur.com/9ZfDkqa.png" />
             <nav>
                 <ul>
-                    <li><a href="@Url.Action("Index", "Overview")" id="@ViewData["ID Overview"]">Home</a></li>
+                    <li><a href="@Url.Action("Index", "Overview", new { personId = ViewData["PersonId"] } )" id="@ViewData["ID Overview"]">Overview</a></li>
                     <li>-</li>
-                    <li><a href="" id="@ViewData["ID Team"]">Team</a></li>
+                    <li><a href="@Url.Action("Index", "Teams", new { personId = ViewData["PersonId"] } )" id="@ViewData["ID Team"]">Team</a></li>
                     <li>-</li>
-                    <li><a href="@Url.Action("Index", "Reservation")" id="@ViewData["ID Reserve"]">Reserve</a></li>
+                    <li><a href="@Url.Action("Index", "Reservation", new { personId = ViewData["PersonId"] } )" id="@ViewData["ID Reserve"]">Reserve</a></li>
                     <li>-</li>
-                    <li><a href="@Url.Action("Index", "Admin")" id="@ViewData["ID Admin Dashboard"]">Admin Dashboard</a></li>
+                    <li><a href="@Url.Action("Index", "Admin", new { personId = ViewData["PersonId"] })" id="@ViewData["ID Admin Dashboard"]">Admin</a></li>
                 </ul>
             </nav>
-            <img src="./img/NGTI Logo.png" />
+            <img id="google_pf" src="@ViewData["ProfilePicture"]" />
         </header>
     </div>
     <main role="main" class="pb-3">
@@ -31,7 +35,7 @@
     </main>
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - NGTI_Calender - <a href="https://www.ngti.nl">Official NGTI website</a>
+            &copy; 2021 - NGTI_Calender - <a href="https://www.ngti.nl">Official NGTI website</a>
         </div>
     </footer>
 </body>
