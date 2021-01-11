@@ -85,29 +85,37 @@
                 </div>
                 <div class="employees">
                     <h1 id="e_h1">Employees</h1>
-                    <div class="employee_config">
+                    <div class="e_container">
+                        <div style="width: inherit; height: 5vh;">
+                            <h1 id="name">Name</h1>
+                            <h1 id="role">Role</h1>
+                        </div>
                         <form asp-action="EmployeeConfig">
-                            <div class="left_side">
-                                <h1>Name</h1>
-                                <div class="nameList">
-                                    @* load employees in this div *@
-                                    @foreach (var person in Model.Item3) {
-                                        <p>@person.PersonName</p>
-                                    }
+                            <div class="employee_config">
+                                <div class="left_side">
+                                    <div class="nameList">
+                                        @* load employees in this div *@
+                                        @foreach (var person in Model.Item3) {
+                                            <p>@person.PersonName</p>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="right_side">
-                                <h1>Role</h1>
-                                <div class="RoleList">
-                                    @* load roles in this div *@
-                                    @foreach (var roles in Model.Item6) {
-                                        <input name="personId" type="hidden" value="@Model.Item4"/>
-                                        <input name="RolesIds" type="hidden" value="@roles.RolesId" />
-                                        <input onclick="SwapValues('A@(roles.RolesId)')" type="checkbox" checked="@roles.Admin" />
-                                        <input type="hidden" id="A@(roles.RolesId)" name="AdminBools" value="@roles.Admin.ToString()" />
-                                        <input onclick="SwapValues('B@(roles.RolesId)')" type="checkbox" checked="@roles.BHV" />
-                                        <input type="hidden" id="B@(roles.RolesId)" name="BHVBools" value="@roles.BHV.ToString()" />
-                                    }
+                                <div class="right_side">
+                                    <div class="RoleList">
+                                        @* load roles in this div *@
+                                        @foreach (var roles in Model.Item6) {
+                                            <input name="personId" type="hidden" value="@Model.Item4" />
+                                            <input name="RolesIds" type="hidden" value="@roles.RolesId" />
+                                            <div class="role_section">
+                                                <input id="IA@(roles.RolesId)" onclick="SwapValues('A@(roles.RolesId)')" type="checkbox" checked="@roles.Admin" />
+                                                <label for="IA@(roles.RolesId)">Admin</label>
+                                                <input type="hidden" id="A@(roles.RolesId)" name="AdminBools" value="@roles.Admin.ToString()" />
+                                                <input id="IB@(roles.RolesId)" onclick="SwapValues('B@(roles.RolesId)')" type="checkbox" checked="@roles.BHV" />
+                                                <label for="IB@(roles.RolesId)">BHV</label>
+                                                <input type="hidden" id="B@(roles.RolesId)" name="BHVBools" value="@roles.BHV.ToString()" />
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                             <button type="submit">save</button>

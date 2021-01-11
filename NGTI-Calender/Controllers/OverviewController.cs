@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NGTI_Calender.Data;
 using System.Net.Mail;
 using NGTI_Calender.Models;
+using System.Globalization;
 
 namespace NGTI_Calender.Controllers
 {
@@ -23,64 +24,29 @@ namespace NGTI_Calender.Controllers
         {
             var amountRes = AmountReservedPlaces();
             List<Reservation> allRes = _context.Reservation.ToList();
-            var testVar = sortAllRes(allRes);
+            var allResSorted = sortAllRes(allRes);
             string[] selectedReservation = new string[] { SelectedDate, SelectedTimeslot };
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), Tuple.Create(SelectedDate, SelectedTimeslot, personId, AmountAvailablePlaces), testVar, _context.Person.ToList(), new Reservation(), Tuple.Create(amountRes, _context.Seats.ToList()[0].places, WhenBHV()), _context.Role.ToList());
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), Tuple.Create(SelectedDate, SelectedTimeslot, personId, AmountAvailablePlaces), allResSorted, _context.Person.ToList(), new Reservation(), Tuple.Create(amountRes, _context.Seats.ToList()[0].places, WhenBHV()), _context.Role.ToList());
             return View(tuple);
         }
 
         public List<Reservation> sortAllRes(List<Reservation> allTheRes)
         {
             List<Reservation> allTheSortedRes = new List<Reservation>();
-            string[][] sortedRes = new string[allTheRes.Count][];
-            int i = 0;
+            List<DateTime> allTheSortedDateTimes = new List<DateTime>();
             foreach(var res in allTheRes)
             {
-                sortedRes[i] = res.Date.Split('-');
-                i++;
+                allTheSortedDateTimes.Add(DateTime.Parse(res.Date));
             }
-            string[] sortedResTogetherNotDistinct = new string[allTheRes.Count];
-            i = 0;
-            foreach(string[] stringDates in sortedRes)
+            allTheSortedDateTimes.Sort((x, y) => DateTime.Compare(x.Date, y.Date));
+            List<DateTime> allTheSortedDateTimesDistinct = allTheSortedDateTimes.Distinct().ToList();
+            foreach(var date in allTheSortedDateTimesDistinct)
             {
-                if(stringDates[1].Length < 2)
+                foreach (var comparableRes in allTheRes)
                 {
-                    stringDates[1] = "0" + stringDates[1];
-                }
-                if(stringDates[0].Length < 2)
-                {
-                    stringDates[0] = "0" + stringDates[0];
-                }
-                sortedResTogetherNotDistinct[i] = stringDates[2] + stringDates[1] + stringDates[0];
-                i++;
-            }
-            string[] sortedResTogether = sortedResTogetherNotDistinct.Distinct().ToArray();
-            sortedResTogether = sortedResTogether.OrderBy(x => x).ToArray();
-            foreach(string sortedDate in sortedResTogether)
-            {
-
-                string Year = sortedDate[0].ToString() + sortedDate[1].ToString() + sortedDate[2].ToString() + sortedDate[3].ToString();
-                string Month = "";
-                string Day = "";
-                if(sortedDate[4].ToString() == "0")
-                {
-                    Month = sortedDate[5].ToString();
-                } else
-                {
-                    Month = sortedDate[4].ToString() + sortedDate[5].ToString();
-                }
-                if (sortedDate[6].ToString() == "0")
-                {
-                    Day = sortedDate[7].ToString();
-                } else {
-                    Day = sortedDate[6].ToString() + sortedDate[7].ToString();
-                }
-                string completedComparableDate = Day + "-" + Month + "-" + Year;
-                foreach (Reservation res in allTheRes)
-                {
-                    if(completedComparableDate == res.Date)
+                    if (date.ToShortDateString() == comparableRes.Date)
                     {
-                        allTheSortedRes.Add(res);
+                        allTheSortedRes.Add(comparableRes);
                     }
                 }
             }
@@ -148,15 +114,44 @@ namespace NGTI_Calender.Controllers
             return RedirectToAction("Index", new { personId = personId, SelectedDate = selectedDate, SelectedTimeslot = selectedTimeslot, AmountAvailablePlaces = amountAvailablePlaces });
         }
 
-        public async Task<IActionResult> RemoveReservation(string personId, string reservationId) {
+        public async Task<IActionResult> RemoveReservation(string selectedDate, string selectedTimeslot, string personId, string amountAvailablePlaces, string reservationId) {
             foreach (var res in _context.Reservation.ToList()) {
                 if (res.ReservationId.ToString() == reservationId) {
                     _context.Reservation.Remove(res);
                     await _context.SaveChangesAsync();
+                    foreach(var person in _context.Person.ToList()) {
+                        if (res.PersonId == person.PersonId) {
+                            foreach(var ts in _context.Timeslot.ToList()) {
+                                if (res.TimeslotId == ts.TimeslotId) {
+                                    string[] s = res.Date.Split("-");
+                                    if (s[0].Length != 2) {
+                                        s[0] = "0" + s[0];
+                                    }
+                                    if (s[1].Length != 2) {
+                                        s[1] = "0" + s[1];
+                                    }
+                                    string s2 = s[0] + "/" + s[1] + "/" + s[2];
+                                    DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                    if (DateTime.Parse(ts.TimeStart) >= DateTime.Now || dt > DateTime.Today) {
+                                        AdminController.SendMail(date: res.Date, timeStart: ts.TimeStart, timeEnd: ts.TimeEnd, email: person.EMail);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     break;
                 }
             }
-            return RedirectToAction("Index", new { personId = personId });
+            //lower amount available places by 1
+            string[] arr = amountAvailablePlaces.Split(" / ");
+            try {
+                int i = int.Parse(arr[0]);
+                i--;
+                amountAvailablePlaces = i.ToString() + " / " + arr[1];
+            } catch (Exception) {
+                throw;
+            }
+            return RedirectToAction("Index", new { personId = personId, SelectedDate = selectedDate, SelectedTimeslot = selectedTimeslot, AmountAvailablePlaces = amountAvailablePlaces });
         }
 
 

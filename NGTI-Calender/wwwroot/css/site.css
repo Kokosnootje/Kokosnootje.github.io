@@ -783,16 +783,47 @@ body, div, h1, h3 {
 .admin_page .employees h1 {
     font-size: 4vh;
 }
-.admin_page .employees .employee_config{
-    overflow-x: hidden;
-    overflow-y: auto;
-    width: 30vw;
+.admin_page .employees #name {
+    float: left;
+    margin-left: 1vw;
+}
+.admin_page .employees #role {
+    float: right;
+    margin-right: 8vw;
+}
+.admin_page .employees .e_container{
+    width: inherit;
     height: 23vh;
     background-color: #444444;
 }
-.admin_page .employees .employee_config h1 {
+.admin_page .employees .employee_config {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 18vh;
+}
+.admin_page .employees .e_container h1 {
     color: #D5BFAA;
     text-decoration: underline;
+}
+.admin_page .employees .nameList, .admin_page .employees .RoleList {
+    color: #D5BFAA;
+}
+.admin_page .employees .nameList p {
+    margin: 0;
+}
+.admin_page .role_section {
+    color: #D5BFAA;
+}
+.admin_page .role_section label {
+    margin: 0;
+    user-select: none;
+}
+.admin_page .e_container button {
+    height:3.5vh;
+    float: right;
+    background-color: #444;
+    color: #D5BFAA;
+    border-color: #D5BFAA;
 }
 .admin_page .workplaces {
     float: right;
@@ -818,10 +849,6 @@ body, div, h1, h3 {
 .admin_page .left_side, .admin_page .right_side {
     width: 12.9vw;
     margin: 0.5vh 0 0 1vw;
-    height: 22.5vh;
-}
-.admin_page .nameList, .admin_page .RoleList {
-    height: 17vh;
 }
 
 .admin_page .workplace_config {
@@ -1095,25 +1122,35 @@ body, div, h1, h3 {
     }
     .admin_page .employees {
         width: 62vw;
-        height: 25vh;
+        height: 22vh;
     }
     .admin_page .employees h1 {
-        font-size: 3vh;
+        font-size: 2.5vh;
+    }
+    .admin_page .employees .nameList p {
+        font-size: 1.8vh;
+        margin-top: 1vh;
+    }
+    .admin_page .role_section label {
+        font-size: 1.5vh;
+    }
+    .admin_page .employees .e_container{
+        width: inherit;
+        height: 19vh;
     }
     .admin_page .employees .employee_config {
-        width: 62vw;
-        height: 20vh;
+        height: 14vh;
     }
     .admin_page .left_side, .admin_page .right_side {
         width: 28vw;
-        height: 19.5vh;
-    }
-    .admin_page .employees .nameList, .admin_page .RoleList {
-        height: 16vh;
+        height: 13.5vh;
     }
     .admin_page .workplaces {
         margin-top: 2vh;
         width: 29vw;
+    }
+    .admin_page .workplaces h1 {
+        font-size: 2.5vh;
     }
     .admin_page .workplace_config form {
         background-color: #444;

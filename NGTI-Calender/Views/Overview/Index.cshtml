@@ -180,6 +180,9 @@
                                 <form asp-action="RemoveReservation">
                                     <input type="hidden" name="personId" value="@Model.Item2.Item3">
                                     <input type="hidden" name="reservationId" value="@res.ReservationId" />
+                                    <input type="hidden" name="selectedDate" value="@Model.Item2.Item1">
+                                    <input type="hidden" name="selectedTimeslot" value="@Model.Item2.Item2">
+                                    <input type="hidden" name="amountAvailablePlaces" value="@Model.Item2.Item4">
                                     <button type="submit">X</button>
                                 </form>
                                 }

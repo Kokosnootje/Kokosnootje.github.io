@@ -16,8 +16,9 @@ namespace NGTI_Calender.Controllers {
             _context = context;
         }
 
-        public IActionResult Index(string personId) {
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Role.ToList());
+        public IActionResult Index(string personId, string message = "") {
+            Popup popup = new Popup() { popupMessage = message };
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), popup, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Role.ToList());
             return View(tuple);
         }
 
@@ -31,6 +32,9 @@ namespace NGTI_Calender.Controllers {
                             string[] s = res.Date.Split("-");
                             if (s[0].Length != 2) {
                                 s[0] = "0" + s[0];
+                            }
+                            if (s[1].Length != 2) {
+                                s[1] = "0" + s[1];
                             }
                             string s2 = s[0] + "/" + s[1] + "/" + s[2];
                             DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -51,12 +55,10 @@ namespace NGTI_Calender.Controllers {
                     //must cascade drop
                     _context.Timeslot.Remove(item);
                     await _context.SaveChangesAsync();
-                    var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "The timeslot has been removed." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-                    return View(tuple2);
+                    return RedirectToAction("Index", new { personId = personId, message = "The timeslot has been removed." });
                 }
             }
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage="An error has occured." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-            return View(tuple);
+            return RedirectToAction("Index", new { personId = personId, message = "An error has occured." });
         }
 
         //add timeslot to database
@@ -88,25 +90,20 @@ namespace NGTI_Calender.Controllers {
                 }
             } catch {
                 //wrong input message
-                var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-                return View(tuple1);
+                return RedirectToAction("Index", new { personId = personId, message = "Please enter valid input" });
             }
             //check if there are null values
-            if (string.IsNullOrWhiteSpace(startTime) || string.IsNullOrWhiteSpace(endTime)){
-                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-                return View(tuple);
+            if (string.IsNullOrWhiteSpace(startTime) || string.IsNullOrWhiteSpace(endTime)) {
+                return RedirectToAction("Index", new { personId = personId, message = "Please enter valid input" });
             }
             //add to database if it does not overlap
             else if (!overlap) {
                 _context.Timeslot.Add(new Timeslot() { TimeStart = startTime, TimeEnd = endTime });
                 await _context.SaveChangesAsync();
-                //timeslot has been added message
-                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The timeslot has been added." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-                return View(tuple2);
+                return RedirectToAction("Index", new { personId = personId, message = "" });
             } else {
                 //overlapping input message
-                var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup { popupMessage = "The input overlaps with an existing timeslot." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-                return View(tuple);
+                return RedirectToAction("Index", new { personId = personId, message = "The input overlaps with an existing timeslot." });
             }
         }
 
@@ -118,15 +115,12 @@ namespace NGTI_Calender.Controllers {
                 if (places >= 0) {
                     _context.Seats.ToList()[0].places = places;
                     await _context.SaveChangesAsync();
-                    var tuple1 = Tuple.Create(_context.Timeslot.ToList(), new Popup(), _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-                    return View(tuple1);
+                    return RedirectToAction("Index", new { personId = personId, message = "" });
                 }
             } catch (Exception) {
-                var tuple2 = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-                return View(tuple2);
+                return RedirectToAction("Index", new { personId = personId, message = "Please enter valid input" });
             }
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), new Popup() { popupMessage = "Please enter valid input." }, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Roles.ToList());
-            return View(tuple);
+            return RedirectToAction("Index", new { personId = personId, message = "Please enter valid input" });
         }
 
         public async Task<IActionResult> EmployeeConfig(string personId, string[] RolesIds, string[] AdminBools, string[] BHVBools) {
@@ -149,7 +143,7 @@ namespace NGTI_Calender.Controllers {
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", new { personId = personId });
         }
-        public static void SendMail(string date, string timeStart, string timeEnd, string email) {
+        public static void SendMail(string date, string timeStart, string timeEnd, string email, string reason = "") {
             // Server settings
             SmtpClient SmtpServer = new SmtpClient();
             SmtpServer.Port = 587;
@@ -164,7 +158,7 @@ namespace NGTI_Calender.Controllers {
             mail.From = new MailAddress("mailcinemaconfirmation@gmail.com");
             mail.To.Add(new MailAddress(email));
             mail.Subject = "Your reservation has been canceled.";
-            mail.Body = "Your reservation for:\n" + date + "\n" + timeStart + "-" + timeEnd + "\nhas been canceled.";
+            mail.Body = "Your reservation for:\n" + date + "\n" + timeStart + "-" + timeEnd + "\nhas been canceled.\n" + reason;
             
             SmtpServer.Send(mail);
         }
