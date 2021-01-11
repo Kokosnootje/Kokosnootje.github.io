@@ -45,8 +45,9 @@
                 <div class="teams">
                     <h1 id="t_h1">Teams</h1>
                     <div class="line"></div>
-                    <form asp-action="">
+                    <form asp-action="Create">
                         <button type="submit">Add team</button>
+                        <input type="text" name="TeamName" placeholder="TeamName" />
                         <div class="person_selection">
                             @{
                                 int i = 0;
@@ -61,7 +62,7 @@
                         </div>
                     </form>
                     <div class="team_configuration">
-                        @* load teams + remove member button *@
+
                     </div>
                 </div>
                 <div class="timeslots">

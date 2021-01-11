@@ -33,8 +33,8 @@
             <div class="line"></div>
             <form asp-action="Create">
                 <button type="submit">Add team</button>
+                <input type="text" name="TeamName"  placeholder="TeamName" />
                 <div class="person_selection">
-                <input type="text" name="TeamName" value="" />
                     @{
                         int i = 0;
                         foreach (var item in Model.Item2) {
