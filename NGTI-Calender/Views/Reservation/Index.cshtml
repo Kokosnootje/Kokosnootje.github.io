@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
 ﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>, int[][], int>
-=======
-﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>>
->>>>>>> Stashed changes
 @{
     //@model IEnumerable<NGTI_Calender.Models.Reservation>
     @using FluentDateTime
@@ -174,7 +170,6 @@
             if (checkBox.checked == true) {
                 document.getElementById(labelID).style.color = checkedColor;
                 document.getElementById(labelID).style.backgroundColor = originColor;
-<<<<<<< Updated upstream
                 var i;
                 for (i = 0; i < amountOfTimeslots; i++) {
                     document.getElementById("TS" + (i + 1).toString() + "_slot_availability").innerHTML = stringArray[i] + " / " + "@(Model.Item7)";
@@ -185,9 +180,6 @@
                     document.getElementById("TS"+i.toString()+"_slot_availability").innerHTML = "Hallo";
                 }*@
 
-=======
-                document.getElementById("TS1_slot_availability").innerHTML = "Hallo";
->>>>>>> Stashed changes
             } else {
                 document.getElementById(labelID).style.color = originColor;
                 document.getElementById(labelID).style.backgroundColor = checkedColor;
