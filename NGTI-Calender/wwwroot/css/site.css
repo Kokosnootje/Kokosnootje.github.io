@@ -894,6 +894,9 @@ body, div, h1, h3 {
     *::-webkit-scrollbar {
         width: 2px;
     }
+    .container {
+        font-size: 2vh;
+    }
     /*LOGIN PAGE*/
     .login_page h1, .login_page #ngti_logo {
         font-size: 9vh;
@@ -928,7 +931,10 @@ body, div, h1, h3 {
     }
     .overview_page .day_block button {
         width: 16.4vw;
-        font-size: 0.5em;
+        font-size: 0.44em;
+    }
+    .overview_page .day_block h3 {
+        font-size: 1.8vh;
     }
     .overview_page .day_block button .TSS_availability {
         height: 2vh;
@@ -970,9 +976,6 @@ body, div, h1, h3 {
     }
     .overview_page .upcoming_reservations .reservation_displays {
         height: 22vh;
-    }
-    .overview_page .upcoming_reservations .reservation_displays .display .button {
-        
     }
     .overview_page .upcoming_reservations .reservation_displays .display .timeslots_of_res {
         height: 10vh;
