@@ -1,6 +1,6 @@
-﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>, int[][], int>
+﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>, int[][], Tuple<int, List<Team>, List<TeamMember>>>
 @{
-    //@model IEnumerable<NGTI_Calender.Models.Reservation>
+//@model IEnumerable<NGTI_Calender.Models.Reservation>
     @using FluentDateTime
     ViewData["Title"] = "Reserve";
     ViewData["ID Reserve"] = "current_page";
@@ -26,7 +26,7 @@
     string getAmountOfPlaces(int selectedDay)
     {
         string s = "";
-        foreach(var item in Model.Item6[selectedDay])
+        foreach (var item in Model.Item6[selectedDay])
         {
             s += item.ToString() + "-";
         }
@@ -131,7 +131,7 @@
                                 <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
                                 <label for="TS@(i)">
                                     @item.TimeStart-@item.TimeEnd
-                                    <div id="TS@(i)_slot_availability" class="slot_availability"><p>@Model.Item7.ToString()</p></div>
+                                    <div id="TS@(i)_slot_availability" class="slot_availability"><p>@Model.Item7.Item1.ToString()</p></div>
                                 </label>
                             </div>
                             i++;
@@ -145,6 +145,14 @@
                     <h1>Select Team(s)</h1>
                     <div id="line2"></div>
                     <div class="team_selection"></div>
+                    @{
+                        int bob = 0;
+                        foreach (Team team in @Model.Item7.Item2)
+                        {
+                            <label name="">@team.TeamName</label>    
+                            <input value="@team.TeamId" type="checkbox" name="selectedTeams" id="TCB@(bob + 1)" />
+                        }
+                    }
                 </div>
                 <input type="hidden" name="personId" value="@Model.Item4">
                 <button id="reserve_button">BACK</button>
@@ -171,7 +179,7 @@
                 document.getElementById(labelID).style.backgroundColor = originColor;
                 var i;
                 for (i = 0; i < amountOfTimeslots; i++) {
-                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").innerHTML = stringArray[i] + " / " + "@(Model.Item7)";
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").innerHTML = stringArray[i] + " / " + "@(Model.Item7.Item1)";
                     document.getElementById("TS" + (i + 1).toString() + "_slot_availability").style.backgroundColor = "#444";
                 }
                 @*for (int i = 0; i < @Model.Item2.Count; i++)
