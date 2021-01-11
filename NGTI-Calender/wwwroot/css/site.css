@@ -389,11 +389,11 @@ body, div, h1, h3 {
 .overview_page .upcoming_reservations .reservation_displays .display a {
     float: right;
     margin-right: 10px;
-    font-size: 14px;
+    font-size: 0.56em;
 }
 .overview_page .upcoming_reservations .reservation_displays .display p {
     text-align: center;
-    font-size: 14px;
+    font-size: 0.56em;
     margin-bottom: 5px;
 }
 
@@ -675,6 +675,13 @@ body, div, h1, h3 {
     float: left;
     margin-left: 1vw;
 }
+.admin_page .teams form #teamname{
+    border-color:#444;
+    color: #444;
+    margin-left: 0.5vw;
+    margin-top: 3vh;
+    width: 11vw;
+}
 .admin_page .teams form button {
     float: right;
     margin-top: 1.5vh;
@@ -689,7 +696,7 @@ body, div, h1, h3 {
 .admin_page .team_configuration {
     width: 41vw;
     height: 71vh;
-    margin: 9vh 0.5vw 0 0.5vw;
+    margin: 1vh 0.5vw 0 0.5vw;
     background-color: #444;
     overflow-y: auto;
     overflow-x: hidden;
@@ -702,6 +709,7 @@ body, div, h1, h3 {
     margin-top: 2vh;
 }
 .admin_page .teams .line {
+    display: none;
     height: 1vh;
     width: 11vw;
     background-color: black;
@@ -737,7 +745,9 @@ body, div, h1, h3 {
 .admin_page .timeslots form, .admin_page .timeslots form input {
     background-color: #444444;
 }
-
+.admin_page .timeslots form input {
+    color: #d5bfaa;
+}
 .admin_page .timeslots form button {
     float: right;
     background-color: #444444;
@@ -950,6 +960,7 @@ body, div, h1, h3 {
     } 
     .overview_page .selected_timeslot h1 {
         font-size: 0.7em;
+        margin-left: 2vw;
     }
     .overview_page .selected_timeslot .colleagues {
         width: 42vw;
@@ -959,7 +970,7 @@ body, div, h1, h3 {
         width: 40vw;
     }
     .overview_page .selected_timeslot .colleagues p {
-        font-size: 0.3em;
+        font-size: 0.28em;
     }
     .overview_page .upcoming_reservations {
         width: 45vw;
@@ -968,6 +979,7 @@ body, div, h1, h3 {
         margin-left: 4.5vw;
     }
     .overview_page .upcoming_reservations h1 {
+        margin-left: 2vw;
         font-size: 0.7em;
     } 
     .overview_page .upcoming_reservations .line {
@@ -983,6 +995,21 @@ body, div, h1, h3 {
     .overview_page .upcoming_reservations .reservation_displays .display {
         width: 17vh;
         height: 20vh;
+    }
+    .overview_page .upcoming_reservations .reservation_displays .display p {
+        font-size: 0.7em;
+    }
+    .overview_page .upcoming_reservations .reservation_displays .display .button {
+        margin-left: 6.5vw;
+    }
+    .overview_page .selected_timeslot .colleagues .res {
+        width: 33vw;
+        font-size: 1.4vh;
+        height: 3vh;
+    }
+    .overview_page .selected_timeslot .colleagues form button {
+        width: 5.5vw;
+        font-size: 1.4vh;
     }
     /* TEAMS PAGE */
     .teams_page h1 {
