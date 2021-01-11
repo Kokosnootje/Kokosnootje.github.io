@@ -17,5 +17,12 @@ namespace NGTI_Calender.Data
         public DbSet<NGTI_Calender.Models.Roles> Role { get; set; }
         public DbSet<NGTI_Calender.Models.Seats> Seats { get; set; }
         public DbSet<NGTI_Calender.Models.Team> Teams { get; set; }
+        public DbSet<NGTI_Calender.Models.TeamMember> TeamMember { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<TeamMember>().HasKey(t => new { t.TeamId, t.PersonId });
+        }
     }
 }

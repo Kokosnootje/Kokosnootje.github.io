@@ -54,9 +54,8 @@ namespace NGTI_Calender.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team)
+        public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team, int[] selectedPersons)
         {
-            // Maak een team aan en edit alle aangeven users om dit TeamID te krijgen.
             if (ModelState.IsValid)
             {
                 _context.Add(team);
@@ -64,6 +63,11 @@ namespace NGTI_Calender.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(team);
+        }
+
+        public void AddMembers(int teamId, int personId)
+        {
+            _context.TeamMember.Add(new TeamMember() { TeamId = teamId, PersonId = personId });
         }
 
         // GET: Team/Edit/5

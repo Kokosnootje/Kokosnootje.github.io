@@ -28,7 +28,32 @@
 </head>
 <body>
     <div class="teams_page">
-        <div class="select_team">
+        <div class="teams">
+            <h1 id="t_h1">Teams</h1>
+            <div class="line"></div>
+            <form asp-action="Create">
+                <button type="submit">Add team</button>
+                <div class="person_selection">
+                    @{
+                        int i = 0;
+                        foreach (var item in Model.Item2)
+                        {
+                            <div>
+                                <input type="text" name="selectedTeamName" value="" />
+                                <input type="checkbox" id="p@(i)" name="selectedPersons" value="@item.PersonId" />
+                                <label for="p@(i)">@item.PersonName</label>
+                            </div>
+                            i++;
+                        }
+                    }
+                </div>
+            </form>
+            <div class="team_configuration">
+                
+            </div>
+        </div>
+        
+        <!--<div class="select_team">
             <h1>Select Team</h1>
             <div class="line"></div>
             <div class="team_selection_scroll">
@@ -60,7 +85,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div>-->
         <div class="team_reservations">
             <h1>Team Reservations</h1>
             <div class="all_members">
