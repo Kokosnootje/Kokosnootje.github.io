@@ -55,7 +55,12 @@ namespace NGTI_Calender.Controllers
         {
             checkAllReservationsForExpired();
             var AmountRes = AmountReservedPlaces();
+<<<<<<< Updated upstream
             var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
+=======
+            var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), new Popup(), personId, _context.Person.ToList());
+            //~also return double array[day1[ts1 = amount, ts2 = amount], day2[ts1 = amount, ts2 = amount]]
+>>>>>>> Stashed changes
             return View(tuple);
         }
         // POST: Reservation
