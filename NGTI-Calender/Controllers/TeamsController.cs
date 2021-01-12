@@ -52,7 +52,8 @@ namespace NGTI_Calender.Controllers {
                 _context.Teams.Add(team);
                 await _context.SaveChangesAsync();
                 foreach (var id in selectedPersons) {
-                    AddMembers(team.TeamId, id);
+                    _context.TeamMember.Add(new TeamMember() { TeamId = team.TeamId, PersonId = id });
+                    await _context.SaveChangesAsync();
                 }
                 return RedirectToAction(nameof(Index));
             }
