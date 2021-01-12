@@ -1,4 +1,4 @@
-﻿@model Tuple<string, List<Person>>
+﻿@model Tuple<string, List<Person>,  List<Team>, List<TeamMember>, Reservation[][], List<Person>>
 @{
     ViewData["Title"] = "Admin Dashboard";
     ViewData["ID Reserve"] = "null";
@@ -33,24 +33,60 @@
             <div class="line"></div>
             <form asp-action="Create">
                 <button type="submit">Add team</button>
-                <input type="text" name="TeamName"  placeholder="TeamName" />
+                <input type="hidden" value="@Model.Item1" name="PersonId"/>
+                <input type="text" name="TeamName" placeholder="TeamName" />
                 <div class="person_selection">
                     @{
                         int i = 0;
-                        foreach (var item in Model.Item2) {
-                        <div>
-                            <input type="checkbox" id="p@(i)" name="selectedPersons" value="@item.PersonId" />
-                            <label for="p@(i)">@item.PersonName</label>
-                        </div>
-                        i++;
-                    }
+                        foreach (var item in Model.Item2)
+                        {
+                            <div>
+                                <input type="checkbox" id="p@(i)" name="selectedPersons" value="@item.PersonId" />
+                                <label for="p@(i)">@item.PersonName</label>
+                            </div>
+                            i++;
+                        }
                     }
                 </div>
             </form>
             <div class="team_configuration">
+                <div class="team_selection"></div>
+                @{
 
+                    int bob = 0;
+                    foreach (Team team in Model.Item3)
+                    {
+                        int a = 0;
+                        foreach (TeamMember tm in Model.Item4)
+                        {
+                            if (Model.Item1 == tm.PersonId.ToString() && tm.TeamId == team.TeamId)
+                            {
+                                <form asp-action="show_team">
+                                    <button>@team.TeamName</button>
+                                    <input type="hidden" value="@Model.Item1" name="PersonId" />
+                                    <input type="hidden" value="@team.TeamId" name="TeamId" />
+                                </form>
+                                foreach (TeamMember tm2 in Model.Item4)
+                                {
+                                    if (tm2.TeamId == team.TeamId)
+                                    {
+                                        foreach (Person p in Model.Item2)
+                                        {
+                                            if (p.PersonId == tm2.PersonId)
+                                            {
+                                                <p>@p.PersonName</p>
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
             </div>
-        </div>
+        
+    </div>
         <!--<div class="select_team">
         <h1>Select Team</h1>
         <div class="line"></div>
@@ -88,22 +124,23 @@
             <h1>Team Reservations</h1>
             <div class="all_members">
                 @* load reservations for each member - 1 div per member*@
-                <div class="member_reservations">
-                    <h2>Name | Role</h2>
-                    <div class="line"></div>
-                    <div class="reservation_displays">
-                        @* 1 display = 1 day of reservations --> use implementation at home screen (no remove button)*@
-                        <div class="display">
-                            <p>Day + Date<br />Timeslots</p>
-                        </div>
-                        <div class="display">
-                            <p>Day + Date<br />Timeslots</p>
-                        </div>
-                        <div class="display">
-                            <p>Day + Date<br />Timeslots</p>
+                @for ( int j = 0; j < Model.Item6.Count; j++)
+                {
+                    <div class="member_reservations">
+                        <h2>@Model.Item6[j].PersonName</h2>
+                        <div class="line"></div>
+                        <div class="reservation_displays">
+                            @* 1 display = 1 day of reservations --> use implementation at home screen (no remove button)*@
+                            @foreach (Reservation res in Model.Item5[j])
+                            {
+                                <div class="display">
+                                    <p>@res.Date<br />@res.Timeslot.TimeStart - @res.Timeslot.TimeEnd</p>
+                                </div>
+                            }
                         </div>
                     </div>
-                </div>
+                }
+
             </div>
         </div>
     </div>

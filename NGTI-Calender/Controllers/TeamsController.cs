@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,8 @@ namespace NGTI_Calender.Controllers {
         }
 
         // GET: Team
-        public IActionResult Index(string personId) {
-            var tuple = Tuple.Create(personId, _context.Person.ToList());
+        public IActionResult Index(string personId, Reservation[][] reservations, List<Person> personList) {
+            var tuple = Tuple.Create(personId, _context.Person.ToList(), _context.Teams.ToList(), _context.TeamMember.ToList(), reservations, personList);
             return View(tuple);
         }
 
@@ -37,17 +38,94 @@ namespace NGTI_Calender.Controllers {
             return View(team);
         }
 
-        // GET: Team/Create
-        public IActionResult Create() {
-            return View();
+        public async Task<IActionResult> show_team(string PersonId, string TeamId)
+        {
+            int i = 0;
+            List<Person> PersonList = new List<Person>();
+            foreach (TeamMember tm in _context.TeamMember.ToList())
+            {
+                if (tm.TeamId.ToString() == TeamId)
+                {
+                    i++;
+                    foreach (Person p in _context.Person.ToList())
+                    {
+                        if (p.PersonId == tm.PersonId)
+                        {
+                            PersonList.Add(p);
+                        }
+                    }
+
+                }
+            }
+            Reservation[][] reservations = new Reservation[i][];
+            int c = 0;
+            foreach (TeamMember tm2 in _context.TeamMember.ToList())
+            {
+                if( c < i)
+                {
+
+                
+                int p = 0;
+                reservations[c] = new Reservation[GetAmount(tm2)];
+                foreach (Reservation res in _context.Reservation.ToList())
+                {
+                    string[] s = res.Date.Split("-");
+                    if (s[0].Length != 2)
+                    {
+                        s[0] = "0" + s[0];
+                    }
+                    if (s[1].Length != 2)
+                    {
+                        s[1] = "0" + s[1];
+                    }
+                    string s2 = s[0] + "/" + s[1] + "/" + s[2];
+                    DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    if  (dt >= DateTime.Today && res.PersonId == tm2.PersonId)
+                    {
+                        reservations[c][p] = res;
+                        p++;
+                    }
+                }
+                }
+                c++;
+            }
+            return RedirectToAction("Index", new { personId = PersonId, reservations = reservations, personList = PersonList });
         }
+
+        public int GetAmount(TeamMember tm)
+        {
+            int t = 0;
+            foreach (Reservation res in _context.Reservation.ToList())
+            {
+                string[] s = res.Date.Split("-");
+                if (s[0].Length != 2)
+                {
+                    s[0] = "0" + s[0];
+                }
+                if (s[1].Length != 2)
+                {
+                    s[1] = "0" + s[1];
+                }
+                string s2 = s[0] + "/" + s[1] + "/" + s[2];
+                DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                if (dt >= DateTime.Today && res.PersonId == tm.PersonId)
+                {
+                    t++;
+                }
+            }
+            return t;
+                
+        }
+
+        // GET: Team/Create
+
 
         // POST: Team/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team, int[] selectedPersons) {
+        public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team, int[] selectedPersons, string PersonId) {
             if (ModelState.IsValid) {
                 _context.Teams.Add(team);
                 await _context.SaveChangesAsync();
@@ -55,9 +133,9 @@ namespace NGTI_Calender.Controllers {
                     _context.TeamMember.Add(new TeamMember() { TeamId = team.TeamId, PersonId = id });
                     await _context.SaveChangesAsync();
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new {PersonId });
             }
-            return View(team);
+            return RedirectToAction("Index", new {PersonId });
         }
 
         public void AddMembers(int teamId, int personId) {
