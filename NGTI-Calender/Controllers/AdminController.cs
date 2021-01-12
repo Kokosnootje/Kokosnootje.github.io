@@ -143,7 +143,7 @@ namespace NGTI_Calender.Controllers {
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", new { personId = personId });
         }
-        public static void SendMail(string date, string timeStart, string timeEnd, string email) {
+        public static void SendMail(string date, string timeStart, string timeEnd, string email, string reason = "") {
             // Server settings
             SmtpClient SmtpServer = new SmtpClient();
             SmtpServer.Port = 587;
@@ -158,7 +158,7 @@ namespace NGTI_Calender.Controllers {
             mail.From = new MailAddress("mailcinemaconfirmation@gmail.com");
             mail.To.Add(new MailAddress(email));
             mail.Subject = "Your reservation has been canceled.";
-            mail.Body = "Your reservation for:\n" + date + "\n" + timeStart + "-" + timeEnd + "\nhas been canceled.";
+            mail.Body = "Your reservation for:\n" + date + "\n" + timeStart + "-" + timeEnd + "\nhas been canceled.\n" + reason;
             
             SmtpServer.Send(mail);
         }

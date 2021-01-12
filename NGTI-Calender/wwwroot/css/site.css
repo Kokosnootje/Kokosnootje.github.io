@@ -229,7 +229,7 @@ body, div, h1, h3 {
     background-color: #444444;
 }
 .overview_page .day_block .timeslots {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     height: 19vh;
 }
@@ -354,7 +354,7 @@ body, div, h1, h3 {
 }
 .overview_page .upcoming_reservations .reservation_displays {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 20vh;
     margin-left: 10px;
 }
@@ -424,7 +424,7 @@ body, div, h1, h3 {
 }
 .teams_page .team_selection_scroll {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .teams_page .team_selection {
     width: 30vw;
@@ -464,12 +464,12 @@ body, div, h1, h3 {
 }
 .teams_page .team_reservations .all_members {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 74vh;
 }
 .teams_page .reservation_displays {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     width: inherit;
     background-color: #444;
     height: 17vh;
@@ -531,7 +531,7 @@ body, div, h1, h3 {
 }
 
 .reserve_page .timeslot_selection {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     height: 35vh
 }
@@ -667,7 +667,7 @@ body, div, h1, h3 {
 }
 .admin_page .teams .person_selection {
     width: 12vw;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 7.5vh;
     float: right;
 }
@@ -691,7 +691,7 @@ body, div, h1, h3 {
     height: 71vh;
     margin: 9vh 0.5vw 0 0.5vw;
     background-color: #444;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 .admin_page .timeslots {
@@ -713,8 +713,8 @@ body, div, h1, h3 {
     font-size: 4vh;    
 }
 
-.admin_page .timeslots .timeslot_config{
-    overflow-y: scroll;
+.admin_page .timeslots .timeslot_config {
+    overflow-y: auto;
     overflow-x: hidden;
     height: 42vh;
     background-color: #444444;
@@ -782,16 +782,47 @@ body, div, h1, h3 {
 .admin_page .employees h1 {
     font-size: 4vh;
 }
-.admin_page .employees .employee_config{
-    overflow-x: hidden;
-    overflow-y: scroll;
-    width: 30vw;
+.admin_page .employees #name {
+    float: left;
+    margin-left: 1vw;
+}
+.admin_page .employees #role {
+    float: right;
+    margin-right: 8vw;
+}
+.admin_page .employees .e_container{
+    width: inherit;
     height: 23vh;
     background-color: #444444;
 }
-.admin_page .employees .employee_config h1 {
+.admin_page .employees .employee_config {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 18vh;
+}
+.admin_page .employees .e_container h1 {
     color: #D5BFAA;
     text-decoration: underline;
+}
+.admin_page .employees .nameList, .admin_page .employees .RoleList {
+    color: #D5BFAA;
+}
+.admin_page .employees .nameList p {
+    margin: 0;
+}
+.admin_page .role_section {
+    color: #D5BFAA;
+}
+.admin_page .role_section label {
+    margin: 0;
+    user-select: none;
+}
+.admin_page .e_container button {
+    height:3.5vh;
+    float: right;
+    background-color: #444;
+    color: #D5BFAA;
+    border-color: #D5BFAA;
 }
 .admin_page .workplaces {
     float: right;
@@ -817,10 +848,6 @@ body, div, h1, h3 {
 .admin_page .left_side, .admin_page .right_side {
     width: 12.9vw;
     margin: 0.5vh 0 0 1vw;
-    height: 22.5vh;
-}
-.admin_page .nameList, .admin_page .RoleList {
-    height: 17vh;
 }
 
 .admin_page .workplace_config {
@@ -867,6 +894,9 @@ body, div, h1, h3 {
     *::-webkit-scrollbar {
         width: 2px;
     }
+    .container {
+        font-size: 2vh;
+    }
     /*LOGIN PAGE*/
     .login_page h1, .login_page #ngti_logo {
         font-size: 9vh;
@@ -901,7 +931,10 @@ body, div, h1, h3 {
     }
     .overview_page .day_block button {
         width: 16.4vw;
-        font-size: 0.5em;
+        font-size: 0.44em;
+    }
+    .overview_page .day_block h3 {
+        font-size: 1.8vh;
     }
     .overview_page .day_block button .TSS_availability {
         height: 2vh;
@@ -912,7 +945,7 @@ body, div, h1, h3 {
     .overview_page .selected_timeslot {
         width: 45vw;
         height: 31vh;
-        overflow-y: scroll;
+        overflow-y: auto;
         overflow-x: hidden;
     } 
     .overview_page .selected_timeslot h1 {
@@ -944,9 +977,6 @@ body, div, h1, h3 {
     .overview_page .upcoming_reservations .reservation_displays {
         height: 22vh;
     }
-    .overview_page .upcoming_reservations .reservation_displays .display .button {
-        
-    }
     .overview_page .upcoming_reservations .reservation_displays .display .timeslots_of_res {
         height: 10vh;
     }
@@ -970,7 +1000,7 @@ body, div, h1, h3 {
     }
     .teams_page .team_selection .member_showcase {
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: auto;
         width: 40vw;
     }
     .teams_page .team_display {
@@ -1044,7 +1074,7 @@ body, div, h1, h3 {
     }
     .reserve_page .team_selection {
         height: 25vh;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
     .reserve_page .right_side #reserve_button {
         margin: 10px;
@@ -1094,25 +1124,35 @@ body, div, h1, h3 {
     }
     .admin_page .employees {
         width: 62vw;
-        height: 25vh;
+        height: 22vh;
     }
     .admin_page .employees h1 {
-        font-size: 3vh;
+        font-size: 2.5vh;
+    }
+    .admin_page .employees .nameList p {
+        font-size: 1.8vh;
+        margin-top: 1vh;
+    }
+    .admin_page .role_section label {
+        font-size: 1.5vh;
+    }
+    .admin_page .employees .e_container{
+        width: inherit;
+        height: 19vh;
     }
     .admin_page .employees .employee_config {
-        width: 62vw;
-        height: 20vh;
+        height: 14vh;
     }
     .admin_page .left_side, .admin_page .right_side {
         width: 28vw;
-        height: 19.5vh;
-    }
-    .admin_page .employees .nameList, .admin_page .RoleList {
-        height: 16vh;
+        height: 13.5vh;
     }
     .admin_page .workplaces {
         margin-top: 2vh;
         width: 29vw;
+    }
+    .admin_page .workplaces h1 {
+        font-size: 2.5vh;
     }
     .admin_page .workplace_config form {
         background-color: #444;
