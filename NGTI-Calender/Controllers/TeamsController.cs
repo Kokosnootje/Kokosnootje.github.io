@@ -18,8 +18,8 @@ namespace NGTI_Calender.Controllers {
         }
 
         // GET: Team
-        public IActionResult Index(string personId, Reservation[][] reservations, List<Person> personList) {
-            var tuple = Tuple.Create(personId, _context.Person.ToList(), _context.Teams.ToList(), _context.TeamMember.ToList(), reservations, personList);
+        public IActionResult Index(string personId, string[] reservations, string[] timeslots, List<string> personList) {
+            var tuple = Tuple.Create(personId, _context.Person.ToList(), _context.Teams.ToList(), _context.TeamMember.ToList(), reservations, timeslots, personList);
             return View(tuple);
         }
 
@@ -41,7 +41,7 @@ namespace NGTI_Calender.Controllers {
         public async Task<IActionResult> show_team(string PersonId, string TeamId)
         {
             int i = 0;
-            List<Person> PersonList = new List<Person>();
+            List<string> PersonList = new List<string>();
             foreach (TeamMember tm in _context.TeamMember.ToList())
             {
                 if (tm.TeamId.ToString() == TeamId)
@@ -51,45 +51,54 @@ namespace NGTI_Calender.Controllers {
                     {
                         if (p.PersonId == tm.PersonId)
                         {
-                            PersonList.Add(p);
+                            PersonList.Add(p.PersonName);
                         }
                     }
 
                 }
             }
-            Reservation[][] reservations = new Reservation[i][];
+            string[] reservations = new string[i];
+            string[] timeslots = new string[i];
             int c = 0;
             foreach (TeamMember tm2 in _context.TeamMember.ToList())
             {
                 if( c < i)
-                {
+                    {
 
                 
-                int p = 0;
-                reservations[c] = new Reservation[GetAmount(tm2)];
-                foreach (Reservation res in _context.Reservation.ToList())
-                {
-                    string[] s = res.Date.Split("-");
-                    if (s[0].Length != 2)
+                    int p = 0;
+                    string s3 = "";
+                    string s4 = "";
+                    foreach (Reservation res in _context.Reservation.ToList())
                     {
-                        s[0] = "0" + s[0];
+                        string[] s = res.Date.Split("-");
+                        if (s[0].Length != 2)
+                        {
+                            s[0] = "0" + s[0];
+                        }
+                        if (s[1].Length != 2)
+                        {
+                            s[1] = "0" + s[1];
+                        }
+                        string s2 = s[0] + "/" + s[1] + "/" + s[2];
+                        DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        if  (dt >= DateTime.Today && res.PersonId == tm2.PersonId)
+                        {
+                            foreach(var ts in _context.Timeslot.ToList()) {
+                                if(ts.TimeslotId == res.TimeslotId) {
+                                    s4 += ts.TimeStart + "-" + ts.TimeEnd + "|";
+                                }
+                            }
+                            s3 += res.Date + "|";
+                            p++;
+                        }
                     }
-                    if (s[1].Length != 2)
-                    {
-                        s[1] = "0" + s[1];
+                    reservations[c] = s3;
+                    timeslots[c] = s4;
                     }
-                    string s2 = s[0] + "/" + s[1] + "/" + s[2];
-                    DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    if  (dt >= DateTime.Today && res.PersonId == tm2.PersonId)
-                    {
-                        reservations[c][p] = res;
-                        p++;
-                    }
-                }
-                }
                 c++;
             }
-            return RedirectToAction("Index", new { personId = PersonId, reservations = reservations, personList = PersonList });
+            return RedirectToAction("Index", new { personId = PersonId, reservations = reservations, timeslots = timeslots, personList = PersonList });
         }
 
         public int GetAmount(TeamMember tm)

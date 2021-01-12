@@ -1,4 +1,4 @@
-﻿@model Tuple<string, List<Person>,  List<Team>, List<TeamMember>, Reservation[][], List<Person>>
+﻿@model Tuple<string, List<Person>,  List<Team>, List<TeamMember>, string[], string[], List<string>>
 @{
     ViewData["Title"] = "Admin Dashboard";
     ViewData["ID Reserve"] = "null";
@@ -18,6 +18,15 @@
             }
         }
         return "./img/NGTI Logo.png";
+    }
+
+    string[][] day_array = new string[Model.Item7.Count][];
+    for(int k = 0; k < Model.Item5.Length; k++) {
+        day_array[k] = Model.Item5[k].Split("|", options: StringSplitOptions.RemoveEmptyEntries);
+    }
+    string[][] ts_array = new string[Model.Item7.Count][];
+    for (int k = 0; k < Model.Item6.Length; k++) {
+        ts_array[k] = Model.Item6[k].Split("|", options: StringSplitOptions.RemoveEmptyEntries);
     }
 }
 
@@ -124,17 +133,17 @@
             <h1>Team Reservations</h1>
             <div class="all_members">
                 @* load reservations for each member - 1 div per member*@
-                @for ( int j = 0; j < Model.Item6.Count; j++)
+                @for ( int j = 0; j < Model.Item7.Count; j++)
                 {
                     <div class="member_reservations">
-                        <h2>@Model.Item6[j].PersonName</h2>
+                        <h2>@Model.Item7[j]</h2>
                         <div class="line"></div>
                         <div class="reservation_displays">
                             @* 1 display = 1 day of reservations --> use implementation at home screen (no remove button)*@
-                            @foreach (Reservation res in Model.Item5[j])
+                            @for(int q = 0; q < day_array[j].Length; q++)
                             {
                                 <div class="display">
-                                    <p>@res.Date<br />@res.Timeslot.TimeStart - @res.Timeslot.TimeEnd</p>
+                                    <p>@day_array[j][q]<br />@ts_array[j][q]</p>
                                 </div>
                             }
                         </div>
