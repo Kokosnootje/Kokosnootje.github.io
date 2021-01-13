@@ -183,6 +183,8 @@ namespace NGTI_Calender.Controllers
             }
             else
             {
+                Popup popup2 = new Popup();
+                popup2.popupMessage = "The following reservation have been made:||";
                 // The person places a reservation for him/her and a team.
                 // -----------
                 // Get the selected team
@@ -251,7 +253,7 @@ namespace NGTI_Calender.Controllers
                                         //Check for existing reservations / double reservations / enough space.
                                         if (DoubleReservation(revList[j][i].PersonId, revList[j][i]) && EnoughFreeSpaces(revList[j][i])) {
                                             Calender(revList[j][i]);
-                                            //popup.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
+                                            popup2.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
                                             _context.Add(revList[j][i]);
                                             await _context.SaveChangesAsync();
                                         }
@@ -269,10 +271,8 @@ namespace NGTI_Calender.Controllers
                         }
                     }
                 }
-                Popup popup = new Popup();
-                //popup.popupMessage = "The following reservation have been made:||";
                 var AmountRes = AmountReservedPlaces();
-                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, Tuple.Create(_context.Seats.ToList()[0].places, _context.Teams.ToList(), _context.TeamMember.ToList()));
+                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup2, personId, _context.Person.ToList(), AmountRes, Tuple.Create(_context.Seats.ToList()[0].places, _context.Teams.ToList(), _context.TeamMember.ToList()));
                 return View(tuple);
             }
         }
