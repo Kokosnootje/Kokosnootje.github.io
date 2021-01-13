@@ -105,47 +105,6 @@ namespace NGTI_Calender.Controllers {
                 timeslots[c] = s4;
                 c++;
             }
-            //string[] reservations = new string[i];
-            //string[] timeslots = new string[i];
-            //int c = 0;
-            //foreach (TeamMember tm2 in _context.TeamMember.ToList())
-            //{
-            //    if( c < i)
-            //        {
-
-
-            //        int p = 0;
-            //        string s3 = "";
-            //        string s4 = "";
-            //        foreach (Reservation res in _context.Reservation.ToList())
-            //        {
-            //            string[] s = res.Date.Split("-");
-            //            if (s[0].Length != 2)
-            //            {
-            //                s[0] = "0" + s[0];
-            //            }
-            //            if (s[1].Length != 2)
-            //            {
-            //                s[1] = "0" + s[1];
-            //            }
-            //            string s2 = s[0] + "/" + s[1] + "/" + s[2];
-            //            DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            //            if  (dt >= DateTime.Today && res.PersonId == tm2.PersonId)
-            //            {
-            //                foreach(var ts in _context.Timeslot.ToList()) {
-            //                    if(ts.TimeslotId == res.TimeslotId) {
-            //                        s4 += ts.TimeStart + "-" + ts.TimeEnd + "|";
-            //                    }
-            //                }
-            //                s3 += res.Date + "|";
-            //                p++;
-            //            }
-            //        }
-            //        reservations[c] = s3;
-            //        timeslots[c] = s4;
-            //        }
-            //    c++;
-            //}
             return RedirectToAction("Index", new { personId = PersonId, reservations = reservations, timeslots = timeslots, personList = PersonStringList });
         }
 
