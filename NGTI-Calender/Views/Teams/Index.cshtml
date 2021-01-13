@@ -42,7 +42,7 @@
             <form asp-action="Create">
                 <button id="create_button" type="submit">Add team</button>
                 <input type="hidden" value="@Model.Item1" name="PersonId"/>
-                <input id="teamname" type="text" name="TeamName" placeholder="TeamName" />
+                <input id="teamname" type="text" maxlength="20" name="TeamName" placeholder="TeamName" />
                 <div class="person_selection">
                     @{
                         int i = 0;
@@ -63,16 +63,32 @@
                         foreach (TeamMember tm in Model.Item4) {
                             if (Model.Item1 == tm.PersonId.ToString() && tm.TeamId == team.TeamId) {
                                 <div class="team">
-                                    <form asp-action="show_team">
-                                        <button>@team.TeamName</button>
-                                        <input type="hidden" value="@Model.Item1" name="PersonId" />
-                                        <input type="hidden" value="@team.TeamId" name="TeamId" />
-                                    </form>
+                                    <div class="TN">
+                                        <form asp-action="show_team">
+                                            <button id="show_team">@team.TeamName</button>
+                                            <input type="hidden" value="@Model.Item1" name="PersonId" />
+                                            <input type="hidden" value="@team.TeamId" name="TeamId" />
+                                        </form>
+                                        <form asp-action="DeleteTeam">
+                                            <input type="hidden" name="teamId" value=@team.TeamId />
+                                            <input type="hidden" name="personId" value="@Model.Item1" />
+                                            <button id="delete_button" type="submit">X</button>
+                                        </form>
+                                    </div>
                                     @foreach (TeamMember tm2 in Model.Item4) {
                                         if (tm2.TeamId == team.TeamId) {
                                             foreach (Person p in Model.Item2) {
                                                 if (p.PersonId == tm2.PersonId) {
-                                                    <p>@p.PersonName</p>
+                                                    <div class="person">
+                                                        <p>@p.PersonName</p>
+                                                        <form asp-action="DeleteTeamMember">
+
+                                                            <input type="hidden" name="teamId" value=@tm2.TeamId />
+                                                            <input type="hidden" name="rmpersonId" value="@tm2.PersonId" />
+                                                            <input type="hidden" name="personId" value="@Model.Item1" />
+                                                            <button id="delete_button" type="submit">X</button>
+                                                        </form>
+                                                    </div>
                                                 }
                                             }
                                         }

@@ -61,7 +61,8 @@ namespace NGTI_Calender.Controllers {
             return RedirectToAction("Index", new { personId = personId, message = "An error has occured." });
         }
 
-        public async Task<IActionResult> DeleteTeamMember(string teamId, string personId)
+        [HttpPost]
+        public async Task<IActionResult> DeleteTeamMember(string teamId, string personId, string rmpersonId)
         {
             foreach (Team team in _context.Teams.ToList())
             {
@@ -71,11 +72,11 @@ namespace NGTI_Calender.Controllers {
                     {
                         foreach(Person person in _context.Person.ToList())
                         {
-                            if (tm.PersonId.ToString() == personId)
+                            if (tm.PersonId.ToString() == rmpersonId)
                             {
                                 _context.TeamMember.Remove(tm);
                                 await _context.SaveChangesAsync();
-                                return RedirectToAction("Index", new { personId = personId, message = "The Teammember has been removed." });
+                                return RedirectToAction("Index", new { personId = personId });
                             }
                         }
                     }
@@ -83,7 +84,8 @@ namespace NGTI_Calender.Controllers {
             }
             return RedirectToAction("Index", new { message = "An error has occured." });
 
-            }
+        }
+        [HttpPost]
         public async Task<IActionResult> DeleteTeam(string teamId, string personId)
         {
             foreach (Team team in _context.Teams.ToList())
@@ -92,7 +94,7 @@ namespace NGTI_Calender.Controllers {
                 {
                     _context.Teams.Remove(team);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Index", new { personId = personId, message = "The Team has been removed." });
+                    return RedirectToAction("Index", new { personId = personId });
 
                 }
             }
