@@ -1,8 +1,78 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = null;
 }
+@model IEnumerable<NGTI_Calender.Models.Person>
+    @using System.Collections.Generic;
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="./css/site.css" type="text/css" rel="stylesheet" />
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google-signin-client_id" content="835750252333-i1ekg7hg1tkl6nevitme4uem0fl16de4.apps.googleusercontent.com">
+    </head>
+    <body>
+        <div class="login_page">
+            <div class="centered_div_hv">
+                <h1>WELC<img id="ngti_logo" src="img/NGTI Logo.png" />ME</h1>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+                <div id="my-signin2" style="position:relative; left:41%;"></div>
+                <script>
+                    function onSuccess(googleUser) {
+                    //Get Google User Profile
+                    var profile = googleUser.getBasicProfile();
+                    //Create payload which will be sent to the controller
+                    const payload = {
+                        PersonName: profile.getName(),
+                        EMail: profile.getEmail(),
+                        Image: profile.getImageUrl()
+                    }
+                    //Fetch payload to controller 'User'
+                    fetch('/api/user/get-details-from-google', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    }).then(response => response.json())
+                        .then(data => {
+                            location.href = '@Url.Action("Index", "Reservation")?personId=' + data.personId
+                        })
+
+                    //window.location.href = "//Url.Action("Index", "Reservation")"
+                }
+                    function onFailure(error) {
+                        console.log(error);
+                    }
+                    function renderButton() {
+                        gapi.signin2.render('my-signin2', {
+                            'scope': 'profile email',
+                        'width': 300,
+                        'height': 60,
+                        'longtitle': true,
+                        'theme': 'light',
+                        'font-size': 10,
+                        'onsuccess': onSuccess,
+                        'onfailure': onFailure
+                        });
+                    }
+                    function responsive(x) {
+                        if (x.matches) {
+                        } else {
+
+                        }
+                    }
+
+                    var x = window.matchMedia("(max-width: 640px)")
+                responsive(x)
+
+                </script>
+
+                <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,219 @@
+﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>, int[][], Tuple<int, List<Team>, List<TeamMember>>>
+@{
+    //Create viewdata to easily pass data from one page to another without the use of the controller.
+    ViewData["Title"] = "Reserve";
+    ViewData["ID Reserve"] = "current_page";
+    ViewData["ID Overview"] = "null";
+    ViewData["ID Team"] = "null";
+    ViewData["ID Admin Dashboard"] = "null";
+    ViewData["ProfilePicture"] = GetProfilePicture(Model.Item4);
+    ViewData["PersonId"] = Model.Item4;
+
+    //This function returns the profile picture of the person who is logged in.
+    string GetProfilePicture(string personId)
+    {
+        foreach (var item in Model.Item5)
+        {
+            if (personId == item.PersonId.ToString())
+            {
+                return item.Image;
+            }
+        }
+        return "./img/NGTI Logo.png";
+    }
+
+
+    //This function returns the amount of total seats which are available to reserve.
+    string getAmountOfPlaces(int selectedDay)
+    {
+        string s = "";
+        foreach (var item in Model.Item6[selectedDay])
+        {
+            s += item.ToString() + "-";
+        }
+        return s;
+    }
+
+    //This function selects all the days of a workweek and returns the day itself + date. 
+    static string[][] SelectDaysOfWeeks()
+    {
+        string[] daysOfWeekCalenderDays = new string[10];
+        string[] daysOfWeeksCalender = new string[10];
+        DateTime lastDay = DateTime.Now;
+        for (int i = 0; i < 10; i++)
+        {
+            if (lastDay.DayOfWeek == DayOfWeek.Saturday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(2.0).ToShortDateString();
+                lastDay = lastDay.AddDays(3.0);
+            }
+            else if (lastDay.DayOfWeek == DayOfWeek.Sunday)
+            {
+                daysOfWeekCalenderDays[i] = "Mon.";
+                daysOfWeeksCalender[i] = lastDay.AddDays(1.0).ToShortDateString();
+                lastDay = lastDay.AddDays(2.0);
+
+            }
+            else
+            {
+                if (lastDay.DayOfWeek == DayOfWeek.Monday)
+                {
+                    daysOfWeekCalenderDays[i] = "Mon.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                if (lastDay.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    daysOfWeekCalenderDays[i] = "Tue.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Wednesday)
+                {
+                    daysOfWeekCalenderDays[i] = "Wed.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Thursday)
+                {
+                    daysOfWeekCalenderDays[i] = "Thu.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+                else if (lastDay.DayOfWeek == DayOfWeek.Friday)
+                {
+                    daysOfWeekCalenderDays[i] = "Fri.";
+                    daysOfWeeksCalender[i] = lastDay.ToShortDateString();
+                    lastDay = lastDay.AddDays(1.0);
+                }
+
+            }
+        }
+        return new[] { daysOfWeekCalenderDays, daysOfWeeksCalender };
+
+    }
+    var calender = SelectDaysOfWeeks();
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link href="./css/site.css" type="text/css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    <div class="reserve_page">
+        <form asp-action="Index">
+            <div class="left_side">
+                <h1>Select date + timeslot:</h1>
+                <div id="line1"></div>
+                <!--DATE SELECTION-->
+                <div class="date_selection">
+                    @{
+                        //Create all circles with the dates and days
+                        for (int k = 0; k < 10; k++)
+                        {
+                            string allResPlaces = getAmountOfPlaces(k);
+                            <label asp-for="Item1.Date" class="date_placeholder" for="CB@(k + 1)" id="L@(k + 1)">@calender[0][k] <br> @calender[1][k]</label>
+                            <input asp-for="Item1.Date" value="@calender[1][k]" type="checkbox" name="selectedObjects" id="CB@(k + 1)" onclick="changeColor('CB@(k + 1)', 'L@(k + 1)', '#D5BFAA', '#444444', @Model.Item2.Count, '@allResPlaces')" />
+                        }
+                    }
+                </div>
+                <!--TIMESLOT SELECTION-->
+                <div class="timeslot_selection">
+                    @{
+                        //Create all timeslots to be selected
+                        int i = 1;
+                        foreach (var item in Model.Item2)
+                        {
+                            string[] abc = new string[3];
+                            abc[0] = item.TimeslotId.ToString();
+                            abc[1] = item.TimeStart;
+                            abc[2] = item.TimeEnd;
+
+                            <div class="timeslot">
+                                <input value="@item.TimeslotId" type="checkbox" name="selectedTimeslots" id="TS@(i)" />
+                                <label for="TS@(i)">
+                                    @item.TimeStart-@item.TimeEnd
+                                    <div id="TS@(i)_slot_availability" class="slot_availability"><p>@Model.Item7.Item1.ToString()</p></div>
+                                </label>
+                            </div>
+                            i++;
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="right_side">
+                <div class="select_team">
+                    <h1>Select Team(s)</h1>
+                    <div id="line2"></div>
+                    <div class="team_selection">
+                        @{
+                            int bob = 0;
+                            foreach (Team team in @Model.Item7.Item2) {
+                                <div class="team">
+                                    <div class="teamLI">
+                                        <input value="@team.TeamId" type="checkbox" name="selectedTeams" id="TCB@(bob + 1)" />
+                                        <label for="TCB@(bob + 1)">@team.TeamName</label>
+                                    </div>
+                                    @foreach (TeamMember tm2 in Model.Item7.Item3) {
+                                        if (tm2.TeamId == team.TeamId) {
+                                            foreach (Person p in Model.Item5) {
+                                                if (p.PersonId == tm2.PersonId) {
+                                                    <p>@p.PersonName</p>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </div>
+                               bob++;
+                            }
+                        }
+                    </div>
+                </div>
+                <input type="hidden" name="personId" value="@Model.Item4">
+                <button type="submit" id="reserve_button">RESERVE</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        if ("@Model.Item3.popupMessage" != "") {
+            var s = "@Html.Raw(Model.Item3.popupMessage)";
+            var s = s.split("|").join("\r");
+            var s = s.split("||").join("\n");
+            setTimeout(() =>  window.alert(s), 100);
+        }
+
+        function changeColor(checkboxID, labelID, originColor, checkedColor, amountOfTimeslots, theString) {
+            var checkBox = document.getElementById(checkboxID);
+            var stringArray = theString.split('-');
+            console.log(stringArray);
+            if (checkBox.checked == true) {
+                document.getElementById(labelID).style.color = checkedColor;
+                document.getElementById(labelID).style.backgroundColor = originColor;
+                var i;
+                for (i = 0; i < amountOfTimeslots; i++) {
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").innerHTML = stringArray[i] + " / " + "@(Model.Item7.Item1)";
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").style.backgroundColor = "#444";
+                }
+                @*for (int i = 0; i < @Model.Item2.Count; i++)
+                {
+                    document.getElementById("TS"+i.toString()+"_slot_availability").innerHTML = "Hallo";
+                }*@
+
+            } else {
+                document.getElementById(labelID).style.color = originColor;
+                document.getElementById(labelID).style.backgroundColor = checkedColor;
+                var i;
+                for (i = 0; i < amountOfTimeslots; i++) {
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").innerHTML = "";
+                    document.getElementById("TS" + (i + 1).toString() + "_slot_availability").style.backgroundColor = "#D5BFAA";
+
+                }
+            }
+        }
+    </script>
+</body>
+
