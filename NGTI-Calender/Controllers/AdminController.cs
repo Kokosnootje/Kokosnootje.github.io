@@ -18,7 +18,7 @@ namespace NGTI_Calender.Controllers {
 
         public IActionResult Index(string personId, string message = "") {
             Popup popup = new Popup() { popupMessage = message };
-            var tuple = Tuple.Create(_context.Timeslot.ToList(), popup, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Role.ToList());
+            var tuple = Tuple.Create(_context.Timeslot.ToList(), popup, _context.Person.ToList(), personId, _context.Seats.ToList()[0], _context.Role.ToList(), Tuple.Create(_context.Teams.ToList(), _context.TeamMember.ToList()));
             return View(tuple);
         }
 
@@ -60,7 +60,20 @@ namespace NGTI_Calender.Controllers {
             }
             return RedirectToAction("Index", new { personId = personId, message = "An error has occured." });
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team, int[] selectedPersons, string PersonId) {
+            if (ModelState.IsValid) {
+                _context.Teams.Add(team);
+                await _context.SaveChangesAsync();
+                foreach (var id in selectedPersons) {
+                    _context.TeamMember.Add(new TeamMember() { TeamId = team.TeamId, PersonId = id });
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction("Index", new { PersonId });
+            }
+            return RedirectToAction("Index", new { PersonId });
+        }
         //add timeslot to database
         [HttpPost]
         public async Task<IActionResult> AddTimeslot(string startTime, string endTime, string personId) {

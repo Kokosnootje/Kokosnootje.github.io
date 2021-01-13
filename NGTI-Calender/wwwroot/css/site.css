@@ -399,66 +399,69 @@ body, div, h1, h3 {
 
 /*----------------------------------------*/
 /* TEAMS PAGE */
-.teams_page h1 {
-    font-size: 2em;
+.teams_page .teams {
+    float: left;
+    width: 42vw;
+    height: 80vh;
+    margin-left: 4vw;
+    margin-top: 2vh;
+}
+.teams_page .teams .person_selection {
+    width: 12vw;
+    overflow-y: auto;
+    height: 7.5vh;
+    float: right;
+}
+.teams_page .teams #t_h1 {
+    float: left;
     margin-left: 1vw;
 }
-.teams_page .select_team, .teams_page .team_reservations {
-    margin: 2vh 0;
-    height: 80vh;
+.teams_page .teams form #teamname{
+    border-color:#444;
+    color: #444;
+    margin-left: 0.5vw;
+    margin-top: 3vh;
+    width: 11vw;
 }
-.teams_page .select_team {
+.teams_page .teams form #create_button {
+    float: right;
+    margin-top: 1.5vh;
+    height: 5.5vh;
+    background-color: white;
+    color: #444;
+    border: none;
+}
+.teams_page .teams form label {
+    font-size: 2vh; 
+}
+.teams_page .team_configuration {
+    width: 41vw;
+    height: 71vh;
+    margin: 1vh 0.5vw 0 0.5vw;
     background-color: #444;
-    width: 34vw;
-    float: left;
-    margin-left: 4vw;
-}
-.teams_page .select_team .line {
-    width: 34vw;
-    height: 1vh;
-    margin: 1vh 0 0 0;
-    background-color: #D5BFAA;
-}
-.teams_page .select_team h1 {
-    color: #D5BFAA;
-}
-.teams_page .team_selection_scroll {
-    overflow-x: hidden;
     overflow-y: auto;
+    overflow-x: hidden;
 }
-.teams_page .team_selection {
-    width: 30vw;
-    height: 70vh;
-    margin: 1vh 2vw;
+.teams_page .team {
+    width: 34vw;
+    margin: 2vh 4vw;
+    background-color: #d5bfaa;
+    padding: 1vh 0;
 }
-.teams_page .team_display {
-    width: inherit;
-    background-color: #D5BFAA;
-    margin-top: 1vh;
+.teams_page .team button {
+    background-color: #d5bfaa;
+    border-color: #444;
+    width: 32vw;
+    margin: 1vh 0 0 1vw;
+    text-decoration: underline;
 }
-.teams_page .team_selection button {
-    font-size: 3.5vh;
-    width: 28vw;
+.teams_page .team p {
+    border: 1px solid #444;
     margin: 1vh 1vw;
-    background-color: #D5BFAA;
-}
-.teams_page .team_selection .member_showcase {
-    width: 28vw;
-    margin: 0 1vw;
-    padding-bottom: 1vh;
-}
-.teams_page .team_selection .member {
-    font-size: 2.5vh;
-    border: 2px solid #444;
-    width: 28vw;
-    height: 4.5vh;
-    margin-bottom: 1vh;
-}
-.teams_page .team_selection .member p {
-    text-align: center;
+    padding: 0 0 0 1vw;
 }
 .teams_page .team_reservations {
-    width: 55vw;
+    width: 50vw;
     float: right;
     margin-right: 3vw;
 }
@@ -470,7 +473,7 @@ body, div, h1, h3 {
 .teams_page .reservation_displays {
     overflow-x: hidden;
     overflow-y: auto;
-    width: inherit;
+    width: 44vw;
     background-color: #444;
     height: 17vh;
 }
@@ -701,21 +704,31 @@ body, div, h1, h3 {
     overflow-y: auto;
     overflow-x: hidden;
 }
+.admin_page .team {
+    width: 34vw;
+    margin: 2vh 4vw;
+    background-color: #d5bfaa;
+    padding-bottom: 1vh;
+}
+.admin_page #teamName{
+    background-color: #d5bfaa;
+    border-color: #444;
+    width: 32vw;
+    margin: 1vh 0 0 1vw;
+    text-decoration: underline;
+    text-align: center;
+}
+.admin_page .team p {
+    border: 1px solid #444;
+    margin: 1vh 1vw;
+    padding: 0 0 0 1vw;
+}
 .admin_page .timeslots {
     float: right;
     width: 46vw;
     height: 50vh;
     margin-right: 4vw;
     margin-top: 2vh;
-}
-.admin_page .teams .line {
-    display: none;
-    height: 1vh;
-    width: 11vw;
-    background-color: black;
-    float: left;
-    margin-left: 0.5vw;
-    margin-top: 4vh;
 }
 .admin_page .timeslots h1{
     font-size: 4vh;    
@@ -1012,40 +1025,6 @@ body, div, h1, h3 {
         font-size: 1.4vh;
     }
     /* TEAMS PAGE */
-    .teams_page h1 {
-        font-size: 1.5em;
-    }
-    .teams_page .select_team, .teams_page .team_reservations {
-        height: 36vh;
-    }
-    .teams_page .select_team, .teams_page .select_team .line, .teams_page .team_reservations, .teams_page .member_reservations {
-        width: 92vw;
-    }
-    .teams_page .team_selection {
-        height: 27vh;
-        width: 88vw;
-    }
-    .teams_page .team_selection .member_showcase {
-        overflow-x: hidden;
-        overflow-y: auto;
-        width: 40vw;
-    }
-    .teams_page .team_display {
-        width: 42vw;
-        height: 26vh;
-        float: left;
-        margin-right: 2vw;
-    }
-    .teams_page .team_selection_scroll {
-        height: 29vh;
-    }
-    .teams_page .team_selection button {
-        font-size: 2.5vh;
-        width: 40vw;
-    }
-    .teams_page .team_selection .member {
-        width: 40vw;
-    }
     .teams_page .reservation_displays {
         height: 14vh;
     }
