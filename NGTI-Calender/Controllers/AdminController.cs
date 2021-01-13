@@ -60,6 +60,45 @@ namespace NGTI_Calender.Controllers {
             }
             return RedirectToAction("Index", new { personId = personId, message = "An error has occured." });
         }
+
+        public async Task<IActionResult> DeleteTeamMember(string teamId, string personId)
+        {
+            foreach (Team team in _context.Teams.ToList())
+            {
+                foreach(TeamMember tm in _context.TeamMember.ToList())
+                {
+                    if (tm.TeamId.ToString() == teamId)
+                    {
+                        foreach(Person person in _context.Person.ToList())
+                        {
+                            if (tm.PersonId.ToString() == personId)
+                            {
+                                _context.TeamMember.Remove(tm);
+                                await _context.SaveChangesAsync();
+                                return RedirectToAction("Index", new { personId = personId, message = "The Teammember has been removed." });
+                            }
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("Index", new { message = "An error has occured." });
+
+            }
+        public async Task<IActionResult> DeleteTeam(string teamId, string personId)
+        {
+            foreach (Team team in _context.Teams.ToList())
+            {
+                if (teamId == team.TeamId.ToString())
+                {
+                    _context.Teams.Remove(team);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", new { personId = personId, message = "The Team has been removed." });
+
+                }
+            }
+            return RedirectToAction("Index", new { message = "An error has occured." });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team, int[] selectedPersons, string PersonId) {
