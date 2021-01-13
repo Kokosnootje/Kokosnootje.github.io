@@ -86,27 +86,28 @@
             </div>
         </div>
         <div class="team_reservations">
-            <h1>Team Reservations</h1>
-            <div class="all_members">
-                @* load reservations for each member - 1 div per member*@
-                @for ( int j = 0; j < Model.Item7.Count; j++)
-                {
-                    <div class="member_reservations">
-                        <h2>@Model.Item7[j]</h2>
-                        <div class="line"></div>
-                        <div class="reservation_displays">
-                            @* 1 display = 1 day of reservations --> use implementation at home screen (no remove button)*@
-                            @for(int q = 0; q < day_array[j].Length; q++)
-                            {
-                                <div class="display">
-                                    <p>@day_array[j][q]<br />@ts_array[j][q]</p>
+            @{
+                if (Model.Item5.Length != 0)  {
+                    <h1>Team Reservations</h1>
+                    <div class="all_members">
+                        @* load reservations for each member - 1 div per member*@
+                        @for (int j = 0; j < Model.Item7.Count; j++) {
+                            <div class="member_reservations">
+                                <h2>@Model.Item7[j]</h2>
+                                <div class="line"></div>
+                                <div class="reservation_displays">
+                                    @* 1 display = 1 day of reservations --> use implementation at home screen (no remove button)*@
+                                    @for (int q = 0; q < day_array[j].Length; q++) {
+                                        <div class="display">
+                                            <p>@day_array[j][q]<br />@ts_array[j][q]</p>
+                                        </div>
+                                    }
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        }
                     </div>
                 }
-
-            </div>
+            }
         </div>
     </div>
 </body>

@@ -144,20 +144,32 @@
                 <div class="select_team">
                     <h1>Select Team(s)</h1>
                     <div id="line2"></div>
-                    <div class="team_selection"></div>
-                    @{
-                        int bob = 0;
-                        foreach (Team team in @Model.Item7.Item2)
-                        {
-                            <label name="">@team.TeamName</label>    
-                            <input value="@team.TeamId" type="checkbox" name="selectedTeams" id="TCB@(bob + 1)" />
+                    <div class="team_selection">
+                        @{
+                            int bob = 0;
+                            foreach (Team team in @Model.Item7.Item2) {
+                                <div class="team">
+                                    <div class="teamLI">
+                                        <input value="@team.TeamId" type="checkbox" name="selectedTeams" id="TCB@(bob + 1)" />
+                                        <label for="TCB@(bob + 1)">@team.TeamName</label>
+                                    </div>
+                                    @foreach (TeamMember tm2 in Model.Item7.Item3) {
+                                        if (tm2.TeamId == team.TeamId) {
+                                            foreach (Person p in Model.Item5) {
+                                                if (p.PersonId == tm2.PersonId) {
+                                                    <p>@p.PersonName</p>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </div>
+                               bob++;
+                            }
                         }
-                    }
+                    </div>
                 </div>
                 <input type="hidden" name="personId" value="@Model.Item4">
-                <button id="reserve_button">BACK</button>
                 <button type="submit" id="reserve_button">RESERVE</button>
-                <a href="https://mail.google.com/mail/u/0/?logout&hl=en">Sign out</a>
             </div>
         </form>
     </div>

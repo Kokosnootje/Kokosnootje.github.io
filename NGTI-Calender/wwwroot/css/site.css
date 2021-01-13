@@ -648,8 +648,42 @@ body, div, h1, h3 {
 .reserve_page .team_selection {
     width: 100%;
     height: 55vh;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
+.reserve_page .team .teamLI {
+    margin-left: 1vw;
+    padding-top: 1vh;
+}
+.reserve_page .team_configuration {
+    width: 41vw;
+    height: 71vh;
+    margin: 1vh 0.5vw 0 0.5vw;
+    background-color: #444;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.reserve_page .team {
+    width: 42vw;
+    margin: 2vh 2vw;
+    background-color: #d5bfaa;
+    padding-bottom: 1vh;
+}
+
+.reserve_page #teamName {
+    background-color: #d5bfaa;
+    border-color: #444;
+    width: 32vw;
+    margin: 1vh 0 0 1vw;
+    text-decoration: underline;
+    text-align: center;
+}
+.reserve_page .team p {
+    border: 1px solid #444;
+    margin: 1vh 1vw;
+}
 .reserve_page .right_side #reserve_button {
     transition: all 0.5s ease 0s;
     background-color: #444444;
@@ -920,6 +954,11 @@ body, div, h1, h3 {
     .container {
         font-size: 2vh;
     }
+    .signout_button {
+    font-size: 2vh;
+    float: right;
+    margin-right: 4vw;
+    }
     /*LOGIN PAGE*/
     .login_page h1, .login_page #ngti_logo {
         font-size: 9vh;
@@ -1025,8 +1064,56 @@ body, div, h1, h3 {
         font-size: 1.4vh;
     }
     /* TEAMS PAGE */
+    .teams_page h1 {
+        font-size: 3vh;
+        margin-top: 2vh;
+    }
+    .teams_page .teams {
+        height: 38vh;
+        width: 92vw;
+    }
+    .teams_page .teams form #teamname {
+        width: 24vw;
+        font-size: 2vh;
+    }
+    .teams_page .teams .team_selection {
+        width: 24vw;
+    }
+    .teams_page .team {
+        width: 83vw;
+    }
+    .teams_page #teamName {
+        width: 81vw;
+    }
+    .teams_page .team form button {
+        width: 81vw;
+        font-size: 2vh;
+    }
+    .teams_page team p {
+        font-size: 2vh;
+    }
+    .teams_page .teams form label {
+        font-size: 1.5vh;
+    }
+    .teams_page .teams .person_selection {
+        width: 30vw;
+    }
+    .teams_page .teams #create_button {
+        font-size: 1.5vh;
+    }
+    .teams_page .team_configuration {
+        width: 91vw;
+        height: 30vh;
+    }
+    .teams_page .team_reservations {
+        width: 92vw;
+    }
+    .teams_page .member_reservations {
+        width: 90vw;
+    }
     .teams_page .reservation_displays {
         height: 14vh;
+        width: 80vw;
     }
     .teams_page .team_reservations .display {
         width: 16vh;
@@ -1082,6 +1169,16 @@ body, div, h1, h3 {
         height: 25vh;
         overflow-y: auto;
     }
+    .reserve_page .team {
+        width: 83vw;
+        margin: 2vh 0 0 5vw;
+    }
+    .reserve_page #teamName {
+        width: 81vw;
+    }
+    .reserve_page team p {
+        font-size: 2vh;
+    }
     .reserve_page .right_side #reserve_button {
         margin: 10px;
         padding: 0;
@@ -1092,10 +1189,33 @@ body, div, h1, h3 {
         height: 27vh;
         width: 92vw;
     }
+    .admin_page .team form #teamname {
+        width: 29vw;
+        font-size: 2vh;
+    } 
+    .admin .team #t_h1 {
+        font-size: 3vh; 
+        margin-top: 2vh;
+    }
     .admin_page .teams .team_selection {
         width: 24vw;
     }
+    .admin_page .team {
+        width: 83vw;
+    }
+    .admin_page #teamName {
+        width: 81vw;
+    }
+    .admin_page team p {
+        font-size: 2vh;
+    }
     .admin_page .teams form label {
+        font-size: 1.5vh;
+    }
+    .admin_page .teams .person_selection {
+        width: 23vw;
+    }
+    .admin_page .teams form button {
         font-size: 1.5vh;
     }
     .admin_page .team_configuration {
