@@ -32,22 +32,49 @@ namespace NGTI_Calender.Controllers
             timeslotList = _context.Timeslot.ToList();
         }
 
-        public bool DoubleReservation(Person user, Timeslot[] rightTimeslots, string[] selectedDates)
+        public bool DoubleReservation(int userId, Reservation res)
         {
-            foreach(var item in _context.Reservation)
+            foreach(var item in _context.Reservation.ToList())
             {
-                for(int i = 0; i < selectedDates.Length; i++)
+                if(item.PersonId == userId && item.Date == res.Date && item.Timeslot.TimeslotId == res.TimeslotId)
                 {
-                    for(int j = 0; j < rightTimeslots.Length; j++)
-                    {
-                        if(item.Person == user && item.Date == selectedDates[i] && item.Timeslot.TimeslotId == rightTimeslots[j].TimeslotId)
-                        {
-                            return false;
-                        }
-                    }
+                    return false;
                 }
             }
             return true;
+        }
+
+        public bool EnoughFreeSpaces(Reservation res)
+        {
+            int amountOfPlaces = _context.Seats.ToList()[0].places;
+            int count = 0;
+            bool bhv = false;
+            foreach(var item in _context.Reservation.ToList())
+            {
+                if (item.Date == res.Date && item.Timeslot.TimeslotId == res.TimeslotId)
+                {
+                    count++;
+                }
+            }
+            foreach(var person in _context.Person.ToList())
+            {
+
+                foreach(var roles in _context.Role.ToList())
+                {
+                    if(person.PersonId == res.PersonId && person.RolesId == roles.RolesId && roles.BHV)
+                    {
+                        bhv = true;
+                    }
+                }
+            }
+            if (bhv)
+            {
+                if(count < amountOfPlaces) { return true; }
+            } else
+            {
+                if(count < (amountOfPlaces - 1)) { return true; }
+            }
+            return false;
         }
 
         // GET: Reservation/Create
@@ -64,6 +91,7 @@ namespace NGTI_Calender.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index([Bind("ReservationId,Date,Timeslot", Prefix = "Item1")] Reservation reservation, string[] selectedObjects, int[] selectedTimeslots, string personId, int[] selectedTeams)
         {
+            //Check if person selected a team while reservering.
             if(selectedTeams.Length == 0)
             {
                 Person user = new Person();
@@ -88,33 +116,36 @@ namespace NGTI_Calender.Controllers
                         }
                     }
                 }
-                if (DoubleReservation(user, rightTimeslots, selectedObjects))
+                Reservation[][] revList = new Reservation[selectedObjects.Length][];
+                for (int i = 0; i < selectedObjects.Length; i++)
                 {
-                    Reservation[][] revList = new Reservation[selectedObjects.Length][];
-                    for (int i = 0; i < selectedObjects.Length; i++)
+                    revList[i] = new Reservation[selectedTimeslots.Length];
+                    for (int j = 0; j < selectedTimeslots.Length; j++)
                     {
-                        revList[i] = new Reservation[selectedTimeslots.Length];
-                        for (int j = 0; j < selectedTimeslots.Length; j++)
-                        {
-                            revList[i][j] = new Reservation();
-                            revList[i][j].Date = selectedObjects[i];
-                            revList[i][j].Person = user;
-                        }
+                        revList[i][j] = new Reservation();
+                        revList[i][j].Date = selectedObjects[i];
+                        revList[i][j].Person = user;
+                        revList[i][j].PersonId = user.PersonId;
                     }
-                    for (int i = 0; i < selectedObjects.Length; i++)
+                }
+                for (int i = 0; i < selectedObjects.Length; i++)
+                {
+                    for (int j = 0; j < selectedTimeslots.Length; j++)
                     {
-                        for (int j = 0; j < selectedTimeslots.Length; j++)
-                        {
-                            revList[i][j].Timeslot = rightTimeslots[j];
-                        }
+                        revList[i][j].Timeslot = rightTimeslots[j];
+                        revList[i][j].TimeslotId = rightTimeslots[j].TimeslotId;
                     }
-                    if (ModelState.IsValid && selectedObjects.Length != 0 && selectedTimeslots.Length != 0)
+                }
+                if (ModelState.IsValid && selectedObjects.Length != 0 && selectedTimeslots.Length != 0)
+                {
+                    Popup popup = new Popup();
+                    popup.popupMessage = "The following reservation have been made:||";
+                    for (int j = 0; j < selectedObjects.Length; j++)
                     {
-                        Popup popup = new Popup();
-                        popup.popupMessage = "The following reservation have been made:||";
-                        for (int j = 0; j < selectedObjects.Length; j++)
+                        for (int i = 0; i < selectedTimeslots.Length; i++)
                         {
-                            for (int i = 0; i < selectedTimeslots.Length; i++)
+                            //check voor dubbele res
+                            if (DoubleReservation(revList[j][i].PersonId, revList[j][i]) && EnoughFreeSpaces(revList[j][i]))
                             {
                                 Calender(revList[j][i]);
                                 popup.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
@@ -122,40 +153,102 @@ namespace NGTI_Calender.Controllers
                                 await _context.SaveChangesAsync();
                             }
                         }
-                        var AmountRes = AmountReservedPlaces();
-                        var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
-                        return View(tuple);
+                    }
+                    var AmountRes = AmountReservedPlaces();
+                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, Tuple.Create(_context.Seats.ToList()[0].places, _context.Teams.ToList(), _context.TeamMember.ToList()));
+                    return View(tuple);
                     }
                     else
                     {
                         var AmountRes = AmountReservedPlaces();
                         Popup popup = new Popup();
                         popup.popupMessage = "an error has occured";
-                        var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
+                        var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, Tuple.Create(_context.Seats.ToList()[0].places, _context.Teams.ToList(), _context.TeamMember.ToList()));
                         return View(tuple);
                     }
-                }
-                else
-                {
-                    var AmountRes = AmountReservedPlaces();
-                    Popup popup = new Popup();
-                    popup.popupMessage = "One of your selected reservations is already made, please check which you tried to reserve double.";
-                    var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, _context.Seats.ToList()[0].places);
-                    return View(tuple);
-                }
             }
             else
             {
                 foreach(var teamId in selectedTeams)
                 {
+                    var testvar = _context.TeamMember.ToList();
                     foreach (var member in _context.TeamMember.ToList())
                     {
                         if (member.TeamId == teamId)
                         {
-                            
+                            Person user = new Person();
+                            foreach (var item in _context.Person)
+                            {
+                                if (item.PersonId.ToString() == member.PersonId.ToString())
+                                {
+                                    user = item;
+                                }
+                            }
+                            Timeslot[] rightTimeslots = new Timeslot[selectedTimeslots.Length];
+                            Dictionary<int, string> time = new Dictionary<int, string>();
+                            for (int i = 0; i < selectedTimeslots.Length; i++)
+                            {
+                                for (int j = 0; j < timeslotList.Count; j++)
+                                {
+                                    if (selectedTimeslots[i] == timeslotList[j].TimeslotId)
+                                    {
+                                        rightTimeslots[i] = timeslotList[j];
+                                        string s = timeslotList[j].TimeStart + "-" + timeslotList[j].TimeEnd;
+                                        time.Add(selectedTimeslots[i], s);
+                                    }
+                                }
+                            }
+                            Reservation[][] revList = new Reservation[selectedObjects.Length][];
+                            for (int i = 0; i < selectedObjects.Length; i++)
+                            {
+                                revList[i] = new Reservation[selectedTimeslots.Length];
+                                for (int j = 0; j < selectedTimeslots.Length; j++)
+                                {
+                                    revList[i][j] = new Reservation();
+                                    revList[i][j].Date = selectedObjects[i];
+                                    revList[i][j].Person = user;
+                                    revList[i][j].PersonId = user.PersonId;
+                                }
+                            }
+                            for (int i = 0; i < selectedObjects.Length; i++)
+                            {
+                                for (int j = 0; j < selectedTimeslots.Length; j++)
+                                {
+                                    revList[i][j].Timeslot = rightTimeslots[j];
+                                    revList[i][j].TimeslotId = rightTimeslots[j].TimeslotId;
+                                }
+                            }
+                            if (ModelState.IsValid && selectedObjects.Length != 0 && selectedTimeslots.Length != 0)
+                            {
+                                for (int j = 0; j < selectedObjects.Length; j++)
+                                {
+                                    for (int i = 0; i < selectedTimeslots.Length; i++)
+                                    {
+                                        if (DoubleReservation(revList[j][i].PersonId, revList[j][i]) && EnoughFreeSpaces(revList[j][i])) {
+                                            Calender(revList[j][i]);
+                                            //popup.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
+                                            _context.Add(revList[j][i]);
+                                            await _context.SaveChangesAsync();
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                var AmountRes1 = AmountReservedPlaces();
+                                Popup popup1 = new Popup();
+                                popup1.popupMessage = "an error has occured";
+                                var tuple1 = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup1, personId, _context.Person.ToList(), AmountRes1, Tuple.Create(_context.Seats.ToList()[0].places, _context.Teams.ToList(), _context.TeamMember.ToList()));
+                                return View(tuple1);
+                            }
                         }
                     }
                 }
+                Popup popup = new Popup();
+                //popup.popupMessage = "The following reservation have been made:||";
+                var AmountRes = AmountReservedPlaces();
+                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, Tuple.Create(_context.Seats.ToList()[0].places, _context.Teams.ToList(), _context.TeamMember.ToList()));
+                return View(tuple);
             }
         }
 

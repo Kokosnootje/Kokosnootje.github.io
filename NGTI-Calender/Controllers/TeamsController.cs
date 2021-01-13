@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +18,8 @@ namespace NGTI_Calender.Controllers {
         }
 
         // GET: Team
-        public IActionResult Index(string personId) {
-            var tuple = Tuple.Create(personId, _context.Person.ToList());
+        public IActionResult Index(string personId, string[] reservations, string[] timeslots, List<string> personList) {
+            var tuple = Tuple.Create(personId, _context.Person.ToList(), _context.Teams.ToList(), _context.TeamMember.ToList(), reservations, timeslots, personList);
             return View(tuple);
         }
 
@@ -37,26 +38,113 @@ namespace NGTI_Calender.Controllers {
             return View(team);
         }
 
-        // GET: Team/Create
-        public IActionResult Create() {
-            return View();
+        public async Task<IActionResult> show_team(string PersonId, string TeamId)
+        {
+            int i = 0;
+            List<string> PersonList = new List<string>();
+            foreach (TeamMember tm in _context.TeamMember.ToList())
+            {
+                if (tm.TeamId.ToString() == TeamId)
+                {
+                    i++;
+                    foreach (Person p in _context.Person.ToList())
+                    {
+                        if (p.PersonId == tm.PersonId)
+                        {
+                            PersonList.Add(p.PersonName);
+                        }
+                    }
+
+                }
+            }
+            string[] reservations = new string[i];
+            string[] timeslots = new string[i];
+            int c = 0;
+            foreach (TeamMember tm2 in _context.TeamMember.ToList())
+            {
+                if( c < i)
+                    {
+
+                
+                    int p = 0;
+                    string s3 = "";
+                    string s4 = "";
+                    foreach (Reservation res in _context.Reservation.ToList())
+                    {
+                        string[] s = res.Date.Split("-");
+                        if (s[0].Length != 2)
+                        {
+                            s[0] = "0" + s[0];
+                        }
+                        if (s[1].Length != 2)
+                        {
+                            s[1] = "0" + s[1];
+                        }
+                        string s2 = s[0] + "/" + s[1] + "/" + s[2];
+                        DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        if  (dt >= DateTime.Today && res.PersonId == tm2.PersonId)
+                        {
+                            foreach(var ts in _context.Timeslot.ToList()) {
+                                if(ts.TimeslotId == res.TimeslotId) {
+                                    s4 += ts.TimeStart + "-" + ts.TimeEnd + "|";
+                                }
+                            }
+                            s3 += res.Date + "|";
+                            p++;
+                        }
+                    }
+                    reservations[c] = s3;
+                    timeslots[c] = s4;
+                    }
+                c++;
+            }
+            return RedirectToAction("Index", new { personId = PersonId, reservations = reservations, timeslots = timeslots, personList = PersonList });
         }
+
+        public int GetAmount(TeamMember tm)
+        {
+            int t = 0;
+            foreach (Reservation res in _context.Reservation.ToList())
+            {
+                string[] s = res.Date.Split("-");
+                if (s[0].Length != 2)
+                {
+                    s[0] = "0" + s[0];
+                }
+                if (s[1].Length != 2)
+                {
+                    s[1] = "0" + s[1];
+                }
+                string s2 = s[0] + "/" + s[1] + "/" + s[2];
+                DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                if (dt >= DateTime.Today && res.PersonId == tm.PersonId)
+                {
+                    t++;
+                }
+            }
+            return t;
+                
+        }
+
+        // GET: Team/Create
+
 
         // POST: Team/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team, int[] selectedPersons) {
+        public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team, int[] selectedPersons, string PersonId) {
             if (ModelState.IsValid) {
                 _context.Teams.Add(team);
                 await _context.SaveChangesAsync();
                 foreach (var id in selectedPersons) {
-                    AddMembers(team.TeamId, id);
+                    _context.TeamMember.Add(new TeamMember() { TeamId = team.TeamId, PersonId = id });
+                    await _context.SaveChangesAsync();
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new {PersonId });
             }
-            return View(team);
+            return RedirectToAction("Index", new {PersonId });
         }
 
         public void AddMembers(int teamId, int personId) {
