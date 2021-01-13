@@ -149,12 +149,12 @@
                                         @if (Model.Item6.Item3[i][j] != 0 && (bhv || admin)) {
                                             <button id="TSS@(j)" type="submit">
                                                 @timeslot.TimeStart-@timeslot.TimeEnd
-                                                <div style="color: limegreen;" id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                                <div title="BHV/ER Present "style="color: limegreen;" id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
                                             </button>
                                         } else {
                                             <button id="TSS@(j)" type="submit">
                                                 @timeslot.TimeStart-@timeslot.TimeEnd
-                                                <div id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
+                                                <div title="BHV/ER Not yet present" id="TSS@(i)@(j)_slot_availability" class="TSS_availability">@getResAmount(i, j, amountRes) / @Model.Item6.Item2</div>
                                             </button>
                                         }
                                     </form>
@@ -207,9 +207,18 @@
                                 if (lastDate != item.Date)
                                 {
 
-                <div class="display">
+                <div class="display" style="background-color: @isResOverDate(item.Date)">
                     <p style="font-weight: bold">@item.Date</p>
                     @{
+                        string isResOverDate(string itemDate)
+                        {
+                            if (DateTime.Parse(itemDate) < DateTime.Now.AddDays(-1))
+                            {
+                                return "#9e8e7e";
+                            }
+                            return "#D5BFAA";
+                        }
+
                         string getResIds(string itemDate)
                         {
                             string theresses = "";
@@ -238,9 +247,15 @@
 
                                 lastDate = item.Date;
                             }
-                                        </div>
+                        </div>
                     }
-                    <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
+                    @{
+                        if (!(DateTime.Parse(item.Date) < DateTime.Now.AddDays(-1)))
+                        {
+                            <button class="button" type="submit" name="resList" value="@getResIds(item.Date)">Cancel</button>
+                        }
+                    }
+
                 </div>
                                 }
                             }
