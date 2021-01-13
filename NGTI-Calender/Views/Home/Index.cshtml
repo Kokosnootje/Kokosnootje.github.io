@@ -38,7 +38,7 @@
                         body: JSON.stringify(payload)
                     }).then(response => response.json())
                         .then(data => {
-                            location.href = '@Url.Action("Index", "Reservation")?personId=' + data.personId
+                            location.href = '@Url.Action("Index", "Overview")?personId=' + data.personId
                         })
 
                     //window.location.href = "//Url.Action("Index", "Reservation")"

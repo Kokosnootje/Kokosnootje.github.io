@@ -30,7 +30,7 @@ namespace NGTI_Calender.Controllers
             return View(tuple);
         }
 
-        public List<Reservation> sortAllRes(List<Reservation> allTheRes)
+        public static List<Reservation> sortAllRes(List<Reservation> allTheRes)
         {
             List<Reservation> allTheSortedRes = new List<Reservation>();
             List<DateTime> allTheSortedDateTimes = new List<DateTime>();

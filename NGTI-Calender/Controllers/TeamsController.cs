@@ -41,7 +41,8 @@ namespace NGTI_Calender.Controllers {
         public async Task<IActionResult> show_team(string PersonId, string TeamId)
         {
             int i = 0;
-            List<string> PersonList = new List<string>();
+            List<string> PersonStringList = new List<string>();
+            List<Person> PersonList = new List<Person>();
             foreach (TeamMember tm in _context.TeamMember.ToList())
             {
                 if (tm.TeamId.ToString() == TeamId)
@@ -51,57 +52,104 @@ namespace NGTI_Calender.Controllers {
                     {
                         if (p.PersonId == tm.PersonId)
                         {
-                            PersonList.Add(p.PersonName);
+                            PersonStringList.Add(p.PersonName);
+                            PersonList.Add(p);
                         }
                     }
 
                 }
             }
-            string[] reservations = new string[i];
-            string[] timeslots = new string[i];
-            int c = 0;
-            foreach (TeamMember tm2 in _context.TeamMember.ToList())
-            {
-                if( c < i)
-                    {
 
-                
-                    int p = 0;
-                    string s3 = "";
-                    string s4 = "";
-                    foreach (Reservation res in _context.Reservation.ToList())
-                    {
+            int e = 0;
+            Reservation[][] resList = new Reservation[i][];
+            foreach (Person p2 in PersonList) {
+                resList[e] = new Reservation[GetAmount(p2)];
+                if (e < i) {
+                    int w = 0;
+                    foreach (Reservation res in _context.Reservation.ToList()) {
                         string[] s = res.Date.Split("-");
-                        if (s[0].Length != 2)
-                        {
+                        if (s[0].Length != 2) {
                             s[0] = "0" + s[0];
                         }
-                        if (s[1].Length != 2)
-                        {
+                        if (s[1].Length != 2) {
                             s[1] = "0" + s[1];
                         }
                         string s2 = s[0] + "/" + s[1] + "/" + s[2];
                         DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                        if  (dt >= DateTime.Today && res.PersonId == tm2.PersonId)
-                        {
-                            foreach(var ts in _context.Timeslot.ToList()) {
-                                if(ts.TimeslotId == res.TimeslotId) {
-                                    s4 += ts.TimeStart + "-" + ts.TimeEnd + "|";
-                                }
-                            }
-                            s3 += res.Date + "|";
-                            p++;
+                        if (dt >= DateTime.Today && res.PersonId == p2.PersonId) {
+                            resList[e][w] = (res);
+                            w++;
                         }
                     }
-                    reservations[c] = s3;
-                    timeslots[c] = s4;
+                }
+                e++;
+            }
+            string[] reservations = new string[i];
+            string[] timeslots = new string[i];
+            int c = 0;
+            int o = 0;
+            foreach (var reslist in resList) {
+                List<Reservation> sortedResList = OverviewController.sortAllRes(reslist.ToList());
+                string s3 = "";
+                string s4 = "";
+                foreach (var res2 in sortedResList) {
+                    foreach (var ts in _context.Timeslot.ToList()) {
+                        if (ts.TimeslotId == res2.TimeslotId) {
+                            s4 += ts.TimeStart + "-" + ts.TimeEnd + "|";
+                        }
                     }
+                    s3 += res2.Date + "|";
+                    o++;
+                }
+                reservations[c] = s3;
+                timeslots[c] = s4;
                 c++;
             }
-            return RedirectToAction("Index", new { personId = PersonId, reservations = reservations, timeslots = timeslots, personList = PersonList });
+            //string[] reservations = new string[i];
+            //string[] timeslots = new string[i];
+            //int c = 0;
+            //foreach (TeamMember tm2 in _context.TeamMember.ToList())
+            //{
+            //    if( c < i)
+            //        {
+
+
+            //        int p = 0;
+            //        string s3 = "";
+            //        string s4 = "";
+            //        foreach (Reservation res in _context.Reservation.ToList())
+            //        {
+            //            string[] s = res.Date.Split("-");
+            //            if (s[0].Length != 2)
+            //            {
+            //                s[0] = "0" + s[0];
+            //            }
+            //            if (s[1].Length != 2)
+            //            {
+            //                s[1] = "0" + s[1];
+            //            }
+            //            string s2 = s[0] + "/" + s[1] + "/" + s[2];
+            //            DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            //            if  (dt >= DateTime.Today && res.PersonId == tm2.PersonId)
+            //            {
+            //                foreach(var ts in _context.Timeslot.ToList()) {
+            //                    if(ts.TimeslotId == res.TimeslotId) {
+            //                        s4 += ts.TimeStart + "-" + ts.TimeEnd + "|";
+            //                    }
+            //                }
+            //                s3 += res.Date + "|";
+            //                p++;
+            //            }
+            //        }
+            //        reservations[c] = s3;
+            //        timeslots[c] = s4;
+            //        }
+            //    c++;
+            //}
+            return RedirectToAction("Index", new { personId = PersonId, reservations = reservations, timeslots = timeslots, personList = PersonStringList });
         }
 
-        public int GetAmount(TeamMember tm)
+        public int GetAmount(Person p)
         {
             int t = 0;
             foreach (Reservation res in _context.Reservation.ToList())
@@ -117,7 +165,7 @@ namespace NGTI_Calender.Controllers {
                 }
                 string s2 = s[0] + "/" + s[1] + "/" + s[2];
                 DateTime dt = DateTime.ParseExact(s2, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                if (dt >= DateTime.Today && res.PersonId == tm.PersonId)
+                if (dt >= DateTime.Today && res.PersonId == p.PersonId)
                 {
                     t++;
                 }
