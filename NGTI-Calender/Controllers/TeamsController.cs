@@ -18,7 +18,7 @@ namespace NGTI_Calender.Controllers {
         }
 
         // GET: Team
-        public IActionResult Index(string personId, string[] reservations, string[] timeslots, List<string> personList) {
+        public IActionResult Index(string personId, string[] reservations = null, string[] timeslots = null, List<string> personList = null) {
             var tuple = Tuple.Create(personId, _context.Person.ToList(), _context.Teams.ToList(), _context.TeamMember.ToList(), reservations, timeslots, personList);
             return View(tuple);
         }
@@ -126,12 +126,8 @@ namespace NGTI_Calender.Controllers {
                 
         }
 
-        // GET: Team/Create
-
-
+        
         // POST: Team/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TeamId,TeamName")] Team team, int[] selectedPersons, string PersonId) {
@@ -146,12 +142,36 @@ namespace NGTI_Calender.Controllers {
             }
             return RedirectToAction("Index", new {PersonId });
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteTeamMember(string teamId, string personId, string rmpersonId) {
+            foreach (Team team in _context.Teams.ToList()) {
+                foreach (TeamMember tm in _context.TeamMember.ToList()) {
+                    if (tm.TeamId.ToString() == teamId) {
+                        foreach (Person person in _context.Person.ToList()) {
+                            if (tm.PersonId.ToString() == rmpersonId) {
+                                _context.TeamMember.Remove(tm);
+                                await _context.SaveChangesAsync();
+                                return RedirectToAction("Index", new { personId = personId});
+                            }
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("Index", new { personId = personId });
 
-        public void AddMembers(int teamId, int personId) {
-            _context.TeamMember.Add(new TeamMember() { TeamId = teamId, PersonId = personId });
-            _context.SaveChangesAsync();
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteTeam(string teamId, string personId) {
+            foreach (Team team in _context.Teams.ToList()) {
+                if (teamId == team.TeamId.ToString()) {
+                    _context.Teams.Remove(team);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", new { personId = personId });
 
+                }
+            }
+            return RedirectToAction("Index", new { personId = personId });
+        }
         // GET: Team/Edit/5
         public async Task<IActionResult> Edit(int? id) {
             if (id == null) {

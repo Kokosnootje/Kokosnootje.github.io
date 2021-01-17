@@ -1,7 +1,6 @@
 ﻿@model Tuple<Reservation, List<Timeslot>, Popup, string, List<Person>, int[][], Tuple<int, List<Team>, List<TeamMember>>>
 @{
-//@model IEnumerable<NGTI_Calender.Models.Reservation>
-    @using FluentDateTime
+    //Create viewdata to easily pass data from one page to another without the use of the controller.
     ViewData["Title"] = "Reserve";
     ViewData["ID Reserve"] = "current_page";
     ViewData["ID Overview"] = "null";
@@ -10,6 +9,7 @@
     ViewData["ProfilePicture"] = GetProfilePicture(Model.Item4);
     ViewData["PersonId"] = Model.Item4;
 
+    //This function returns the profile picture of the person who is logged in.
     string GetProfilePicture(string personId)
     {
         foreach (var item in Model.Item5)
@@ -23,6 +23,7 @@
     }
 
 
+    //This function returns the amount of total seats which are available to reserve.
     string getAmountOfPlaces(int selectedDay)
     {
         string s = "";
@@ -33,6 +34,7 @@
         return s;
     }
 
+    //This function selects all the days of a workweek and returns the day itself + date. 
     static string[][] SelectDaysOfWeeks()
     {
         string[] daysOfWeekCalenderDays = new string[10];
@@ -108,6 +110,7 @@
                 <!--DATE SELECTION-->
                 <div class="date_selection">
                     @{
+                        //Create all circles with the dates and days
                         for (int k = 0; k < 10; k++)
                         {
                             string allResPlaces = getAmountOfPlaces(k);
@@ -119,6 +122,7 @@
                 <!--TIMESLOT SELECTION-->
                 <div class="timeslot_selection">
                     @{
+                        //Create all timeslots to be selected
                         int i = 1;
                         foreach (var item in Model.Item2)
                         {
@@ -144,20 +148,32 @@
                 <div class="select_team">
                     <h1>Select Team(s)</h1>
                     <div id="line2"></div>
-                    <div class="team_selection"></div>
-                    @{
-                        int bob = 0;
-                        foreach (Team team in @Model.Item7.Item2)
-                        {
-                            <label name="">@team.TeamName</label>    
-                            <input value="@team.TeamId" type="checkbox" name="selectedTeams" id="TCB@(bob + 1)" />
+                    <div class="team_selection">
+                        @{
+                            int bob = 0;
+                            foreach (Team team in @Model.Item7.Item2) {
+                                <div class="team">
+                                    <div class="teamLI">
+                                        <input value="@team.TeamId" type="checkbox" name="selectedTeams" id="TCB@(bob + 1)" />
+                                        <label for="TCB@(bob + 1)">@team.TeamName</label>
+                                    </div>
+                                    @foreach (TeamMember tm2 in Model.Item7.Item3) {
+                                        if (tm2.TeamId == team.TeamId) {
+                                            foreach (Person p in Model.Item5) {
+                                                if (p.PersonId == tm2.PersonId) {
+                                                    <p>@p.PersonName</p>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </div>
+                               bob++;
+                            }
                         }
-                    }
+                    </div>
                 </div>
                 <input type="hidden" name="personId" value="@Model.Item4">
-                <button id="reserve_button">BACK</button>
                 <button type="submit" id="reserve_button">RESERVE</button>
-                <a href="https://mail.google.com/mail/u/0/?logout&hl=en">Sign out</a>
             </div>
         </form>
     </div>

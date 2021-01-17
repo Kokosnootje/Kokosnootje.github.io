@@ -27,7 +27,10 @@
                     <li><a href="@Url.Action("Index", "Admin", new { personId = ViewData["PersonId"] })" id="@ViewData["ID Admin Dashboard"]">Admin</a></li>
                 </ul>
             </nav>
-            <img id="google_pf" src="@ViewData["ProfilePicture"]" />
+            <div class="google">
+                <a class="signout_button" href="https://mail.google.com/mail/u/0/?logout&hl=en">Sign out</a>
+                <img id="google_pf" src="@ViewData["ProfilePicture"]" />
+            </div>
         </header>
     </div>
     <main role="main" class="pb-3">

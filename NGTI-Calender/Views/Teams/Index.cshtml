@@ -42,7 +42,7 @@
             <form asp-action="Create">
                 <button id="create_button" type="submit">Add team</button>
                 <input type="hidden" value="@Model.Item1" name="PersonId"/>
-                <input id="teamname" type="text" name="TeamName" placeholder="TeamName" />
+                <input id="teamname" type="text" maxlength="20" name="TeamName" placeholder="TeamName" />
                 <div class="person_selection">
                     @{
                         int i = 0;
@@ -63,16 +63,32 @@
                         foreach (TeamMember tm in Model.Item4) {
                             if (Model.Item1 == tm.PersonId.ToString() && tm.TeamId == team.TeamId) {
                                 <div class="team">
-                                    <form asp-action="show_team">
-                                        <button>@team.TeamName</button>
-                                        <input type="hidden" value="@Model.Item1" name="PersonId" />
-                                        <input type="hidden" value="@team.TeamId" name="TeamId" />
-                                    </form>
+                                    <div class="TN">
+                                        <form asp-action="show_team">
+                                            <button id="show_team">@team.TeamName</button>
+                                            <input type="hidden" value="@Model.Item1" name="PersonId" />
+                                            <input type="hidden" value="@team.TeamId" name="TeamId" />
+                                        </form>
+                                        <form asp-action="DeleteTeam">
+                                            <input type="hidden" name="teamId" value=@team.TeamId />
+                                            <input type="hidden" name="personId" value="@Model.Item1" />
+                                            <button id="delete_button" type="submit">X</button>
+                                        </form>
+                                    </div>
                                     @foreach (TeamMember tm2 in Model.Item4) {
                                         if (tm2.TeamId == team.TeamId) {
                                             foreach (Person p in Model.Item2) {
                                                 if (p.PersonId == tm2.PersonId) {
-                                                    <p>@p.PersonName</p>
+                                                    <div class="person">
+                                                        <p>@p.PersonName</p>
+                                                        <form asp-action="DeleteTeamMember">
+
+                                                            <input type="hidden" name="teamId" value=@tm2.TeamId />
+                                                            <input type="hidden" name="rmpersonId" value="@tm2.PersonId" />
+                                                            <input type="hidden" name="personId" value="@Model.Item1" />
+                                                            <button id="delete_button" type="submit">X</button>
+                                                        </form>
+                                                    </div>
                                                 }
                                             }
                                         }
@@ -86,27 +102,28 @@
             </div>
         </div>
         <div class="team_reservations">
-            <h1>Team Reservations</h1>
-            <div class="all_members">
-                @* load reservations for each member - 1 div per member*@
-                @for ( int j = 0; j < Model.Item7.Count; j++)
-                {
-                    <div class="member_reservations">
-                        <h2>@Model.Item7[j]</h2>
-                        <div class="line"></div>
-                        <div class="reservation_displays">
-                            @* 1 display = 1 day of reservations --> use implementation at home screen (no remove button)*@
-                            @for(int q = 0; q < day_array[j].Length; q++)
-                            {
-                                <div class="display">
-                                    <p>@day_array[j][q]<br />@ts_array[j][q]</p>
+            @{
+                if (Model.Item5.Length != 0)  {
+                    <h1>Team Reservations</h1>
+                    <div class="all_members">
+                        @* load reservations for each member - 1 div per member*@
+                        @for (int j = 0; j < Model.Item7.Count; j++) {
+                            <div class="member_reservations">
+                                <h2>@Model.Item7[j]</h2>
+                                <div class="line"></div>
+                                <div class="reservation_displays">
+                                    @* 1 display = 1 day of reservations --> use implementation at home screen (no remove button)*@
+                                    @for (int q = 0; q < day_array[j].Length; q++) {
+                                        <div class="display">
+                                            <p>@day_array[j][q]<br />@ts_array[j][q]</p>
+                                        </div>
+                                    }
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        }
                     </div>
                 }
-
-            </div>
+            }
         </div>
     </div>
 </body>

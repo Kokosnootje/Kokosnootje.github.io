@@ -31,7 +31,8 @@ namespace NGTI_Calender.Controllers
             _context = context;
             timeslotList = _context.Timeslot.ToList();
         }
-
+        
+        //Function to check if the reservations isn't already made before we save it in the database.
         public bool DoubleReservation(int userId, Reservation res)
         {
             foreach(var item in _context.Reservation.ToList())
@@ -44,11 +45,14 @@ namespace NGTI_Calender.Controllers
             return true;
         }
 
+        //Function to check if there is enough free spaces for the reservation to be made.
+        //There will always be 1 place reserved for the BHV'er / ER. 
         public bool EnoughFreeSpaces(Reservation res)
         {
             int amountOfPlaces = _context.Seats.ToList()[0].places;
             int count = 0;
             bool bhv = false;
+            //Count will increase by 1 for every reservation already made for the selected date and timeslot.
             foreach(var item in _context.Reservation.ToList())
             {
                 if (item.Date == res.Date && item.Timeslot.TimeslotId == res.TimeslotId)
@@ -56,6 +60,7 @@ namespace NGTI_Calender.Controllers
                     count++;
                 }
             }
+            //Check wether the user is a bhv'er / er or not.
             foreach(var person in _context.Person.ToList())
             {
 
@@ -69,10 +74,10 @@ namespace NGTI_Calender.Controllers
             }
             if (bhv)
             {
-                if(count < amountOfPlaces) { return true; }
+                if(count < amountOfPlaces) { return true; } 
             } else
             {
-                if(count < (amountOfPlaces - 1)) { return true; }
+                if(count < (amountOfPlaces - 1)) { return true; } //A non-BHV'er / ER will get one place less since there is 1 place always reserved for a BHV'er / ER.
             }
             return false;
         }
@@ -92,16 +97,20 @@ namespace NGTI_Calender.Controllers
         public async Task<IActionResult> Index([Bind("ReservationId,Date,Timeslot", Prefix = "Item1")] Reservation reservation, string[] selectedObjects, int[] selectedTimeslots, string personId, int[] selectedTeams)
         {
             //Check if person selected a team while reservering.
-            if(selectedTeams.Length == 0)
+            if(selectedTeams.Length == 0) 
             {
+                // The person places a reservation for him/herself alone.
+                // ----------
+                //New person gets created (to be added to the reservation)
                 Person user = new Person();
                 foreach (var item in _context.Person)
                 {
-                    if (item.PersonId.ToString() == personId)
+                    if (item.PersonId.ToString() == personId) //For each of the persons from the database check if thats the person who reserved the spots.
                     {
                         user = item;
                     }
                 }
+                //Create a new timeslot array where all the correct timeslots will be stored.
                 Timeslot[] rightTimeslots = new Timeslot[selectedTimeslots.Length];
                 Dictionary<int, string> time = new Dictionary<int, string>();
                 for (int i = 0; i < selectedTimeslots.Length; i++)
@@ -110,12 +119,15 @@ namespace NGTI_Calender.Controllers
                     {
                         if (selectedTimeslots[i] == timeslotList[j].TimeslotId)
                         {
+                            //Format the timeslots to the right format required by the database/model.
                             rightTimeslots[i] = timeslotList[j];
                             string s = timeslotList[j].TimeStart + "-" + timeslotList[j].TimeEnd;
                             time.Add(selectedTimeslots[i], s);
                         }
                     }
                 }
+                //Create a new double reservation array where all the reservations will be stored.
+                //There will be 1 reservation per timeslots. So if someone selected 3 days with 2 timeslots there will be a total of 3 * 2 = 6 reservations created.
                 Reservation[][] revList = new Reservation[selectedObjects.Length][];
                 for (int i = 0; i < selectedObjects.Length; i++)
                 {
@@ -124,10 +136,12 @@ namespace NGTI_Calender.Controllers
                     {
                         revList[i][j] = new Reservation();
                         revList[i][j].Date = selectedObjects[i];
+                        //Add the right user to the new made reservation.
                         revList[i][j].Person = user;
                         revList[i][j].PersonId = user.PersonId;
                     }
                 }
+                //Add all the correctly formatted timeslots to all the reservations.
                 for (int i = 0; i < selectedObjects.Length; i++)
                 {
                     for (int j = 0; j < selectedTimeslots.Length; j++)
@@ -144,7 +158,7 @@ namespace NGTI_Calender.Controllers
                     {
                         for (int i = 0; i < selectedTimeslots.Length; i++)
                         {
-                            //check voor dubbele res
+                            //Check for existing reservations / double reservations / enough space.
                             if (DoubleReservation(revList[j][i].PersonId, revList[j][i]) && EnoughFreeSpaces(revList[j][i]))
                             {
                                 Calender(revList[j][i]);
@@ -169,9 +183,15 @@ namespace NGTI_Calender.Controllers
             }
             else
             {
-                foreach(var teamId in selectedTeams)
+                Popup popup2 = new Popup();
+                popup2.popupMessage = "The following reservation have been made:||";
+                // The person places a reservation for him/her and a team.
+                // -----------
+                // Get the selected team
+                foreach (var teamId in selectedTeams)
                 {
                     var testvar = _context.TeamMember.ToList();
+                    //Create a reservation for each member of the selected team.
                     foreach (var member in _context.TeamMember.ToList())
                     {
                         if (member.TeamId == teamId)
@@ -179,11 +199,12 @@ namespace NGTI_Calender.Controllers
                             Person user = new Person();
                             foreach (var item in _context.Person)
                             {
-                                if (item.PersonId.ToString() == member.PersonId.ToString())
+                                if (item.PersonId.ToString() == member.PersonId.ToString()) //For each of the persons from the database check if thats the person who reserved the spots.
                                 {
                                     user = item;
                                 }
                             }
+                            //Create a new timeslot array where all the correct timeslots will be stored.
                             Timeslot[] rightTimeslots = new Timeslot[selectedTimeslots.Length];
                             Dictionary<int, string> time = new Dictionary<int, string>();
                             for (int i = 0; i < selectedTimeslots.Length; i++)
@@ -192,12 +213,15 @@ namespace NGTI_Calender.Controllers
                                 {
                                     if (selectedTimeslots[i] == timeslotList[j].TimeslotId)
                                     {
+                                        //Format the timeslots to the right format required by the database/model.
                                         rightTimeslots[i] = timeslotList[j];
                                         string s = timeslotList[j].TimeStart + "-" + timeslotList[j].TimeEnd;
                                         time.Add(selectedTimeslots[i], s);
                                     }
                                 }
                             }
+                            //Create a new double reservation array where all the reservations will be stored.
+                            //There will be 1 reservation per timeslots. So if someone selected 3 days with 2 timeslots there will be a total of 3 * 2 = 6 reservations created.
                             Reservation[][] revList = new Reservation[selectedObjects.Length][];
                             for (int i = 0; i < selectedObjects.Length; i++)
                             {
@@ -206,10 +230,12 @@ namespace NGTI_Calender.Controllers
                                 {
                                     revList[i][j] = new Reservation();
                                     revList[i][j].Date = selectedObjects[i];
+                                    //Add the right user to the new made reservation.
                                     revList[i][j].Person = user;
                                     revList[i][j].PersonId = user.PersonId;
                                 }
                             }
+                            //Add all the correctly formatted timeslots to all the reservations.
                             for (int i = 0; i < selectedObjects.Length; i++)
                             {
                                 for (int j = 0; j < selectedTimeslots.Length; j++)
@@ -224,9 +250,10 @@ namespace NGTI_Calender.Controllers
                                 {
                                     for (int i = 0; i < selectedTimeslots.Length; i++)
                                     {
+                                        //Check for existing reservations / double reservations / enough space.
                                         if (DoubleReservation(revList[j][i].PersonId, revList[j][i]) && EnoughFreeSpaces(revList[j][i])) {
                                             Calender(revList[j][i]);
-                                            //popup.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
+                                            popup2.popupMessage += revList[j][i].Person.PersonName + "|" + revList[j][i].Date + "|" + time[revList[j][i].Timeslot.TimeslotId] + "||";
                                             _context.Add(revList[j][i]);
                                             await _context.SaveChangesAsync();
                                         }
@@ -244,10 +271,8 @@ namespace NGTI_Calender.Controllers
                         }
                     }
                 }
-                Popup popup = new Popup();
-                //popup.popupMessage = "The following reservation have been made:||";
                 var AmountRes = AmountReservedPlaces();
-                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup, personId, _context.Person.ToList(), AmountRes, Tuple.Create(_context.Seats.ToList()[0].places, _context.Teams.ToList(), _context.TeamMember.ToList()));
+                var tuple = Tuple.Create(new Reservation(), _context.Timeslot.ToList(), popup2, personId, _context.Person.ToList(), AmountRes, Tuple.Create(_context.Seats.ToList()[0].places, _context.Teams.ToList(), _context.TeamMember.ToList()));
                 return View(tuple);
             }
         }
@@ -500,6 +525,7 @@ namespace NGTI_Calender.Controllers
             return count;
         }
 
+        //Check if there are any reservations which are 7 days or older. If there are any, delete them.
         public void checkAllReservationsForExpired()
         {
             List<int> reservationIds = new List<int>();
